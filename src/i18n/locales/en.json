@@ -1,0 +1,2283 @@
+{
+  "common": {
+    "welcome": "Welcome",
+    "login": "Login",
+    "logout": "Logout",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "language": "Language",
+    "back": "Back",
+    "viewAll": "View All",
+    "next": "Next",
+    "finish": "Finish",
+    "skip": "Skip",
+    "close": "Close",
+    "copyright": "© {{year}} MarLn. All rights reserved."
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "settings": "Settings"
+  },
+  "auth": {
+    "email": "Email",
+    "password": "Password",
+    "signIn": "Sign In",
+    "forgotPassword": "Forgot Password?",
+    "heroTitle": "Welcome to MarLn 🚀",
+    "heroSubtitle": "Your all-in-one solution for managing students, instructors, and university operations in one digital hub.",
+    "signInTitle": "Sign in to MarLn",
+    "subtitle": "Use your university credentials",
+    "invalidCredentials": "Invalid credentials. Please try again.",
+    "emailPlaceholder": "admin@uni.com",
+    "logoAlt": "MarLn Logo",
+    "bannerAlt": "Banner"
+  },
+  "student": {
+    "pdfViewer": {
+      "title": "PDF Viewer",
+      "close": "Close PDF",
+      "iframeTitle": "Course PDF",
+      "notFound": "PDF not found.",
+      "summarize": "Summarize PDF",
+      "generating": "Generating summary..."
+    },
+    "videoViewer": {
+      "title": "Video Viewer",
+      "summarizeTitle": "Summarize with Sage AI",
+      "summarizeShort": "AI Summary",
+      "noTranscriptTitle": "No transcript available for this video",
+      "noTranscriptLabel": "No Transcript Available",
+      "noTranscriptShort": "No Transcript",
+      "close": "Close Video",
+      "unsupported": "Your browser does not support the video tag.",
+      "notFound": "Video not found."
+    },
+    "tour": {
+      "nextPrompt": {
+        "title": "Continue to next page?",
+        "desc": "You finished this page tour. You can continue with the next page or close now."
+      },
+      "complete": {
+        "title": "Onboarding Tour Complete!",
+        "desc": "You have completed the onboarding tour and explored all the key features of your LMS. You're ready to start your learning journey!",
+        "restart": "Restart tour"
+      },
+      "cta": {
+        "try": "Start Tour",
+        "disabled": "Tour not available on this page",
+        "hint": "Click here"
+      },
+      "full": "Full tour (recommended)",
+      "pageOnly": "Tour for this page",
+      "startTour": "Start guided tour",
+      "courses": {
+        "title": "Find Your Courses",
+        "desc": "Search for courses by name or instructor to quickly find what you need.",
+        "gridTitle": "Course Overview",
+        "gridDesc": "Each card shows your schedule, next class time, and current progress.",
+        "detailsTitle": "Course Details",
+        "detailsDesc": "Click to access syllabus, materials, videos, and weekly content."
+      },
+      "profile": {
+        "card": {
+          "title": "Your Profile",
+          "desc": "View your basic info and update your photo."
+        },
+        "form": {
+          "title": "Edit Details",
+          "desc": "Update contact info, program, year, and more."
+        },
+        "activity": {
+          "title": "Activity & Stats",
+          "desc": "Review your recent activity and progress insights."
+        }
+      },
+      "studyPlan": {
+        "header": {
+          "title": "Study Plan Overview",
+          "desc": "Here you can see the course title, duration, total hours, and difficulty level for your study plan."
+        },
+        "overview": {
+          "title": "Course Overview",
+          "desc": "This section shows the course description, learning objectives, and prerequisites you need to complete."
+        },
+        "weekly": {
+          "title": "Weekly Study Plan",
+          "desc": "Click on any week to expand and see detailed topics, activities, and deliverables. Track your progress with status indicators."
+        },
+        "progress": {
+          "title": "Progress Summary",
+          "desc": "Monitor your weekly progress at a glance with completion status for each week."
+        },
+        "resources": {
+          "title": "Learning Resources",
+          "desc": "Access all the textbooks, online courses, tools, and materials you need for this course."
+        },
+        "milestones": {
+          "title": "Key Milestones",
+          "desc": "Important deadlines and major assessments with their weights and schedules."
+        }
+      },
+      "assignmentSubmission": {
+        "header": {
+          "title": "Assignment Submission Center",
+          "desc": "Welcome to the Assignment Submission Center. Here you can access different types of assignment submission forms."
+        },
+        "instructions": {
+          "title": "Instructions",
+          "desc": "Read the instructions carefully to understand how to submit your assignments properly."
+        },
+        "forms": {
+          "title": "Assignment Forms",
+          "desc": "Choose the appropriate form type for your assignment. Each form is designed for specific assignment types."
+        },
+        "importantNotes": {
+          "title": "Important Notes",
+          "desc": "Pay attention to these important notes and requirements before submitting your assignments."
+        }
+      },
+      "definitionsForm": {
+        "header": {
+          "title": "Definitions Submission Form",
+          "desc": "Welcome to the Definitions Submission Form. Here you can submit definitions for multiple courses and terms."
+        },
+        "instructions": {
+          "title": "Instructions",
+          "desc": "Read the instructions carefully to understand how to submit your definitions properly."
+        },
+        "studentInfo": {
+          "title": "Student Information",
+          "desc": "Fill in your personal information including your name and student ID."
+        },
+        "courseSection": {
+          "title": "Course Information",
+          "desc": "Add course details and definitions. You can add multiple courses and multiple definitions per course."
+        },
+        "definitions": {
+          "title": "Definitions",
+          "desc": "Add terms and their definitions. Include source information and page numbers when available."
+        },
+        "submit": {
+          "title": "Submit Form",
+          "desc": "Review your information and submit the form when ready."
+        }
+      },
+      "caseBriefsForm": {
+        "header": {
+          "title": "Case Briefs Submission Form",
+          "desc": "Welcome to the Case Briefs Submission Form. Here you can submit legal case briefs for multiple courses."
+        },
+        "instructions": {
+          "title": "Instructions",
+          "desc": "Read the instructions carefully to understand how to submit your case briefs properly."
+        },
+        "studentInfo": {
+          "title": "Student Information",
+          "desc": "Fill in your personal information including your name and student ID."
+        },
+        "courseSection": {
+          "title": "Course Information",
+          "desc": "Add course details and case briefs. You can add multiple courses and multiple case briefs per course."
+        },
+        "caseBriefs": {
+          "title": "Case Briefs",
+          "desc": "Add case details including facts, issues, holdings, and legal analysis."
+        },
+        "submit": {
+          "title": "Submit Form",
+          "desc": "Review your information and submit the form when ready."
+        }
+      },
+      "miniThesisForm": {
+        "header": {
+          "title": "Mini Thesis Submission Form",
+          "desc": "Welcome to the Mini Thesis Submission Form. Here you can submit research papers and mini theses for multiple courses."
+        },
+        "instructions": {
+          "title": "Instructions",
+          "desc": "Read the instructions carefully to understand how to submit your mini thesis properly."
+        },
+        "studentInfo": {
+          "title": "Student Information",
+          "desc": "Fill in your personal information including your name and student ID."
+        },
+        "courseSection": {
+          "title": "Course Information",
+          "desc": "Add course details and thesis papers. You can add multiple courses and multiple thesis papers per course."
+        },
+        "thesisPapers": {
+          "title": "Thesis Papers",
+          "desc": "Add thesis details including abstract, introduction, methodology, findings, and conclusion."
+        },
+        "submit": {
+          "title": "Submit Form",
+          "desc": "Review your information and submit the form when ready."
+        }
+      },
+      "midtermEssayForm": {
+        "header": {
+          "title": "Midterm Essay Submission Form",
+          "desc": "Welcome to the Midterm Essay Submission Form. Here you can submit essay exam responses for multiple courses."
+        },
+        "instructions": {
+          "title": "Instructions",
+          "desc": "Read the instructions carefully to understand how to submit your midterm essays properly."
+        },
+        "studentInfo": {
+          "title": "Student Information",
+          "desc": "Fill in your personal information including your name and student ID."
+        },
+        "courseSection": {
+          "title": "Course Information",
+          "desc": "Add course details and exam information. You can add multiple courses and multiple essay questions per course."
+        },
+        "essayQuestions": {
+          "title": "Essay Questions",
+          "desc": "Add essay questions and your detailed responses. Include question numbers, text, and your answers."
+        },
+        "importantNotice": {
+          "title": "Important Notice",
+          "desc": "Pay attention to these important requirements and guidelines for your midterm essay submission."
+        },
+        "submit": {
+          "title": "Submit Form",
+          "desc": "Review your information and submit the form when ready."
+        }
+      },
+      "checkMyVae": {
+        "header": {
+          "title": "Check My VAE",
+          "desc": "Welcome to the Check My VAE page. Here you can view your academic progress, course performance, and overall standing."
+        },
+        "tabs": {
+          "title": "Navigation Tabs",
+          "desc": "Use these tabs to navigate between different views: Overview, Course Details, Requirements, and Progress Timeline."
+        },
+        "overallStatus": {
+          "title": "Overall Academic Status",
+          "desc": "View your overall academic progress including credit hours, GPA, courses completed, and academic standing."
+        },
+        "courseProgress": {
+          "title": "Current Course Progress",
+          "desc": "See detailed progress for the current course including attendance, assignments, grades, and upcoming milestones."
+        },
+        "requirements": {
+          "title": "Requirements Overview",
+          "desc": "Track your progress across different requirement categories: core courses, electives, and general education."
+        },
+        "progressTimeline": {
+          "title": "Progress Timeline",
+          "desc": "View your academic journey timeline and progress insights to understand your learning trajectory."
+        }
+      },
+      "assignments": {
+        "searchTitle": "Find Assignments",
+        "searchDesc": "Search for assignments by title or course name.",
+        "filterTitle": "Filter by Status",
+        "filterDesc": "View all assignments or filter by pending, submitted, or overdue.",
+        "gridTitle": "Assignment Overview",
+        "gridDesc": "Each card shows due date, assignment type, and total points."
+      },
+      "zoolaReport": {
+        "header": {
+          "title": "Zoola Report",
+          "desc": "Welcome to the Zoola Report page. Here you can view comprehensive analytics about your course performance, learning progress, and VAE hours."
+        },
+        "tabs": {
+          "title": "Navigation Tabs",
+          "desc": "Use these tabs to navigate between different report sections: VAE Hours, Overview, Performance, Analytics, Recommendations, and Progress."
+        },
+        "overview": {
+          "title": "Overview Section",
+          "desc": "View your student information, overall summary, performance breakdown, and learning analytics at a glance."
+        },
+        "performance": {
+          "title": "Performance Section",
+          "desc": "Analyze your detailed performance metrics and compare them with class averages and targets."
+        },
+        "analytics": {
+          "title": "Analytics Section",
+          "desc": "Deep dive into your learning analytics including time spent, engagement metrics, and activity patterns."
+        },
+        "recommendations": {
+          "title": "Recommendations Section",
+          "desc": "Get personalized recommendations based on your performance to improve your learning outcomes."
+        },
+        "progress": {
+          "title": "Progress Section",
+          "desc": "Track your weekly progress trends and get insights about your learning trajectory."
+        },
+        "vaeHours": {
+          "title": "VAE Hours Section",
+          "desc": "View detailed breakdown of your VAE hours, activities, and time tracking for this course."
+        }
+      }
+    },
+    "ecollab": {
+      "title": "eCollab",
+      "whatIsTitle": "What's an eCollab?",
+      "description": "eCollab is a dynamic digital space designed to help users showcase meaningful work, reflect on learning, and share achievements in a professional setting. It goes beyond file storage — it enables storytelling, collaboration, and branding.",
+      "bullets": {
+        "item1": "Highlight their best work and share it beyond the classroom or organization",
+        "item2": "Reflect on the creativity, effort, and learning behind their projects",
+        "item3": "Present a comprehensive view of their academic or professional growth",
+        "item4": "Share curated content with peers, mentors, employers, or admissions teams"
+      },
+      "controlTitle": "eCollab puts users in control",
+      "controlText": " — visibility settings can be set to private or public and adjusted at any time.",
+      "discussion": {
+        "title": "Discussion Board",
+        "placeholder": "Share an idea, question, or achievement...",
+        "postButton": "Post"
+      },
+      "reply": {
+        "placeholder": "Write a reply...",
+        "button": "Reply",
+        "cancel": "Cancel",
+        "link": "Reply"
+      },
+      "emptyState": "No posts yet. Start the discussion!",
+      "quickLinks": {
+        "title": "Quick Links",
+        "myPortfolio": "My Portfolio",
+        "sharedWithMe": "Shared with Me",
+        "mentorConnect": "Mentor Connect",
+        "resourceHub": "Resource Hub"
+      },
+      "highlights": {
+        "title": "Recent Highlights",
+        "line1": "Emily Brown shared a new project: Web Dev Portfolio",
+        "line2": "John Smith received feedback from Dr. Sarah Johnson",
+        "line3": "Mentor Connect: 2 new messages"
+      },
+      "you": "You",
+      "justNow": "Just now",
+      "features": {
+        "whyChooseTitle": "Why Choose eCollab?",
+        "whyChooseSubtitle": "Transform your learning experience with powerful collaboration tools",
+        "portfolioBuilding": "Portfolio Building",
+        "portfolioBuildingDesc": "Create stunning portfolios that tell your story and showcase your growth journey.",
+        "peerCollaboration": "Peer Collaboration",
+        "peerCollaborationDesc": "Engage in meaningful discussions and receive constructive feedback from classmates.",
+        "mentorGuidance": "Mentor Guidance",
+        "mentorGuidanceDesc": "Connect with experienced mentors for personalized guidance and career advice.",
+        "resourceSharing": "Resource Sharing",
+        "resourceSharingDesc": "Access and share valuable learning resources, tools, and industry insights."
+      },
+      "tags": {
+        "portfolioShowcase": "Portfolio Showcase",
+        "peerFeedback": "Peer Feedback",
+        "mentorConnect": "Mentor Connect",
+        "resourceHub": "Resource Hub"
+      },
+      "search": {
+        "placeholder": "Search discussions..."
+      },
+      "filters": {
+        "all": "All",
+        "questions": "Questions",
+        "projects": "Projects"
+      },
+      "privacy": {
+        "onlyVisibleToClassmates": "Only visible to classmates"
+      },
+      "actions": {
+        "share": "Share",
+        "report": "Report",
+        "reply": "Reply"
+      },
+      "activity": {
+        "overview": "Activity Overview",
+        "activeDiscussions": "Active Discussions",
+        "collaborators": "Collaborators"
+      },
+      "stats": {
+        "collaborationStats": "Collaboration Stats",
+        "postsThisWeek": "Posts This Week",
+        "repliesGiven": "Replies Given",
+        "projectsShared": "Projects Shared",
+        "mentorSessions": "Mentor Sessions"
+      },
+      "popups": {
+        "postPublished": "Post Published",
+        "postPublishedMessage": "Your post has been published successfully!",
+        "replyPosted": "Reply Posted",
+        "replyPostedMessage": "Your reply has been posted successfully!",
+        "postLiked": "Post Liked",
+        "postLikedMessage": "Post added to your liked items",
+        "postUnliked": "Post Unliked",
+        "postUnlikedMessage": "Post removed from your liked items",
+        "postShared": "Post Shared",
+        "postSharedMessage": "Post link copied to clipboard!",
+        "reportSubmitted": "Report Submitted",
+        "reportSubmittedMessage": "Thank you for your report. We will review it shortly.",
+        "openingMessage": "Opening {{description}}...",
+        "itemsAvailable": "{{description}} - {{count}} items available"
+      },
+      "emptyStateMessage": "Start a discussion to connect with your classmates!"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "filters": "Filters",
+      "searchPlaceholder": "Search notifications...",
+      "types": {
+        "all": "All Types",
+        "assignment": "Assignments",
+        "grade": "Grades",
+        "announcement": "Announcements",
+        "material": "Course Materials",
+        "exam": "Exams"
+      },
+      "priorities": {
+        "all": "All Priorities",
+        "high": "High Priority",
+        "medium": "Medium Priority",
+        "low": "Low Priority",
+        "label": "Priority"
+      },
+      "empty": {
+        "title": "No notifications found",
+        "subtitle": "Try adjusting your search or filters"
+      },
+      "viewMode": {
+        "listView": "List View",
+        "cardView": "Card View"
+      },
+      "status": {
+        "read": "Read",
+        "unread": "Unread"
+      },
+      "actions": {
+        "viewDetails": "View Details",
+        "takeAction": "Take Action"
+      },
+      "details": {
+        "message": "Message",
+        "course": "Course",
+        "type": "Type"
+      }
+    },
+    "dashboard": {
+      "stats": {
+        "enrolledCourses": "Enrolled Courses",
+        "pendingAssignments": "Pending Assignments",
+        "averageGrade": "Average Grade",
+        "nextClass": "Next Class"
+      },
+      "academicPerformance": {
+        "title": "Academic Performance",
+        "semester": { "this": "This Semester", "last": "Last Semester" }
+      },
+      "studyProgress": {
+        "attendanceRate": "Attendance Rate",
+        "studyHours": "Study Hours",
+        "completedTasks": "Completed Tasks",
+        "currentGpa": "Current GPA"
+      },
+      "upcomingAssignments": {
+        "title": "Upcoming Assignments",
+        "viewAll": "View All",
+        "status": { "pending": "Pending", "in-progress": "In Progress", "not-started": "Not Started" },
+        "daysLeft_one": "{{count}} day left",
+        "daysLeft_other": "{{count}} days left",
+        "dueOn": "Due: {{date}}"
+      },
+      "schedule": {
+        "today": "Today's Schedule",
+        "instructor": "Instructor: {{name}}"
+      },
+      "deadlines": {
+        "title": "Important Deadlines",
+        "type": { "assignment": "Assignment", "project": "Project" },
+        "due": "Due: {{date}}"
+      },
+      "resources": {
+        "title": "Study Resources",
+        "digitalLibrary": { "title": "Digital Library", "subtitle": "Access course materials" },
+        "studyGroups": { "title": "Study Groups", "subtitle": "Join or create study groups" },
+        "academicSupport": { "title": "Academic Support", "subtitle": "Get help from tutors" }
+      },
+      "widgets": {
+        "messages": "Messages",
+        "recentActivities": "Recent Activities",
+        "quickLinks": "Quick Links",
+        "buttons": { "courseMaterials": "Course Materials", "assignments": "Assignments", "schedule": "Schedule", "grades": "Grades" }
+      }
+    },
+    "materials": {
+      "title": "Course Materials",
+      "searchPlaceholder": "Search materials...",
+      "filters": "More Filters",
+      "view": {
+        "grid": "Grid View",
+        "list": "List View"
+      },
+      "courses": {
+        "all": "All Courses"
+      },
+      "types": {
+        "all": "All Types",
+        "lecture-notes": "Lecture Notes",
+        "assignment": "Assignments",
+        "project": "Projects",
+        "resource": "Resources"
+      },
+      "labels": {
+        "format": "Format",
+        "size": "Size",
+        "instructor": "Instructor",
+        "downloads": "Downloads",
+        "uploaded": "Uploaded",
+        "viewDetails": "View Details",
+        "downloadCount_one": "{{count}} download",
+        "downloadCount_other": "{{count}} downloads"
+      },
+      "list": {
+        "title": "Title",
+        "course": "Course",
+        "type": "Type",
+        "format": "Format",
+        "downloads": "Downloads",
+        "actions": "Actions"
+      },
+      "modal": {
+        "description": "Description",
+        "fileInfo": "File Information",
+        "courseInfo": "Course Information",
+        "format": "Format",
+        "size": "Size",
+        "downloads": "Downloads",
+        "instructor": "Instructor",
+        "type": "Type",
+        "uploaded": "Uploaded",
+        "close": "Close",
+        "download": "Download"
+      }
+    },
+    "courses": {
+      "title": "My Courses",
+      "tour": {
+        "search": { "title": "Search Your Courses", "desc": "Use this search bar to quickly find courses by name or instructor." },
+        "grid": { "title": "Your Course Dashboard", "desc": "Here are all your enrolled courses with progress tracking, schedules, and quick access to course materials." },
+        "details": { "title": "Course Materials & Resources", "desc": "Click \"View Details\" to access course syllabus, weekly materials, videos, and assignments." }
+      },
+      "searchPlaceholder": "Search courses...",
+      "card": {
+        "instructor": "Instructor:",
+        "nextClass": "Next Class: {{date}}",
+        "progress": "Progress"
+      },
+      "list": {
+        "course": "Course",
+        "instructor": "Instructor",
+        "schedule": "Schedule",
+        "progress": "Progress",
+        "nextClass": "Next Class",
+        "actions": "Actions"
+      },
+      "viewDetails": "View Details",
+      "modal": {
+        "closeAria": "Close",
+        "courseDetails": "Course Details",
+        "classInfo": "Class Info",
+        "enrolled": "Enrolled: {{count}}",
+        "next": "Next: {{date}}",
+        "progress": "Progress: {{percent}}%",
+        "courseSyllabus": "Course Syllabus",
+        "viewSyllabus": "View Syllabus (PDF)",
+        "actionButtons": {
+          "studyPlan": "Study Plan",
+          "assignmentSubmissionForm": "Assignment Submission Form",
+          "checkMyVae": "Check My VAE",
+          "zoolaReport": "Zoola Report"
+        },
+        "assignmentSubmission": {
+          "title": "Assignment Submission",
+          "instructionsTitle": "Assignment Submission Instructions",
+          "instructionsP1": "There is an assignment submission page like this one for each course, but only one submission form needs to be submitted for each type of assignment.",
+          "instructionsP2": {
+            "part1": "Please select the form below for the type of assignment you are submitting. Then use the form to upload one document for each course you are taking which requires that assignment.",
+            "strong": "Definitions Submission Form",
+            "part2": "and then upload four documents on it: one for Intro to Law, one for Contracts, one for Criminal Law, and one for Torts."
+          },
+          "clickToAccess": "Click to access",
+          "forms": {
+            "definitions": { "title": "Definitions Submission Form", "description": "Submit definitions for legal terms and concepts" },
+            "caseBriefs": { "title": "Case Briefs Submission Form", "description": "Submit case briefs and legal analysis" },
+            "miniThesis": { "title": "Mini Thesis Papers Submission Form", "description": "Submit mini thesis papers and research" },
+            "midtermEssays": { "title": "Midterm Essay Exams Submission Form", "description": "Submit midterm essay examinations" }
+          },
+          "importantNotesTitle": "Important Notes",
+          "importantNotesList": [
+            "Each assignment type requires a separate submission form",
+            "You can upload multiple course documents on a single form",
+            "Make sure to include your name and course information on each document",
+            "Submit assignments before the deadline to avoid late penalties",
+            "Contact your instructor if you have questions about specific assignments"
+          ]
+        },
+        "caseBriefs": {
+          "title": "Case Briefs Submission Form",
+          "subtitle": "Submit case briefs and legal analysis",
+          "instructionsTitle": "Case Brief Assignment Instructions",
+          "instructionsP1": "This form allows you to submit case briefs for multiple courses. For each course, provide the course information and detailed case briefs including facts, issues, holdings, and reasoning.",
+          "instructionsP2": "Each case brief should include all required sections. You can add multiple courses and multiple case briefs per course. Make sure all required fields are completed before submission.",
+          "studentInfoTitle": "Student Information",
+          "courseTitle": "Course {{num}}",
+          "caseBriefsTitle": "Case Briefs",
+          "caseBriefTitle": "Case Brief {{num}}",
+          "addCaseBrief": "Add Case Brief",
+          "addAnotherCourse": "Add Another Course",
+          "submitButton": "Submit Case Briefs",
+          "submitting": "Submitting...",
+          "submitSuccess": "Case briefs submitted successfully!",
+          "fields": {
+            "studentName": "Student Name *",
+            "studentId": "Student ID *",
+            "courseName": "Course Name *",
+            "courseCode": "Course Code *",
+            "caseName": "Case Name *",
+            "citation": "Citation",
+            "court": "Court",
+            "date": "Date",
+            "facts": "Facts *",
+            "issue": "Issue *",
+            "holding": "Holding *",
+            "reasoning": "Reasoning",
+            "dissent": "Dissent (if any)",
+            "significance": "Significance"
+          },
+          "placeholders": {
+            "studentName": "Enter your full name",
+            "studentId": "Enter your student ID",
+            "courseName": "e.g., Criminal Law",
+            "courseCode": "e.g., CRIM201",
+            "caseName": "e.g., Brown v. Board of Education",
+            "citation": "e.g., 347 U.S. 483 (1954)",
+            "court": "e.g., U.S. Supreme Court",
+            "facts": "Summarize the key facts of the case...",
+            "issue": "What legal question is the court addressing?",
+            "holding": "What did the court decide?",
+            "reasoning": "Explain the court's legal reasoning and analysis...",
+            "dissent": "Summarize any dissenting opinions...",
+            "significance": "What is the broader impact of this decision?"
+          },
+          "validation": {
+            "studentName": "Student name is required",
+            "studentId": "Student ID is required",
+            "courseName": "Course name is required",
+            "courseCode": "Course code is required",
+            "caseName": "Case name is required",
+            "facts": "Facts are required",
+            "issue": "Issue is required",
+            "holding": "Holding is required"
+          }
+        },
+        "midtermEssays": {
+          "title": "Midterm Essay Exams Submission Form",
+          "subtitle": "Submit midterm essay examinations",
+          "instructionsTitle": "Midterm Essay Exam Instructions",
+          "instructionsP1": "This form allows you to submit midterm essay exams for multiple courses. Each exam should include the exam details, essay questions, and your written responses. Make sure to include word counts and time spent on each question.",
+          "instructionsP2": "Each essay question should be answered thoroughly and demonstrate your understanding of the course material. You can add multiple courses and multiple essay questions per course.",
+          "studentInfoTitle": "Student Information",
+          "courseTitle": "Course {{num}}",
+          "essayQuestionsTitle": "Essay Questions",
+          "essayQuestionTitle": "Essay Question {{num}}",
+          "addQuestion": "Add Question",
+          "addAnotherCourse": "Add Another Course",
+          "submitButton": "Submit Midterm Essays",
+          "submitting": "Submitting...",
+          "submitSuccess": "Midterm essay exams submitted successfully!",
+          "importantNoticeTitle": "Important Submission Notice",
+          "importantNoticeList": [
+            "Ensure all essay questions are answered completely and thoroughly",
+            "Include relevant legal citations and case law references where applicable",
+            "Submit before the deadline to avoid late penalties",
+            "Double-check your answers for accuracy and completeness",
+            "Contact your instructor immediately if you encounter technical issues"
+          ],
+          "fields": {
+            "studentName": "Student Name *",
+            "studentId": "Student ID *",
+            "courseName": "Course Name *",
+            "courseCode": "Course Code *",
+            "examDate": "Exam Date *",
+            "timeLimit": "Time Limit",
+            "questionNumber": "Question Number *",
+            "wordCount": "Word Count",
+            "questionText": "Question Text *",
+            "answer": "Your Answer *",
+            "timeSpent": "Time Spent"
+          },
+          "placeholders": {
+            "studentName": "Enter your full name",
+            "studentId": "Enter your student ID",
+            "courseName": "e.g., Criminal Procedure",
+            "courseCode": "e.g., CRIM302",
+            "timeLimit": "e.g., 2 hours, 90 minutes",
+            "questionNumber": "e.g., 1, 2, 3 or A, B, C",
+            "wordCount": "e.g., 500",
+            "questionText": "Copy the essay question from your exam...",
+            "answer": "Write your comprehensive answer to the essay question. Include relevant legal principles, case law, and analysis...",
+            "timeSpent": "e.g., 45 minutes, 1 hour 15 minutes"
+          },
+          "validation": {
+            "studentName": "Student name is required",
+            "studentId": "Student ID is required",
+            "courseName": "Course name is required",
+            "courseCode": "Course code is required",
+            "examDate": "Exam date is required",
+            "questionNumber": "Question number is required",
+            "questionText": "Question text is required",
+            "answer": "Answer is required"
+          }
+        },
+        "miniThesis": {
+          "title": "Mini Thesis Papers Submission Form",
+          "subtitle": "Submit mini thesis papers and research assignments",
+          "instructionsTitle": "Mini Thesis Assignment Instructions",
+          "instructionsP1": "This form allows you to submit mini thesis papers for multiple courses. Each thesis should include a clear research question, methodology, findings, and conclusion. Follow academic writing standards and include proper citations.",
+          "instructionsP2": "Each thesis paper should be well-structured and demonstrate critical thinking. You can add multiple courses and multiple thesis papers per course. Make sure all required fields are completed.",
+          "studentInfoTitle": "Student Information",
+          "courseTitle": "Course {{num}}",
+          "thesisPapersTitle": "Thesis Papers",
+          "thesisPaperTitle": "Thesis Paper {{num}}",
+          "addThesisPaper": "Add Thesis Paper",
+          "addAnotherCourse": "Add Another Course",
+          "submitButton": "Submit Thesis Papers",
+          "submitting": "Submitting...",
+          "submitSuccess": "Mini thesis papers submitted successfully!",
+          "fields": {
+            "studentName": "Student Name *",
+            "studentId": "Student ID *",
+            "courseName": "Course Name *",
+            "courseCode": "Course Code *",
+            "title": "Thesis Title *",
+            "topic": "Research Topic *",
+            "wordCount": "Word Count",
+            "keywords": "Keywords",
+            "abstract": "Abstract *",
+            "introduction": "Introduction *",
+            "literatureReview": "Literature Review",
+            "methodology": "Methodology",
+            "findings": "Findings",
+            "conclusion": "Conclusion *",
+            "references": "References"
+          },
+          "placeholders": {
+            "studentName": "Enter your full name",
+            "studentId": "Enter your student ID",
+            "courseName": "e.g., Constitutional Law",
+            "courseCode": "e.g., CONST301",
+            "title": "Enter the title of your thesis",
+            "topic": "e.g., Freedom of Speech in Digital Age",
+            "wordCount": "e.g., 2500",
+            "keywords": "e.g., freedom of speech, digital rights, constitutional law",
+            "abstract": "Provide a concise summary of your research question, methodology, and key findings...",
+            "introduction": "Introduce your research question, provide context, and outline your argument...",
+            "literatureReview": "Review relevant literature and establish the context for your research...",
+            "methodology": "Describe your research methods, data collection, and analysis approach...",
+            "findings": "Present your research findings and analysis...",
+            "conclusion": "Summarize your findings, discuss implications, and suggest future research...",
+            "references": "List all sources cited in your thesis (use appropriate citation format)..."
+          },
+          "validation": {
+            "studentName": "Student name is required",
+            "studentId": "Student ID is required",
+            "courseName": "Course name is required",
+            "courseCode": "Course code is required",
+            "title": "Thesis title is required",
+            "topic": "Topic is required",
+            "abstract": "Abstract is required",
+            "introduction": "Introduction is required",
+            "conclusion": "Conclusion is required"
+          }
+        },
+        "studyPlan": {
+          "title": "Study Plan",
+          "courseOverview": "Course Overview",
+          "learningObjectives": "Learning Objectives",
+          "prerequisites": "Prerequisites",
+          "weeklyStudyPlan": "Weekly Study Plan",
+          "progressSummary": "Progress Summary",
+          "learningResources": "Learning Resources",
+          "keyMilestones": "Key Milestones",
+          "totalHours": "Total Hours",
+          "difficulty": "Difficulty",
+          "week": "Week {{num}}",
+          "topicsCovered": "Topics Covered",
+          "activities": "Activities",
+          "deliverables": "Deliverables",
+          "estimatedHours": "{{hours}}h",
+          "status": {
+            "completed": "completed",
+            "inProgress": "in-progress",
+            "notStarted": "not-started"
+          },
+          "resourceStatus": {
+            "available": "Available",
+            "unavailable": "Unavailable"
+          },
+          "backButton": "Back",
+          "courseDuration": "{{course}} • {{duration}}",
+          "unknownCourse": "Unknown Course",
+          "courses": {
+            "cyberSecurity": {
+              "title": "Cyber Security Study Plan",
+              "description": "Comprehensive study plan covering cybersecurity fundamentals, threats, and defense mechanisms.",
+              "objectives": [
+                "Understand cybersecurity principles and best practices",
+                "Learn about common cyber threats and attack vectors",
+                "Master security tools and defense mechanisms",
+                "Develop incident response and recovery skills"
+              ],
+              "prerequisites": ["Basic Computer Science", "Networking Fundamentals"],
+              "weeks": {
+                "week1": {
+                  "title": "Introduction to Cybersecurity",
+                  "topics": ["Cybersecurity fundamentals", "Threat landscape overview", "Security principles"],
+                  "activities": ["Read Chapter 1-2", "Complete Quiz 1", "Join discussion forum"],
+                  "deliverables": ["Quiz submission", "Discussion participation"]
+                },
+                "week2": {
+                  "title": "Network Security Basics",
+                  "topics": ["Network protocols", "Firewall configuration", "VPN setup"],
+                  "activities": ["Lab exercises", "Hands-on practice", "Group project planning"],
+                  "deliverables": ["Lab report", "Project outline"]
+                },
+                "week3": {
+                  "title": "Cryptography Fundamentals",
+                  "topics": ["Encryption algorithms", "Hash functions", "Digital signatures"],
+                  "activities": ["Cryptography exercises", "Code implementation", "Security analysis"],
+                  "deliverables": ["Code submission", "Security report"]
+                },
+                "week4": {
+                  "title": "Web Application Security",
+                  "topics": ["OWASP Top 10", "SQL injection", "XSS prevention"],
+                  "activities": ["Vulnerability assessment", "Penetration testing", "Security audit"],
+                  "deliverables": ["Vulnerability report", "Security recommendations"]
+                },
+                "week5": {
+                  "title": "Incident Response",
+                  "topics": ["Incident detection", "Response procedures", "Recovery planning"],
+                  "activities": ["Case studies", "Simulation exercises", "Documentation"],
+                  "deliverables": ["Incident response plan", "Case study analysis"]
+                }
+              },
+              "resources": [
+                { "type": "Textbook", "name": "Cybersecurity Essentials", "author": "Dr. Sarah Johnson" },
+                { "type": "Online Course", "name": "Cybersecurity Fundamentals", "platform": "Coursera" },
+                { "type": "Lab Environment", "name": "Virtual Security Lab", "platform": "VMware" },
+                { "type": "Tools", "name": "Wireshark, Metasploit, Nmap", "platform": "Open Source" }
+              ],
+              "milestones": [
+                { "title": "Midterm Assessment", "type": "Exam" },
+                { "title": "Project Phase 1", "type": "Project" },
+                { "title": "Security Audit", "type": "Practical" },
+                { "title": "Final Project", "type": "Project" }
+              ]
+            },
+            "advancedPython": {
+              "title": "Advanced Python Study Plan",
+              "description": "Master advanced Python concepts, best practices, and real-world applications.",
+              "objectives": [
+                "Master advanced Python features and syntax",
+                "Learn design patterns and best practices",
+                "Develop real-world applications",
+                "Understand performance optimization"
+              ],
+              "prerequisites": ["Python Basics", "Object-Oriented Programming"],
+              "weeks": {
+                "week1": {
+                  "title": "Advanced Python Features",
+                  "topics": ["Decorators", "Generators", "Context managers"],
+                  "activities": ["Code examples", "Practice exercises", "Mini projects"],
+                  "deliverables": ["Code submission", "Feature demonstration"]
+                },
+                "week2": {
+                  "title": "Design Patterns",
+                  "topics": ["Creational patterns", "Structural patterns", "Behavioral patterns"],
+                  "activities": ["Pattern implementation", "Case studies", "Design exercises"],
+                  "deliverables": ["Pattern examples", "Design document"]
+                },
+                "week3": {
+                  "title": "Performance Optimization",
+                  "topics": ["Profiling", "Memory management", "Algorithm optimization"],
+                  "activities": ["Performance testing", "Optimization exercises", "Benchmarking"],
+                  "deliverables": ["Performance report", "Optimized code"]
+                },
+                "week4": {
+                  "title": "Testing and Debugging",
+                  "topics": ["Unit testing", "Integration testing", "Debugging techniques"],
+                  "activities": ["Test writing", "Debugging practice", "Test coverage"],
+                  "deliverables": ["Test suite", "Debugging report"]
+                }
+              },
+              "resources": [
+                { "type": "Textbook", "name": "Python Cookbook", "author": "Prof. Michael Chen" },
+                { "type": "Online Course", "name": "Advanced Python Programming", "platform": "edX" },
+                { "type": "Development Environment", "name": "PyCharm Professional", "platform": "JetBrains" },
+                { "type": "Libraries", "name": "NumPy, Pandas, Django", "platform": "Python Package Index" }
+              ],
+              "milestones": [
+                { "title": "Feature Assessment", "type": "Code Review" },
+                { "title": "Design Pattern Project", "type": "Project" },
+                { "title": "Performance Challenge", "type": "Practical" },
+                { "title": "Final Application", "type": "Project" }
+              ]
+            },
+            "webDevelopment": {
+              "title": "Web Development Study Plan",
+              "description": "Learn modern web development technologies and best practices.",
+              "objectives": [
+                "Master modern web technologies",
+                "Learn responsive design principles",
+                "Understand web security best practices",
+                "Build full-stack web applications"
+              ],
+              "prerequisites": ["HTML/CSS Basics", "JavaScript Fundamentals"],
+              "weeks": {
+                "week1": {
+                  "title": "Modern HTML & CSS",
+                  "topics": ["Semantic HTML", "CSS Grid", "Flexbox", "CSS Variables"],
+                  "activities": ["Layout exercises", "Responsive design", "CSS animations"],
+                  "deliverables": ["Portfolio page", "CSS showcase"]
+                },
+                "week2": {
+                  "title": "JavaScript ES6+",
+                  "topics": ["Arrow functions", "Destructuring", "Modules", "Async/await"],
+                  "activities": ["Code challenges", "Mini applications", "ES6 features"],
+                  "deliverables": ["JavaScript project", "Feature demonstration"]
+                },
+                "week3": {
+                  "title": "Frontend Frameworks",
+                  "topics": ["React basics", "Component lifecycle", "State management"],
+                  "activities": ["React tutorials", "Component building", "State exercises"],
+                  "deliverables": ["React app", "Component library"]
+                },
+                "week4": {
+                  "title": "Backend Development",
+                  "topics": ["Node.js", "Express.js", "API design", "Database integration"],
+                  "activities": ["Server setup", "API development", "Database queries"],
+                  "deliverables": ["Backend API", "Database schema"]
+                }
+              },
+              "resources": [
+                { "type": "Textbook", "name": "Web Development Guide", "author": "Dr. Emily Brown" },
+                { "type": "Online Course", "name": "Full Stack Web Development", "platform": "Udemy" },
+                { "type": "Development Tools", "name": "VS Code, Chrome DevTools", "platform": "Various" },
+                { "type": "Frameworks", "name": "React, Node.js, Express", "platform": "Open Source" }
+              ],
+              "milestones": [
+                { "title": "Frontend Assessment", "type": "Project" },
+                { "title": "Backend Integration", "type": "Project" },
+                { "title": "Full Stack App", "type": "Project" },
+                { "title": "Final Portfolio", "type": "Project" }
+              ]
+            }
+          }
+        },
+        "checkMyVae": {
+          "title": "Verification of Academic Experience (VAE)",
+          "lastUpdated": "Last updated: {{date}}",
+          "refresh": "Refresh VAE",
+          "tabs": {
+            "overview": "Overview",
+            "course": "Course Details",
+            "requirements": "Requirements",
+            "progress": "Progress Tracking"
+          },
+          "notFound": {
+            "title": "Course Not Found",
+            "desc": "Please select a course to view VAE information.",
+            "backToCourses": "Back to Courses"
+          },
+          "overallStatusTitle": "Overall Academic Status",
+          "creditHours": "Credit Hours",
+          "complete": "Complete",
+          "gpa": "GPA",
+          "grade": "Grade",
+          "courses": "Courses",
+          "completed": "Completed",
+          "total": "Total",
+          "standing": "Standing",
+          "currentCourseTitle": "Current Course: {{course}}",
+          "courseProgress": "Course Progress",
+          "attendance": "Attendance",
+          "assignments": "Assignments",
+          "midtermGrade": "Midterm Grade",
+          "nextMilestone": "Next Milestone",
+          "dueDate": "Due: {{date}}",
+          "requirementsOverviewTitle": "Degree Requirements Overview",
+          "courseDetailsVaeTitle": "{{course}} - Detailed VAE",
+          "courseStats": "Course Statistics",
+          "attendanceRate": "Attendance Rate",
+          "assignmentsCompleted": "Assignments Completed",
+          "lastActivity": "Last Activity",
+          "gradesMilestones": "Grades & Milestones",
+          "due": "Due Date",
+          "courseRequirementsBreakdown": "Course Requirements Breakdown",
+          "status": { "completed": "Completed", "inProgress": "In Progress", "pending": "Pending" },
+          "requirements": { "coreCourses": "Core Courses", "electives": "Electives", "generalEducation": "General Education" },
+          "progressTimeline": "Academic Progress Timeline",
+          "timeline": {
+            "sem1": { "title": "Semester 1", "desc": "Completed 15 credit hours with 3.2 GPA", "time": "Fall 2023" },
+            "sem2": { "title": "Semester 2", "desc": "Completed 18 credit hours with 3.5 GPA", "time": "Spring 2024" },
+            "current": { "title": "Current Semester", "desc": "In progress with 12 credit hours", "time": "Fall 2024" },
+            "future": { "title": "Future Semesters", "desc": "Remaining 45 credit hours to complete degree", "time": "2025-2026" }
+          },
+          "progressInsightsTitle": "Progress Insights",
+          "insights": {
+            "onTrack": { "title": "On Track", "text": "You are currently on track to complete your degree within the expected timeframe." },
+            "improving": { "title": "Improving", "text": "Your GPA has improved from 3.2 to 3.45 over the last two semesters." }
+          }
+        },
+        "zoolaReport": {
+          "title": "Zoola Academic Report",
+          "generated": "Generated: {{date}}",
+          "actions": { "exportPdf": "Export PDF", "refresh": "Refresh" },
+          "tabs": {
+            "vaeHours": "VAE Hours",
+            "overview": "Overview",
+            "performance": "Performance",
+            "analytics": "Analytics",
+            "recommendations": "Recommendations",
+            "progress": "Progress"
+          },
+          "notFound": {
+            "title": "Course Not Found",
+            "desc": "Please select a course to view Zoola Report.",
+            "backToCourses": "Back to Courses"
+          },
+          "sections": {
+            "studentInfo": "Student Information",
+            "overallSummary": "Overall Performance Summary",
+            "performanceBreakdown": "Performance Breakdown by Category",
+            "learningAnalyticsOverview": "Learning Analytics Overview",
+            "detailedPerformance": "Detailed Performance Analysis",
+            "performanceMetrics": "Performance Metrics",
+            "comparativeAnalysis": "Comparative Analysis",
+            "analyticsDeepDive": "Learning Analytics Deep Dive",
+            "timeActivityAnalysis": "Time and Activity Analysis",
+            "engagementMetrics": "Engagement Metrics",
+            "personalizedRecommendations": "Personalized Recommendations",
+            "weeklyProgress": "Weekly Progress Tracking",
+            "progressInsights": "Progress Insights",
+            "vaeHoursSummary": "VAE Hours Summary"
+          },
+          "labels": {
+            "studentId": "Student ID",
+            "studentName": "Student Name",
+            "academicPeriod": "Academic Period",
+            "overallScore": "Overall Score",
+            "currentGrade": "Current Grade",
+            "classRank": "Class Rank",
+            "of": "of",
+            "percentile": "Percentile",
+            "top": "Top",
+            "trend": "Trend",
+            "vsPrevious": "vs Previous",
+            "weight": "Weight",
+            "score": "Score",
+            "totalStudyTime": "Total Study Time",
+            "classAttendance": "Class Attendance",
+            "overallEngagement": "Overall Engagement",
+            "avgResponse": "Avg. Response",
+            "assignmentsSubmitted": "Assignments Submitted",
+            "quizzesCompleted": "Quizzes Completed",
+            "lastActivity": "Last Activity",
+            "engagementScore": "Engagement Score",
+            "attendanceRate": "Attendance Rate",
+            "responseTime": "Response Time",
+            "days": "days",
+            "yourScore": "Your Score",
+            "targetScore": "Target Score",
+            "improvement": "Improvement",
+            "activityName": "Activity Name",
+            "timeSpent": "Time Spent",
+            "aggregate": "Aggregate",
+            "total": "Total",
+            "totalActivities": "Total Activities",
+            "activitiesWithTime": "Activities with Time",
+            "categories": "Categories",
+            "impact": "Impact",
+            "prioritySuffix": "Priority"
+          },
+          "insights": {
+            "steadyImprovement": {
+              "title": "Steady Improvement",
+              "text": "Your scores have shown consistent improvement over the past 8 weeks, indicating strong learning progress."
+            },
+            "targetAchievement": {
+              "title": "Target Achievement",
+              "text": "You're on track to achieve your target score of 90% with continued effort and focus."
+            },
+            "recommendationNote": "This recommendation is based on your current performance and learning patterns."
+          },
+          "vaeHoursTitle": "{{course}} Course, Live Classes, and Discussion Boards VAE Hours"
+        },
+        "weeklyContent": "Weekly Content",
+        "week": "Week {{num}}",
+        "viewPdf": "View PDF",
+        "watchVideo": "Watch Video",
+        "proBanner": "Available on PRO Version"
+      }
+    },
+    "grades": {
+      "title": "My Grades",
+      "searchPlaceholder": "Search courses...",
+      "filters": "More Filters",
+      "view": {
+        "grid": "Grid View",
+        "list": "List View"
+      },
+      "semesters": {
+        "all": "All Semesters",
+        "spring2024": "Spring 2024",
+        "fall2023": "Fall 2023"
+      },
+      "overview": {
+        "gpa": "Overall GPA",
+        "completed": "Courses Completed",
+        "current": "Current Courses"
+      },
+      "viewDetails": "View Details",
+      "list": {
+        "course": "Course",
+        "code": "Code",
+        "instructor": "Instructor",
+        "grade": "Grade",
+        "trend": "Trend",
+        "actions": "Actions"
+      },
+      "modal": {
+        "courseInfo": "Course Information",
+        "courseCode": "Course Code",
+        "instructor": "Instructor",
+        "semester": "Semester",
+        "gradeSummary": "Grade Summary",
+        "currentGrade": "Current Grade",
+        "trend": "Trend",
+        "trendImproving": "Improving",
+        "trendDeclining": "Declining",
+        "assignmentDetails": "Assignment Details",
+        "weight": "Weight",
+        "contribution": "Contribution",
+        "close": "Close"
+      }
+    },
+    "assignments": {
+      "title": "My Assignments",
+      "searchPlaceholder": "Search assignments...",
+      "filters": "More Filters",
+      "status": {
+        "all": "All Status",
+        "pending": "Pending",
+        "submitted": "Submitted",
+        "overdue": "Overdue"
+      },
+      "list": {
+        "assignment": "Assignment",
+        "course": "Course",
+        "due": "Due",
+        "status": "Status",
+        "type": "Type",
+        "points": "Points",
+        "submitted": "Submitted",
+        "actions": "Actions"
+      },
+      "buttons": {
+        "submit": "Submit Assignment",
+        "viewDetails": "View Details"
+      },
+      "view": {
+        "grid": "Grid View",
+        "list": "List View"
+      },
+      "modal": {
+        "details": "Assignment Details",
+        "submission": "Submission Status",
+        "status": "Status",
+        "submitted": "Submitted",
+        "dueDate": "Due Date",
+        "close": "Close",
+        "dropHint": "Drag and drop files here or click to browse",
+        "submit": "Submit Assignment"
+      }
+    },
+    "schedule": {
+      "title": "Class Schedule",
+      "subtitle": "Your weekly timetable at a glance",
+      "views": { "weekly": "Weekly", "monthly": "Monthly" },
+      "todayTitle": "Today's Classes",
+      "noToday": "No classes today!",
+      "onlineAvailable": "Online Available",
+      "stats": {
+        "title": "Quick Stats",
+        "totalClasses": "Total Classes",
+        "thisSemester": "This semester",
+        "onlineClasses": "Online Classes",
+        "availableOnline": "Available online",
+        "totalHours": "Total Hours",
+        "weeklyHours": "Weekly hours",
+        "attendance": "Attendance",
+        "currentRate": "Current rate"
+      },
+      "actions": {
+        "title": "Quick Actions",
+        "joinNext": "Join Next Class",
+        "setReminder": "Set Reminder",
+        "syncCalendar": "Sync Calendar",
+        "viewMap": "View Map"
+      },
+      "popups": {
+        "joiningClass": "Joining Class",
+        "joiningClassMessage": "Joining {{course}} online session...",
+        "calendarUpdated": "Calendar Updated",
+        "calendarUpdatedMessage": "Added {{course}} to your calendar",
+        "joiningNextClass": "Joining Next Class",
+        "joiningNextClassMessage": "Joining {{course}} at {{time}}",
+        "noClasses": "No Classes",
+        "noClassesMessage": "No upcoming classes found",
+        "remindersSet": "Reminders Set",
+        "remindersSetMessage": "Reminder set for all classes this week!",
+        "calendarSynced": "Calendar Synced",
+        "calendarSyncedMessage": "Calendar synced successfully! All classes added to your calendar.",
+        "openingMap": "Opening Map",
+        "openingMapMessage": "Opening campus map..."
+      },
+      "days": {
+        "short": { "sun": "Sun", "mon": "Mon", "tue": "Tue", "wed": "Wed", "thu": "Thu", "fri": "Fri", "sat": "Sat" }
+      },
+      "weekly": {
+        "header": "{{day}}'s Classes",
+        "noClasses": "No classes scheduled for {{day}}.",
+        "joinOnline": "Join Online",
+        "addCalendar": "Add to Calendar"
+      },
+      "dateSystem": {
+        "label": "Date System:",
+        "gregorian": "Gregorian",
+        "hijri": "Hijri"
+      },
+      "holidayKSA": "KSA Holiday",
+      "fridayHint": "Friday (Jumu’ah)"
+    },
+    "messages": {
+      "searchPlaceholder": "Search conversations...",
+      "send": "Send",
+      "typing": "Typing...",
+      "inputPlaceholder": "Type a message...",
+      "attachments": { "image": "Image", "file": "File" },
+      "empty": { "title": "Select a conversation", "subtitle": "Choose a conversation to start messaging" }
+    },
+    "profile": {
+      "completion": "Profile Completion",
+      "viewDataRetention": "📄 View Data Retention Policy",
+      "accessibility": "Show Accessibility Bar",
+      "form": {
+        "fullName": "Full Name",
+        "email": "Email",
+        "phone": "Phone",
+        "program": "Program",
+        "year": "Year",
+        "dob": "Date of Birth",
+        "gender": "Gender",
+        "genderSelect": "Select Gender",
+        "genderMale": "Male",
+        "genderFemale": "Female",
+        "genderOther": "Other",
+        "address": "Address",
+        "nationality": "Nationality",
+        "role": "Role",
+        "save": "Save Changes"
+      },
+      "social": { "linkedin": "LinkedIn", "github": "GitHub" },
+      "activity": {
+        "title": "Account Activity",
+        "lastLogin": "Last Login",
+        "courses": "Courses Enrolled",
+        "assignments": "Pending Assignments",
+        "score": "Activity Score",
+        "monthly": "Activity (Monthly)"
+      }
+    },
+    "sageAI": {
+      "title": "Sage AI",
+      "subtitle": "Your intelligent learning assistant",
+      "sections": {
+        "availablePrompts": "Available Prompts",
+        "proFeatures": "PRO Features",
+        "proBadge": "Available with PRO Version"
+      },
+      "chat": {
+        "back": "Back",
+        "chatTitle": "Sage AI Chat",
+        "placeholder": "Message Sage AI..."
+      },
+      "prompts": {
+        "courseSummary": { "title": "Course Summary", "description": "Get a comprehensive summary of any course topic" },
+        "studyTips": { "title": "Study Tips", "description": "Receive personalized study strategies and tips" },
+        "practiceQuestions": { "title": "Practice Questions", "description": "Generate practice questions for any subject" },
+        "advancedAnalysis": { "title": "Advanced Analysis", "description": "Deep dive analysis of complex topics" },
+        "codeReview": { "title": "Code Review", "description": "Get detailed code reviews and suggestions" },
+        "essayWriting": { "title": "Essay Writing", "description": "AI-powered essay writing assistance" },
+        "researchAssistant": { "title": "Research Assistant", "description": "Advanced research and citation help" },
+        "examPrep": { "title": "Exam Prep", "description": "Comprehensive exam preparation tools" },
+        "projectGuidance": { "title": "Project Guidance", "description": "Step-by-step project planning and guidance" }
+      },
+      "panel": {
+        "copy": { "button": "Copy Summary", "copied": "Copied!" },
+        "summaryTitle": "Sage AI Summary",
+        "poweredBy": "Powered by AI",
+        "videoTitle": "Video Title",
+        "aiGenerated": "AI-Generated Summary",
+        "generating": "Generating summary...",
+        "noSummary": "No summary available for this video.",
+        "copy": { "button": "Copy Summary", "copied": "Copied!" },
+        "footer": { "line1": "This summary was generated by Sage AI based on the video transcript.", "line2": "For the most accurate information, please watch the full video." },
+        "closeAria": "Close panel",
+        "documentTitle": "Document Title",
+        "upsell": {
+          "title": "Unlock full summary",
+          "desc": "Upgrade to PRO to read the complete AI-generated summary.",
+          "button": "Upgrade to PRO"
+        }
+      },
+      "chatResponses": {
+        "courseSummary": "Here's a comprehensive summary of your course topic:\n\n**Key Concepts:**\n• Fundamental principles and theories\n• Core methodologies and approaches\n• Essential frameworks and models\n\n**Main Points:**\n• Critical learning objectives\n• Important definitions and terminology\n• Key relationships between concepts\n\n**Important Details:**\n• Practical applications and examples\n• Common challenges and solutions\n• Best practices and recommendations\n\nThis summary covers the essential aspects of your course material. Would you like me to elaborate on any specific topic?",
+        "studyTips": "Here are personalized study strategies for your subject:\n\n**Active Learning Techniques:**\n• Create mind maps and concept diagrams\n• Use the Feynman technique (explain to others)\n• Practice with flashcards and spaced repetition\n\n**Time Management:**\n• Use the Pomodoro technique (25-min focused sessions)\n• Schedule regular review sessions\n• Break complex topics into smaller chunks\n\n**Memory Enhancement:**\n• Connect new information to existing knowledge\n• Use mnemonic devices and acronyms\n• Practice retrieval through self-quizzing\n\n**Environment Optimization:**\n• Find a quiet, distraction-free study space\n• Use consistent study times\n• Take regular breaks to maintain focus",
+        "practiceQuestions": "Here are Python programming practice questions to test your understanding:\n\n**Multiple Choice Questions:**\n1. What is the output of `print(type([]))`?\n   A) <class 'list'>\n   B) <class 'array'>\n   C) <class 'sequence'>\n   D) <class 'collection'>\n\n2. Which method is used to add an element to the end of a list?\n   A) list.insert()\n   B) list.append()\n   C) list.add()\n   D) list.push()\n\n**Code Analysis Questions:**\n3. What will this code output?\n```python\nx = [1, 2, 3]\ny = x\ny.append(4)\nprint(x)\n```\n\n4. Explain the difference between `==` and `is` in Python.\n\n**Problem-Solving Questions:**\n5. Write a function that finds the second largest number in a list.\n\n6. Create a program that counts the frequency of each character in a string.\n\n7. Implement a function to check if a string is a palindrome.\n\n**Debugging Questions:**\n8. Find and fix the bug in this code:\n```python\ndef calculate_average(numbers):\n    total = 0\n    for num in numbers:\n        total += num\n    return total / len(numbers)\n\nresult = calculate_average([1, 2, 3, 4, 5])\nprint(result)\n```\n\n**Concept Questions:**\n9. Explain the difference between a tuple and a list in Python.\n\n10. What are list comprehensions and provide an example?\n\n**Advanced Questions:**\n11. Write a decorator that measures the execution time of a function.\n\n12. Explain the concept of generators and create a simple generator function.\n\nWould you like me to provide the answers or create more specific questions for your Python topic?",
+        "default": "I understand you're asking about your studies. I'm here to help with course summaries, study tips, practice questions, and general academic support. Could you please be more specific about what you need help with?"
+      }
+    },
+    "definitionsForm": {
+      "title": "Definitions Submission Form",
+      "subtitle": "Submit definitions for legal terms and concepts",
+      "instructionsTitle": "Definitions Assignment Instructions",
+      "instructionsP1": "This form allows you to submit definitions for multiple courses. For each course, provide the course name, course code, and list the legal terms with their definitions, sources, and page numbers.",
+      "instructionsNoteStrong": "Note:",
+      "instructionsNoteTail": "You can add multiple courses and multiple definitions per course. Make sure all required fields are completed before submission.",
+      "studentInfoTitle": "Student Information",
+      "fields": {
+        "studentName": "Student Name *",
+        "studentId": "Student ID *",
+        "courseName": "Course Name *",
+        "courseCode": "Course Code *",
+        "term": "Legal Term *",
+        "source": "Source",
+        "definition": "Definition *",
+        "pageNumber": "Page Number"
+      },
+      "placeholders": {
+        "studentName": "Enter your full name",
+        "studentId": "Enter your student ID",
+        "courseName": "e.g., Introduction to Law",
+        "courseCode": "e.g., LAW101",
+        "term": "e.g., Mens Rea",
+        "source": "e.g., Textbook, Case Law",
+        "definition": "Provide a clear and concise definition of the legal term...",
+        "pageNumber": "e.g., 45, 67-68"
+      },
+      "definitionsTitle": "Definitions",
+      "addDefinition": "Add Definition",
+      "definitionTitle": "Definition {{num}}",
+      "addAnotherCourse": "Add Another Course",
+      "submitButton": "Submit Definitions",
+      "submitting": "Submitting...",
+      "validation": {
+        "studentName": "Student name is required",
+        "studentId": "Student ID is required",
+        "courseName": "Course name is required",
+        "courseCode": "Course code is required",
+        "term": "Term is required",
+        "definition": "Definition is required"
+      },
+      "submitSuccess": "Definitions submitted successfully!"
+    }
+  },
+  "instructor": {
+    "notifications": {
+      "title": "Notifications",
+      "new": "New Notification",
+      "editTitle": "Edit Notification",
+      "newTitle": "New Notification",
+      "targetAudience": "Target Audience",
+      "targetAudienceLabel": "Target Audience",
+      "allStudents": "All Students",
+      "fields": { "title": "Title", "message": "Message" },
+      "actions": { "save": "Save Changes", "post": "Post Notification" }
+    },
+    "myCourses": {
+      "title": "My Courses",
+      "students": "{{count}} students",
+      "weeks": "{{count}} weeks",
+      "lastUpdated": "Last updated: {{date}}",
+      "viewEdit": "View / Edit",
+      "modal": {
+        "save": "Save",
+        "cancel": "Cancel",
+        "addContent": "Add Content",
+        "upload": "Upload",
+        "selected": "Selected: {{name}}",
+        "type": { "pdf": "PDF", "video": "Video" },
+        "noContent": "No content uploaded yet."
+      },
+      "addWeek": {
+        "open": "+ Add Week",
+        "placeholder": "Week title (e.g. Week 3: Deep Learning)",
+        "add": "Add",
+        "cancel": "Cancel"
+      }
+    },
+    "dashboard": {
+      "stats": {
+        "myCourses": "My Courses",
+        "studentsTaught": "Students Taught",
+        "assignmentsToGrade": "Assignments to Grade",
+        "upcomingClasses": "Upcoming Classes"
+      },
+      "charts": {
+        "coursePerformance": "Course Performance",
+        "studentEngagement": "Student Engagement",
+        "range": { "last7": "Last 7 Classes", "lastSemester": "Last Semester" }
+      },
+      "sections": {
+        "messages": "Student Messages",
+        "quickAccess": "Quick Access",
+        "upcomingEvents": "Upcoming Events",
+        "noticeBoard": "Notice Board",
+        "recentActivity": "Recent Activity"
+      },
+      "table": { "title": "Title", "by": "By", "date": "Date", "views": "Views" }
+    },
+    "profile": {
+      "completion": "Profile Completion",
+      "viewDataRetention": "📄 View Data Retention Policy",
+      "accessibility": "Show Accessibility Bar",
+      "social": { "linkedin": "LinkedIn", "github": "GitHub" },
+      "form": {
+        "fullName": "Full Name",
+        "email": "Email",
+        "phone": "Phone",
+        "department": "Department",
+        "dob": "Date of Birth",
+        "gender": "Gender",
+        "genderSelect": "Select Gender",
+        "genderMale": "Male",
+        "genderFemale": "Female",
+        "genderOther": "Other",
+        "address": "Address",
+        "nationality": "Nationality",
+        "role": "Role",
+        "save": "Save Changes"
+      },
+      "password": {
+        "changeTitle": "Change Password",
+        "new": "New Password",
+        "confirm": "Confirm Password",
+        "update": "Update Password"
+      },
+      "activity": {
+        "title": "Account Activity",
+        "lastLogin": "Last Login",
+        "coursesTaught": "Courses Taught",
+        "billsPaid": "Bills Paid",
+        "score": "Activity Score",
+        "monthly": "Activity (Monthly)"
+      }
+    },
+    "studentMessages": {
+      "title": "Student Messages",
+      "new": "New Message",
+      "searchLabel": "Search Student",
+      "searchPlaceholder": "Search by name...",
+      "selectLabel": "Select Student",
+      "modal": {
+        "editTitle": "Edit Message",
+        "newTitle": "New Message",
+        "fieldMessage": "Message"
+      },
+      "actions": {
+        "saveChanges": "Save Changes",
+        "send": "Send Message"
+      }
+    },
+    "studentsManagement": {
+      "title": "Students Management",
+      "selectCourse": "Select Course",
+      "table": {
+        "student": "Student",
+        "email": "Email",
+        "year": "Year",
+        "progress": "Progress",
+        "aiInsight": "AI Insight",
+        "attendance": "Attendance",
+        "lastActive": "Last Active",
+        "actions": "Actions"
+      },
+      "actions": {
+        "viewDetails": "View Details",
+        "message": "Message",
+        "addNote": "Add Note",
+        "saveNote": "Save Note",
+        "aiInsight": "AI Insight"
+      },
+      "modal": {
+        "progress": "Progress",
+        "progressCompleted": "{{value}}% completed",
+        "attendance": "Attendance",
+        "instructorNotes": "Instructor Notes",
+        "notesPlaceholder": "Add notes or feedback..."
+      }
+    },
+    "courseMaterials": {
+      "title": "Course Materials",
+      "add": "Add Material",
+      "selectCourse": "Select Course",
+      "card": {
+        "type": "Type",
+        "file": "File",
+        "uploaded": "Uploaded"
+      },
+      "modal": {
+        "editTitle": "Edit Material",
+        "newTitle": "Add Material",
+        "fields": {
+          "title": "Title",
+          "type": "Type",
+          "file": "File",
+          "uploadDate": "Upload Date"
+        },
+        "types": {
+          "syllabus": "Syllabus",
+          "study": "Study Guide",
+          "assignment": "Assignment",
+          "quiz": "Quiz"
+        },
+        "actions": {
+          "save": "Save Changes",
+          "add": "Add Material"
+        }
+      }
+    },
+    "assignments": {
+      "title": "Assignment Management",
+      "create": "Create Assignment",
+      "filters": {
+        "searchPlaceholder": "Search assignments...",
+        "allCourses": "All Courses",
+        "allStatus": "All Status",
+        "status": { "active": "Active", "completed": "Completed", "draft": "Draft" },
+        "moreFilters": "More Filters"
+      },
+      "card": {
+        "dueDate": "Due Date",
+        "submissions": "Submissions",
+        "type": "Type",
+        "points": "Points",
+        "status": { "active": "Active", "completed": "Completed", "draft": "Draft" },
+        "viewSubmissions": "View Submissions"
+      },
+      "menu": { "viewDetails": "View Details", "edit": "Edit", "download": "Download Submissions", "delete": "Delete" },
+      "modal": {
+        "title": "Create New Assignment",
+        "fields": {
+          "course": "Course",
+          "title": "Title",
+          "titlePlaceholder": "Enter assignment title",
+          "description": "Description",
+          "descriptionPlaceholder": "Enter assignment description",
+          "dueDate": "Due Date",
+          "points": "Points",
+          "pointsPlaceholder": "e.g., 100",
+          "type": "Assignment Type",
+          "uploadFiles": "Upload Files",
+          "dragHint": "Drag and drop files here or click to browse"
+        },
+        "actions": { "cancel": "Cancel", "create": "Create Assignment" }
+      },
+      "ai": {
+        "generateButton": "AI Generate",
+        "title": "AI Assignment Generator",
+        "fields": { "course": "Course", "type": "Type", "topic": "Topic", "difficulty": "Difficulty", "points": "Points" },
+        "anyCourse": "Any",
+        "placeholders": { "topic": "e.g., Sorting algorithms, regression, cybersecurity basics" },
+        "generate": "Generate",
+        "generating": "Generating...",
+        "empty": "Fill in details and click Generate to create a draft assignment.",
+        "copy": "Copy Draft",
+        "copied": "Copied!",
+        "assist": "AI Assist",
+        "apply": "Apply to form"
+      }
+    },
+    "grades": {
+      "title": "Grades & Assessment",
+      "selectCourse": "Select Course",
+      "table": {
+        "student": "Student",
+        "email": "Email",
+        "assignments": "Assignments",
+        "final": "Final Grade",
+        "actions": "Actions"
+      },
+      "actions": { "editGrade": "Edit Grade", "message": "Message" },
+      "modal": {
+        "assignmentGrades": "Assignment Grades",
+        "assignmentLabel": "Assignment {{index}}: {{grade}}",
+        "finalGrade": "Final Grade",
+        "feedback": "Feedback",
+        "feedbackPlaceholder": "Add feedback...",
+        "save": "Save Grade"
+      }
+    },
+    "teachingSchedule": {
+      "title": "Teaching Schedule",
+      "days": { "sun": "Sun", "mon": "Mon", "tue": "Tue", "wed": "Wed", "thu": "Thu", "fri": "Fri", "sat": "Sat" },
+      "sidebar": { "upcoming": "Upcoming Events", "none": "No upcoming events." },
+      "modal": {
+        "editTitle": "Edit Event",
+        "newTitle": "Add Event",
+        "fields": { "title": "Title", "type": "Type", "date": "Date", "time": "Time", "description": "Description" },
+        "types": { "class": "Class", "assignment": "Assignment", "activity": "Activity", "holiday": "Holiday", "university": "University Event" },
+        "actions": { "save": "Save Changes", "add": "Add Event", "delete": "Delete" }
+      },
+      "jumuahWarning": {
+        "title": "Heads-up: Friday (Jumu’ah)",
+        "desc": "The selected time overlaps the Jumu’ah window ({{start}}–{{end}}). Consider choosing another time."
+      },
+      "prayer": {
+        "title": "Prayer Times (Demo)",
+        "fajr": "Fajr",
+        "dhuhr": "Dhuhr",
+        "asr": "Asr",
+        "maghrib": "Maghrib",
+        "isha": "Isha",
+        "footer": "Connected to external prayer times API (to integrate)"
+      }
+    },
+    "sageAI": {
+      "title": "Sage AI",
+      "subtitle": "Your intelligent teaching assistant",
+      "sections": {
+        "availablePrompts": "Available Prompts",
+        "proFeatures": "PRO Features",
+        "proBadge": "Available with PRO Version"
+      },
+      "chat": {
+        "back": "Back",
+        "chatTitle": "Sage AI Chat",
+        "placeholder": "Type a message..."
+      }
+    },
+    "tour": {
+      "sidebar": { "title": "Navigation", "desc": "Use the sidebar to navigate between instructor features." },
+      "dashboard": {
+        "stats": { "title": "Your Teaching Overview", "desc": "Quick stats about your courses, students, grading and upcoming classes." },
+        "messages": { "title": "Student Messages", "desc": "Review and respond to the latest messages from your students." }
+      },
+      "courses": {
+        "grid": { "title": "Your Courses", "desc": "Browse and manage all your courses here." },
+        "details": { "title": "Course Details", "desc": "Open a course to add materials or update weekly content." }
+      },
+      "students": {
+        "table": { "title": "Students Roster", "desc": "View progress, attendance, and manage student notes." },
+        "aiInsight": { "title": "AI Insight (Preview)", "desc": "First insight shows for 10 seconds, then locks to PRO for future." }
+      },
+      "assignments": {
+        "filters": { "title": "Filter & Search", "desc": "Search by title, filter by course and status." },
+        "list": { "title": "Assignments List", "desc": "View due dates, submissions, points and actions." }
+      },
+      "grades": {
+        "table": { "title": "Grades Overview", "desc": "Review and edit final grades and feedback." }
+      },
+      "calendar": {
+        "nav": { "title": "Navigate Months", "desc": "Move between months and switch date systems." },
+        "grid": { "title": "Calendar Grid", "desc": "Click a day to add an event; colored pills show events." },
+        "hijri": { "title": "Hijri/Gregorian", "desc": "Toggle between Hijri and Gregorian views." },
+        "prayer": { "title": "Prayer Times (Demo)", "desc": "Demo panel with prayer times; Friday conflicts are highlighted." }
+      },
+      "materials": {
+        "upload": { "title": "Upload Materials", "desc": "Add new PDFs, quizzes, or resources for your course." },
+        "list": { "title": "Materials Library", "desc": "Manage uploaded files and edit details." }
+      },
+      "messages": {
+        "list": { "title": "Conversations", "desc": "Search, select, and review student conversations." },
+        "compose": { "title": "Compose", "desc": "Create or edit a message to students." }
+      },
+      "notifications": {
+        "filter": { "title": "Target Audience", "desc": "Choose recipients for your announcements." },
+        "list": { "title": "Announcements List", "desc": "Create, edit, and manage announcements." }
+      },
+      "profile": {
+        "actions": { "title": "Profile & Actions", "desc": "Update details, change password, and access quick links." }
+      },
+      "complete": {
+        "title": "Instructor Onboarding Tour Complete!",
+        "desc": "You have completed the instructor tour and explored the key teaching features. You're ready to go!",
+        "restart": "Restart tour"
+      }
+    }
+  },
+  "admin": {
+    "dashboard": {
+      "welcome": "Welcome back, {{name}}!",
+      "roleDept": "Admin | IT Department",
+      "profileCompletion": "Profile Completion",
+      "stats": { "students": "Students", "instructors": "Instructors", "courses": "Courses", "revenue": "Revenue" },
+      "quickActions": { "addCourse": "Add Course", "manageUsers": "Manage Users", "viewReports": "View Reports", "systemSettings": "System Settings" },
+      "charts": { "enrollmentTrends": "Enrollment Trends", "courseCompletions": "Course Completions" },
+      "recentActivity": "Recent Activity",
+      "announcements": { "title": "Announcements", "table": { "title": "Title", "by": "By", "date": "Date", "views": "Views" } },
+      "pendingApprovals": { "title": "Pending Approvals", "none": "No pending items.", "by": "by" },
+      "systemHealth": {
+        "title": "System Health & Usage",
+        "server": "Server",
+        "uptime": "Uptime",
+        "api": "API",
+        "activeUsers": "Active Users",
+        "peakTime": "Peak Time"
+      },
+      "topCourses": "Top Performing Courses",
+      "feedbackSupport": "Feedback & Support",
+      "upcomingEvents": "Upcoming Events",
+      "instructorLeaderboard": "Instructor Leaderboard",
+      "studentProgress": "Student Progress Overview",
+      "quickLinks": {
+        "title": "Quick Links & Resources",
+        "helpCenter": "Help Center",
+        "adminDocs": "Admin Docs",
+        "lmsRoadmap": "LMS Roadmap"
+      },
+      "systemAnnouncements": "System Announcements",
+      "recentLogins": "Recent Logins",
+      "completions": "{{count}} completions"
+    },
+    "profile": {
+      "completion": "Profile Completion",
+      "viewDataRetention": "📄 View Data Retention Policy",
+      "accessibility": "Show Accessibility Bar",
+      "social": { "linkedin": "LinkedIn", "github": "GitHub" },
+      "form": {
+        "fullName": "Full Name",
+        "email": "Email",
+        "phone": "Phone",
+        "department": "Department",
+        "dob": "Date of Birth",
+        "gender": "Gender",
+        "genderSelect": "Select Gender",
+        "genderMale": "Male",
+        "genderFemale": "Female",
+        "genderOther": "Other",
+        "address": "Address",
+        "nationality": "Nationality",
+        "role": "Role",
+        "save": "Save Changes"
+      },
+      "password": { "changeTitle": "Change Password", "new": "New Password", "confirm": "Confirm Password", "update": "Update Password" },
+      "activity": {
+        "title": "Account Activity",
+        "lastLogin": "Last Login",
+        "coursesEnrolled": "Courses Enrolled",
+        "billsPaid": "Bills Paid",
+        "score": "Activity Score",
+        "monthly": "Activity (Monthly)"
+      },
+      "notifications": {
+        "title": "Notifications & Queries",
+        "actions": { "sendNotification": "Send Notification", "reply": "Reply", "send": "Send", "cancel": "Cancel", "sendReply": "Send Reply" },
+        "queries": {
+          "title": "Queries",
+          "table": {
+            "sender": "Sender",
+            "role": "Role",
+            "message": "Message",
+            "date": "Date",
+            "status": "Status",
+            "actions": "Actions"
+          },
+          "status": { "open": "Open", "closed": "Closed" },
+          "replyModal": {
+            "title": "Reply to Query",
+            "query": "Query",
+            "yourReply": "Your Reply"
+          }
+        },
+        "sent": {
+          "title": "Sent Notifications",
+          "table": { "recipient": "Recipient", "email": "Email", "message": "Message", "date": "Date" }
+        },
+        "sendModal": {
+          "title": "Send Notification",
+          "fields": {
+            "recipient": "Recipient",
+            "selectRecipient": "Select Recipient",
+            "email": "Email Address",
+            "message": "Message"
+          },
+          "recipientOptions": {
+            "all": "All Users",
+            "students": "All Students",
+            "instructors": "All Instructors",
+            "custom": "Specific Email"
+          }
+        }
+      },
+      "documentManagement": {
+        "title": "Document Management",
+        "uploadButton": "Upload Document",
+        "table": {
+          "title": "Title",
+          "category": "Category",
+          "uploadedBy": "Uploaded By",
+          "uploadDate": "Upload Date",
+          "file": "File",
+          "actions": "Actions"
+        },
+        "actions": { "download": "Download", "delete": "Delete" },
+        "uploadModal": {
+          "title": "Upload Document",
+          "fields": { "title": "Title", "category": "Category", "description": "Description", "file": "File" },
+          "drop": { "chooseOrDrag": "Choose a file or drag it here", "supported": "Supported formats: .xlsx, .xls, .csv" },
+          "buttons": { "cancel": "Cancel", "upload": "Upload", "downloadTemplate": "Download Template" }
+        }
+      },
+      "instructorManagement": {
+        "title": "Instructor Management",
+        "addNew": "Add New Instructor",
+        "table": {
+          "name": "Name",
+          "email": "Email",
+          "department": "Department",
+          "courses": "Courses",
+          "batches": "Batches",
+          "engagement": "Engagement",
+          "actions": "Actions"
+        },
+        "actions": { "edit": "Edit", "delete": "Delete" },
+        "addModal": {
+          "title": "Add New Instructor",
+          "fields": { "name": "Name", "email": "Email", "department": "Department", "selectDepartment": "Select Department" },
+          "buttons": { "cancel": "Cancel", "add": "Add Instructor" }
+        },
+        "editModal": {
+          "title": "Edit Instructor",
+          "fields": { "name": "Name", "email": "Email", "department": "Department", "selectDepartment": "Select Department" },
+          "buttons": { "cancel": "Cancel", "save": "Save Changes" }
+        }
+      },
+      "courseManagement": {
+        "title": "Course Management",
+        "filters": {
+          "allLevels": "All Levels",
+          "undergraduate": "Undergraduate",
+          "masters": "Masters",
+          "searchPlaceholder": "Search by name or code...",
+          "reset": "Reset Courses to Default",
+          "addNew": "Add New Course"
+        },
+        "table": {
+          "name": "Name",
+          "code": "Code",
+          "credits": "Credits",
+          "hours": "Hours",
+          "source": "Source",
+          "actions": "Actions"
+        },
+        "source": { "marln": "MarLn", "university": "University" },
+        "predefined": {
+          "title": "MarLn Predefined Courses",
+          "addToUniversity": "Add to University",
+          "added": "Added"
+        },
+        "addModal": {
+          "title": "Add New Course",
+          "fields": {
+            "name": "Course Name",
+            "code": "Course Code",
+            "credits": "Credits",
+            "hours": "Instructional Hours",
+            "description": "Description"
+          },
+          "buttons": { "cancel": "Cancel", "add": "Add Course" }
+        },
+        "editModal": {
+          "title": "Edit Course",
+          "fields": {
+            "name": "Course Name",
+            "code": "Course Code",
+            "credits": "Credits",
+            "hours": "Instructional Hours",
+            "description": "Description"
+          },
+          "buttons": { "cancel": "Cancel", "save": "Save Changes" }
+        },
+        "viewModal": {
+          "titleSuffix": " - Details",
+          "labels": { "code": "Code", "credits": "Credits", "hours": "Instructional Hours", "source": "Source", "description": "Description" }
+        }
+      },
+      "studentsManagement": {
+        "title": "Student Management",
+        "buttons": {
+          "upload": "Upload Students",
+          "addNew": "Add New Student",
+          "moreFilters": "More Filters",
+          "export": "Export",
+          "cancel": "Cancel",
+          "save": "Save Changes",
+          "add": "Add Student",
+          "delete": "Delete"
+        },
+        "searchPlaceholder": "Search students...",
+        "filters": {
+          "all": "All Students",
+          "active": "Active",
+          "inactive": "Inactive",
+          "graduated": "Graduated"
+        },
+        "table": {
+          "name": "Name",
+          "email": "Email",
+          "program": "Program",
+          "year": "Year",
+          "status": "Status",
+          "enrollmentDate": "Enrollment Date",
+          "actions": "Actions"
+        },
+        "status": { "active": "Active", "inactive": "Inactive", "graduated": "Graduated" },
+        "pagination": {
+          "summary": "Showing {{from}} to {{to}} of {{total}} entries",
+          "previous": "Previous",
+          "next": "Next"
+        },
+        "addModal": {
+          "title": "Add New Student",
+          "fields": {
+            "fullName": "Full Name",
+            "email": "Email",
+            "program": "Program",
+            "selectProgram": "Select Program",
+            "year": "Year",
+            "selectYear": "Select Year",
+            "phone": "Phone",
+            "dateOfBirth": "Date of Birth",
+            "gender": "Gender",
+            "selectGender": "Select Gender",
+            "male": "Male",
+            "female": "Female",
+            "other": "Other",
+            "nationality": "Nationality",
+            "address": "Address"
+          }
+        },
+        "uploadModal": {
+          "title": "Upload Students",
+          "chooseOrDrag": "Choose a file or drag it here",
+          "supportedFormats": "Supported formats: .xlsx, .xls, .csv",
+          "downloadTemplate": "Download Template",
+          "messages": {
+            "noValidData": "No valid data found in the file",
+            "processingError": "Error processing the file. Please check the format.",
+            "readingError": "Error reading the file",
+            "success_one": "Successfully added {{count}} student",
+            "success_other": "Successfully added {{count}} students"
+          }
+        },
+        "actionMenu": { "edit": "Edit", "delete": "Delete", "viewResults": "View Results" },
+        "resultsModal": {
+          "title": "Student Results - {{name}}",
+          "overview": {
+            "overallGPA": "Overall GPA",
+            "attendance": "Attendance",
+            "courses": "Courses",
+            "progress": "Progress"
+          },
+          "sections": {
+            "coursePerformance": "Course Performance",
+            "gpaProgress": "GPA Progress"
+          }
+        },
+        "deleteModal": {
+          "confirm": "Are you sure you want to delete {{name}}? This action cannot be undone."
+        }
+      },
+      "programManagement": {
+        "title": "Program Management",
+        "buttons": { "addNew": "Add New Program", "cancel": "Cancel", "add": "Add Program", "save": "Save Changes" },
+        "table": {
+          "name": "Name",
+          "durationYears": "Duration (Years)",
+          "specialization": "Specialization",
+          "actions": "Actions"
+        },
+        "addModal": {
+          "title": "Add New Program",
+          "fields": { "name": "Program Name", "durationYears": "Duration (Years)", "specialization": "Specialization" }
+        },
+        "editModal": {
+          "title": "Edit Program",
+          "fields": { "name": "Program Name", "durationYears": "Duration (Years)", "specialization": "Specialization" }
+        },
+        "viewModal": {
+          "titleSuffix": " - Terms/Semesters",
+          "termLabel": "Term/Semester {{term}}",
+          "coursesCount": "Courses: {{count}}",
+          "manageCourses": "Manage Courses"
+        },
+        "manageCoursesModal": {
+          "title": "Manage Courses for {{program}} - Term {{term}}",
+          "currentCourses": "Current Courses:",
+          "noCourses": "No courses assigned.",
+          "addCourse": "Add Course:",
+          "remove": "Remove",
+          "add": "Add"
+        }
+      },
+      "academicCalendar": {
+        "title": "Academic Calendar",
+        "buttons": { "addEvent": "Add Event", "cancel": "Cancel", "add": "Add Event" },
+        "table": { "title": "Title", "date": "Date", "type": "Type", "description": "Description", "actions": "Actions" },
+        "types": { "event": "Event", "exam": "Exam", "holiday": "Holiday" },
+        "addModal": {
+          "title": "Add Academic Event",
+          "fields": {
+            "title": "Title",
+            "date": "Date",
+            "type": "Type",
+            "selectType": "Select Type",
+            "description": "Description"
+          }
+        }
+      },
+      "reports": {
+        "title": "Reports & Analytics",
+        "dateRange": { "to": "to" },
+        "cards": {
+          "totalEnrollments": "Total Enrollments",
+          "courseCompletions": "Course Completions",
+          "marlnPerformance": "MarLn Performance"
+        },
+        "table": {
+          "courseName": "Course Name",
+          "enrollments": "Enrollments",
+          "completions": "Completions",
+          "type": "Type"
+        }
+      },
+      "departmentDashboard": {
+        "title": "University Hierarchy",
+        "roles": {
+          "universityDean": "University Dean",
+          "collegeDean": "College Dean",
+          "hod": "HoD",
+          "instructor": "Instructor"
+        }
+      },
+      "systemSettings": {
+        "title": "System Settings & MarLn Integration",
+        "availableCourses": {
+          "title": "Available MarLn Courses",
+          "purchaseAccess": "Purchase Access",
+          "priceSuffix": "/mo"
+        },
+        "activeCourses": {
+          "title": "Active/Purchased Courses",
+          "none": "No active MarLn courses.",
+          "table": { "course": "Course", "expires": "Expires" }
+        },
+        "bills": {
+          "title": "Upcoming MarLn Bills",
+          "none": "No upcoming bills.",
+          "table": { "description": "Description", "dueDate": "Due Date", "amount": "Amount", "actions": "Actions" },
+          "payNow": "Pay Now"
+        },
+        "purchaseModal": {
+          "title": "Purchase MarLn Courses",
+          "fields": { "durationMonths": "Duration (months)" },
+          "totalPrice": "Total Price: ${{price}}",
+          "buttons": { "cancel": "Cancel", "purchase": "Purchase" }
+        },
+        "alerts": {
+          "coursesPurchased": "Courses purchased and enabled!",
+          "billPaid": "Bill paid!"
+        }
+      },
+      "userManagement": {
+        "title": "User Management",
+        "tabs": { "active": "Active Users", "deleted": "Deleted Users" },
+        "headers": {
+          "name": "Name",
+          "email": "Email",
+          "role": "Role",
+          "status": "Status",
+          "program": "Program",
+          "credentials": "Credentials",
+          "actions": "Actions"
+        },
+        "deletedHeaders": { "name": "Name", "email": "Email", "role": "Role", "program": "Program", "actions": "Actions" },
+        "statuses": { "active": "Active", "suspended": "Suspended" },
+        "roles": { "student": "Student", "instructor": "Instructor" },
+        "credentials": { "created": "Created", "create": "Create Credentials" },
+        "actions": {
+          "resetPassword": "Reset Password",
+          "suspend": "Suspend",
+          "unsuspend": "Unsuspend",
+          "upgradeProgram": "Upgrade Program",
+          "deleteUser": "Delete User",
+          "restore": "Restore"
+        },
+        "emptyDeleted": { "title": "No Deleted Users", "subtitle": "Deleted users will appear here" },
+        "upgradeModal": {
+          "title": "Upgrade Program",
+          "selectNewProgram": "Select New Program",
+          "selectProgram": "Select Program",
+          "buttons": { "cancel": "Cancel", "upgrade": "Upgrade" }
+        },
+        "resetModal": {
+          "title": "Reset Password",
+          "prompt": "Send password reset link to {{email}}?",
+          "buttons": { "cancel": "Cancel", "sendLink": "Send Link" }
+        },
+        "credentialsModal": {
+          "title": "Create Credentials",
+          "fields": { "usernameEmail": "Username (Email)", "password": "Password" },
+          "requireChange": "Require password change on first login",
+          "sendEmail": "Send credentials via email",
+          "emailSent": "Email sent!",
+          "buttons": { "cancel": "Cancel", "create": "Create" }
+        },
+        "alerts": {
+          "resetSent": "Password reset link sent to {{email}}",
+          "credentialsCreated": "Credentials created for {{name}}",
+          "emailSentTo": "Credentials sent to {{email}}"
+        }
+      },
+      "dataRetentionPolicy": {
+        "compliance": {
+          "title": "Compliance Checklist",
+          "intro": "Marln LMS is committed to full compliance with all relevant data protection laws and best practices. We regularly review and update our policies to ensure ongoing alignment.",
+          "items": {
+            "gdpr": { "label": "GDPR (EU General Data Protection Regulation)", "status": "Compliant" },
+            "pdpl": { "label": "Saudi Arabia PDPL (Personal Data Protection Law)", "status": "Compliant" },
+            "shariah": { "label": "Shariah Principles", "status": "Aligned" },
+            "best": { "label": "Best Practices in Data Privacy", "status": "Adopted" }
+          }
+        },
+        "header": {
+          "title": "Data Retention Policy",
+          "subtitle": "How we manage and retain your data in Marln LMS"
+        },
+        "info": {
+          "text": "This page summarizes how user and course data is retained and managed in compliance with legal obligations (GDPR). For questions, contact your administrator."
+        },
+        "tableCard": {
+          "title": "Retention Details",
+          "table": {
+            "headers": {
+              "area": "Area",
+              "category": "Category",
+              "purpose": "Purpose",
+              "retention": "Retention Period",
+              "lawful": "Lawful Bases & Notes"
+            },
+            "rows": {
+              "site": {
+                "area": "Site",
+                "category": "Test Category",
+                "purpose": "Test Purpose",
+                "retention": "1 year",
+                "lawful": {
+                  "tag": "GDPR Art 6.1(c)",
+                  "desc": "Processing is necessary for compliance with a legal obligation to which the controller is subject"
+                }
+              },
+              "users": {
+                "area": "Users",
+                "category": "Test Category",
+                "purpose": "Test Purpose",
+                "retention": "1 year",
+                "lawful": {
+                  "tag": "GDPR Art 6.1(c)",
+                  "desc": "Processing is necessary for compliance with a legal obligation to which the controller is subject"
+                }
+              },
+              "courseCategories": { "area": "Course categories", "category": "-", "purpose": "-", "retention": "No retention period", "lawful": "-" },
+              "courses": { "area": "Courses", "category": "-", "purpose": "-", "retention": "No retention period", "lawful": "-" },
+              "activityModules": { "area": "Activity modules", "category": "-", "purpose": "-", "retention": "No retention period", "lawful": "-" },
+              "blocks": { "area": "Blocks", "category": "-", "purpose": "-", "retention": "No retention period", "lawful": "-" }
+            }
+          }
+        },
+        "legal": {
+          "title": "Legal Alignment: Saudi Arabia’s PDPL & Shariah Principles",
+          "intro": "Marln LMS aligns with international and local data protection standards. Below is a mapping of Saudi Arabia’s Personal Data Protection Law (PDPL) principles to corresponding Shariah concepts, ensuring both legal and cultural compliance.",
+          "table": {
+            "headers": { "pdplPrinciple": "PDPL Principle", "shariah": "Shariah Alignment" },
+            "rows": {
+              "lawful": { "pdpl": "Lawful and transparent processing", "shariah": "Consent and trust (Amanah)" },
+              "purpose": { "pdpl": "Purpose limitation", "shariah": "Maslahah (use must be beneficial)" },
+              "min": { "pdpl": "Data minimization", "shariah": "Prohibition of unnecessary intrusion" },
+              "rights": { "pdpl": "Data subject rights (access, correction)", "shariah": "Haq al-Khususiyyah and Adalah" },
+              "security": { "pdpl": "Security and confidentiality", "shariah": "Darar and Amanah" }
+            }
+          },
+          "note": "Note: The PDPL (2021, amended 2023) is Saudi Arabia’s primary data protection law. Its principles are designed to be compatible with Shariah, ensuring both legal and ethical data stewardship in Marln LMS."
+        }
+      }
+    }
+  },
+  "sidebar": {
+    "brand": "MarLn",
+    "profile": { "ariaEdit": "Edit Profile" },
+    "roles": { "admin": "Admin", "instructor": "Instructor", "student": "Student", "user": "User" },
+    "menu": {
+      "admin": {
+        "dashboard": "Dashboard",
+        "students": "Student Management",
+        "instructors": "Instructor Management",
+        "programs": "Program Management",
+        "courses": "Course Management",
+        "documents": "Document Management",
+        "calendar": "Training Calendar",
+        "notifications": "Notifications/Queries",
+        "reports": "Reports & Analytics",
+        "users": "User Management",
+        "settings": "System Settings"
+      },
+      "instructor": {
+        "dashboard": "Dashboard",
+        "courses": "My Courses",
+        "students": "Students Management",
+        "assignments": "Assignments",
+        "grades": "Grades & Assessment",
+        "calendar": "Teaching Schedule",
+        "materials": "Course Materials",
+        "messages": "Student Messages",
+        "notifications": "Notifications",
+        "sage-ai": "Sage AI"
+      },
+      "student": {
+        "dashboard": "Dashboard",
+        "my-courses": "My Courses",
+        "assignments": "Assignments",
+        "grades": "My Grades",
+        "schedule": "Class Schedule",
+        "materials": "Course Materials",
+        "messages": "Messages",
+        "notifications": "Notifications",
+        "ecollab": "eCollab",
+        "sage-ai": "Sage AI"
+      }
+    },
+    "theme": { "dark": "Dark Theme", "light": "Light Theme", "toggleAria": "Toggle Dark/Light Theme" },
+    "logout": "Logout"
+  }
+} 
