@@ -406,1230 +406,110 @@
           "title": "قسم ساعات VAE",
           "desc": "عرض تفصيل مفصل لساعات VAE والأنشطة وتتبع الوقت لهذا المقرر."
         }
-      },
-      "sageAI": {
-        "header": {
-          "title": "سايج الذكي",
-          "backToDashboard": "العودة إلى لوحة التحكم",
-          "newChat": "بدء محادثة جديدة",
-          "showHistory": "إظهار سجل المحادثات",
-          "hideHistory": "إخفاء سجل المحادثات"
-        },
-        "welcome": {
-          "title": "كيف يمكنني مساعدتك اليوم؟",
-          "subtitle": "أنا هنا لمساعدتك في دراستك واحتياجاتك الأكاديمية."
-        },
-        "prompts": {
-          "courseSummary": {
-            "title": "ملخص المقرر",
-            "description": "احصل على ملخص شامل لأي موضوع دراسي"
-          },
-          "studyTips": {
-            "title": "نصائح الدراسة",
-            "description": "احصل على استراتيجيات ونصائح دراسية مخصصة"
-          },
-          "practiceQuestions": {
-            "title": "أسئلة التدريب",
-            "description": "أنشئ أسئلة تدريبية لأي مادة"
-          },
-          "examRoadmapping": {
-            "title": "خريطة طريق الامتحان",
-            "description": "احصل على خرائط طريق دراسية لشهادات الشبكات"
-          }
-        },
-        "certifications": {
-          "ciscoCCNA": {
-            "title": "سيسكو CCNA",
-            "subtitle": "شهادة سيسكو المعتمدة لشبكات الحاسوب – 200-301",
-            "description": "أتقن أساسيات الشبكات، اتصال IP، الأمان، والأتمتة"
-          },
-          "comptiaNetwork": {
-            "title": "كومبتيا نيتورك+",
-            "subtitle": "N10-008",
-            "description": "مفاهيم الشبكات الأساسية لمتخصصي تكنولوجيا المعلومات"
-          },
-          "juniperJNCIA": {
-            "title": "جونيبر JNCIA-Junos",
-            "subtitle": "JN0-104",
-            "description": "شهادة جونيبر المعتمدة للمساعد - Junos"
-          },
-          "moreCourses": {
-            "title": "المزيد من الدورات",
-            "subtitle": "",
-            "description": "دورات شهادات إضافية متاحة مع النسخة المميزة"
-          }
-        },
-        "roadmap": {
-          "prompt": "أريد التحضير لشهادة",
-          "topics": "هل يمكنك مساعدتي في إنشاء خريطة طريق دراسية تغطي هذه المواضيع",
-          "duration": "الشهادة تستغرق عادة",
-          "complete": "لإكمالها وهي",
-          "level": "مستوى"
-        },
-        "input": {
-          "placeholder": "رسالة إلى سايج الذكي...",
-          "attachFile": "إرفاق ملف",
-          "voiceInput": "إدخال صوتي",
-          "sendMessage": "إرسال رسالة",
-          "disclaimer": "سايج الذكي قد يخطئ. يرجى التحقق من المعلومات المهمة."
-        },
-        "history": {
-          "deleteChat": "حذف المحادثة",
-          "newChat": "محادثة جديدة"
-        },
-        "upgrade": {
-          "title": "الترقية إلى النسخة المميزة",
-          "continueConversation": "استمر في محادثتك مع مساعدة ذكية غير محدودة",
-          "accessFeatures": "الوصول إلى سجل محادثات غير محدود وميزات متقدمة",
-          "button": "ترقية الآن"
-        },
-        "modal": {
-          "chooseCertification": "اختر الشهادة",
-          "close": "إغلاق النافذة",
-          "proVersion": "متاح مع النسخة المميزة",
-          "selectCertification": "اختر {{certification}}"
-        },
-        "panel": {
-          "summaryTitle": "ملخص الذكي",
-          "poweredBy": "مدعوم بواسطة سايج الذكي",
-          "closeAria": "إغلاق لوحة الملخص",
-          "documentTitle": "المستند",
-          "aiGenerated": "ملخص مولّد بالذكاء الاصطناعي",
-          "upsell": {
-            "title": "الترقية إلى النسخة المميزة",
-            "desc": "احصل على رؤى ذكية غير محدودة وتحليلات متقدمة",
-            "button": "ترقية الآن"
-          },
-          "generating": "جاري إنشاء الملخص...",
-          "noSummary": "لا يوجد ملخص متاح",
-          "copy": {
-            "button": "نسخ الملخص",
-            "copied": "تم النسخ!"
-          },
-          "footer": {
-            "line1": "رؤى مدعومة بالذكاء الاصطناعي لتعلم أفضل",
-            "line2": "مولّد بتقنية سايج الذكي"
-          }
-        }
       }
     },
-    "notifications": {
-      "title": "الإشعارات",
-      "filters": "عوامل التصفية",
-      "searchPlaceholder": "ابحث في الإشعارات...",
-      "types": {
-        "all": "كل الأنواع",
-        "assignment": "الواجبات",
-        "grade": "الدرجات",
-        "announcement": "الإعلانات",
-        "material": "مواد المقرر",
-        "exam": "الاختبارات"
+    "ecollab": {
+      "title": "إي كولاب",
+      "whatIsTitle": "ما هو eCollab؟",
+      "description": "eCollab مساحة رقمية ديناميكية لمساعدة المستخدمين على عرض الأعمال ذات المعنى، والتأمل في التعلّم، ومشاركة الإنجازات في بيئة مهنية. يتجاوز تخزين الملفات — فهو يمكّن من السرد التفاعلي والتعاون وبناء الهوية.",
+      "bullets": {
+        "item1": "عرض أفضل الأعمال ومشاركتها خارج الفصول الدراسية أو المؤسسة",
+        "item2": "التأمل في الإبداع والجهد والتعلّم وراء المشاريع",
+        "item3": "عرض شامل للنمو الأكاديمي أو المهني",
+        "item4": "مشاركة المحتوى المنتقى مع الأقران والمرشدين وأصحاب العمل أو فرق القبول"
       },
-      "priorities": {
-        "all": "كل الأولويات",
-        "high": "أولوية عالية",
-        "medium": "أولوية متوسطة",
-        "low": "أولوية منخفضة",
-        "label": "الأولوية"
+      "controlTitle": "eCollab يضع المستخدمين في التحكم",
+      "controlText": " — يمكن ضبط إعدادات الظهور لتكون خاصة أو عامة وتعديلها في أي وقت.",
+      "discussion": {
+        "title": "لوحة النقاش",
+        "placeholder": "شارك فكرة أو سؤالاً أو إنجازًا...",
+        "postButton": "نشر"
       },
-      "empty": {
-        "title": "لم يتم العثور على إشعارات",
-        "subtitle": "حاول تعديل البحث أو عوامل التصفية"
+      "reply": {
+        "placeholder": "اكتب ردًا...",
+        "button": "رد",
+        "cancel": "إلغاء",
+        "link": "رد"
       },
-      "viewMode": {
-        "listView": "عرض القائمة",
-        "cardView": "عرض البطاقات"
+      "emptyState": "لا توجد منشورات بعد. ابدأ النقاش!",
+      "quickLinks": {
+        "title": "روابط سريعة",
+        "myPortfolio": "ملفي",
+        "sharedWithMe": "مشترك معي",
+        "mentorConnect": "التواصل مع المرشد",
+        "resourceHub": "مركز الموارد"
       },
-      "status": {
-        "read": "مقروء",
-        "unread": "غير مقروء"
+      "highlights": {
+        "title": "أبرز المستجدات",
+        "line1": "شاركت إميلي براون مشروعًا جديدًا: معرض ويب",
+        "line2": "تلقى جون سميث ملاحظات من د. سارة جونسون",
+        "line3": "التواصل مع المرشد: رسالتان جديدتان"
       },
-      "actions": {
-        "viewDetails": "عرض التفاصيل",
-        "takeAction": "اتخاذ إجراء"
+      "you": "أنت",
+      "justNow": "الآن",
+      "features": {
+        "whyChooseTitle": "لماذا تختار eCollab؟",
+        "whyChooseSubtitle": "حوّل تجربة تعلمك بأدوات التعاون القوية",
+        "portfolioBuilding": "بناء الملف الشخصي",
+        "portfolioBuildingDesc": "أنشئ ملفات شخصية مذهلة تحكي قصتك وتعرض رحلة نموك.",
+        "peerCollaboration": "التعاون مع الأقران",
+        "peerCollaborationDesc": "انخرط في مناقشات هادفة واحصل على ملاحظات بناءة من زملائك.",
+        "mentorGuidance": "إرشاد المرشد",
+        "mentorGuidanceDesc": "تواصل مع مرشدين ذوي خبرة للحصول على إرشاد مخصص ونصائح مهنية.",
+        "resourceSharing": "مشاركة الموارد",
+        "resourceSharingDesc": "احصل على موارد التعلم القيمة والأدوات ورؤى الصناعة وشاركها."
       },
-      "details": {
-        "message": "الرسالة",
-        "course": "المقرر",
-        "type": "النوع"
+      "tags": {
+        "portfolioShowcase": "عرض الملف الشخصي",
+        "peerFeedback": "ملاحظات الأقران",
+        "mentorConnect": "التواصل مع المرشد",
+        "resourceHub": "مركز الموارد"
       },
-      "actionRequired": {
-        "title": "إجراء مطلوب"
-      }
-    },
-    "dashboard": {
-      "stats": {
-        "enrolledCourses": "المقررات المسجلة",
-        "pendingAssignments": "الواجبات المعلقة",
-        "averageGrade": "المعدل المتوسط",
-        "nextClass": "الحصة القادمة"
+      "search": {
+        "placeholder": "البحث في المناقشات..."
       },
-      "academicPerformance": {
-        "title": "الأداء الأكاديمي",
-        "semester": { "this": "هذا الفصل", "last": "الفصل السابق" }
-      },
-      "studyProgress": {
-        "attendanceRate": "نسبة الحضور",
-        "studyHours": "ساعات الدراسة",
-        "completedTasks": "المهام المكتملة",
-        "currentGpa": "المعدل التراكمي الحالي"
-      },
-      "upcomingAssignments": {
-        "title": "الواجبات القادمة",
-        "viewAll": "عرض الكل",
-        "status": { "pending": "قيد الانتظار", "in-progress": "قيد التنفيذ", "not-started": "غير مُبدأ" },
-        "daysLeft_one": "متبقّ {{count}} يوم",
-        "daysLeft_other": "متبقّ {{count}} أيام",
-        "dueOn": "تاريخ الاستحقاق: {{date}}"
-      },
-      "schedule": {
-        "today": "جدول اليوم",
-        "instructor": "المدرّس: {{name}}"
-      },
-      "deadlines": {
-        "title": "المواعيد المهمة",
-        "type": { "assignment": "واجب", "project": "مشروع" },
-        "due": "تاريخ الاستحقاق: {{date}}"
-      },
-      "resources": {
-        "title": "مصادر الدراسة",
-        "digitalLibrary": { "title": "المكتبة الرقمية", "subtitle": "الوصول إلى مواد المقرر" },
-        "studyGroups": { "title": "مجموعات الدراسة", "subtitle": "انضم أو أنشئ مجموعات دراسة" },
-        "academicSupport": { "title": "الدعم الأكاديمي", "subtitle": "احصل على مساعدة من المدرسين" }
-      },
-      "widgets": {
-        "messages": "الرسائل",
-        "recentActivities": "الأنشطة الأخيرة",
-        "quickLinks": "روابط سريعة",
-        "buttons": { "courseMaterials": "مواد المقرر", "assignments": "الواجبات", "schedule": "الجدول", "grades": "الدرجات" }
-      }
-    },
-    "materials": {
-      "title": "مواد المقرر",
-      "searchPlaceholder": "ابحث في المواد...",
-      "filters": "مزيد من عوامل التصفية",
-      "download": "تحميل",
-      "downloading": "جاري التحميل...",
-      "downloadSuccess": "تم تحميل الملف بنجاح!",
-      "downloadError": "فشل التحميل. يرجى المحاولة مرة أخرى.",
-      "view": {
-        "grid": "عرض الشبكة",
-        "list": "عرض القائمة"
-      },
-      "courses": {
-        "all": "كل المقررات"
-      },
-      "types": {
-        "all": "كل الأنواع",
-        "lecture-notes": "ملاحظات المحاضرة",
-        "assignment": "الواجبات",
-        "project": "المشاريع",
-        "resource": "الموارد"
-      },
-      "labels": {
-        "format": "الصيغة",
-        "size": "الحجم",
-        "instructor": "المدرّس",
-        "downloads": "التنزيلات",
-        "uploaded": "تم الرفع",
-        "viewDetails": "عرض التفاصيل",
-        "downloadCount_one": "{{count}} تنزيل",
-        "downloadCount_other": "{{count}} تنزيلات"
-      },
-      "list": {
-        "title": "العنوان",
-        "course": "المقرر",
-        "type": "النوع",
-        "format": "الصيغة",
-        "downloads": "التنزيلات",
-        "actions": "الإجراءات"
-      },
-      "modal": {
-        "description": "الوصف",
-        "fileInfo": "معلومات الملف",
-        "courseInfo": "معلومات المقرر",
-        "format": "الصيغة",
-        "size": "الحجم",
-        "downloads": "التنزيلات",
-        "instructor": "المدرّس",
-        "type": "النوع",
-        "uploaded": "تم الرفع",
-        "close": "إغلاق",
-        "download": "تنزيل",
-        "downloading": "جاري التحميل..."
-      }
-    },
-    "courses": {
-      "title": "مقرراتي",
-      "searchPlaceholder": "ابحث في المقررات...",
-      "card": {
-        "instructor": "المدرّس:",
-        "nextClass": "الحصة القادمة: {{date}}",
-        "progress": "التقدم"
-      },
-      "list": {
-        "course": "المقرر",
-        "instructor": "المدرّس",
-        "schedule": "الجدول",
-        "progress": "التقدم",
-        "nextClass": "الحصة القادمة",
-        "actions": "الإجراءات"
-      },
-      "viewDetails": "عرض التفاصيل",
-      "modal": {
-        "closeAria": "إغلاق",
-        "courseDetails": "تفاصيل المقرر",
-        "classInfo": "معلومات الحصة",
-        "enrolled": "المسجلون: {{count}}",
-        "next": "التالي: {{date}}",
-        "progress": "التقدم: {{percent}}%",
-        "courseSyllabus": "منهج المقرر",
-        "viewSyllabus": "عرض المنهج (PDF)",
-        "actionButtons": {
-          "studyPlan": "خطة الدراسة",
-          "assignmentSubmissionForm": "نموذج تسليم الواجب",
-          "checkMyVae": "تحقق من VAE الخاص بي",
-          "zoolaReport": "تقرير زولا"
-        },
-        "quickActions": {
-          "title": "إجراءات سريعة",
-          "materials": "المواد",
-          "messages": "الرسائل",
-          "schedule": "الجدول",
-          "grades": "الدرجات"
-        },
-        "details": {
-          "instructor": "المدرّس",
-          "schedule": "الجدول",
-          "room": "القاعه"
-        },
-        "assignmentSubmission": {
-          "title": "تسليم الواجبات",
-          "instructionsTitle": "إرشادات تسليم الواجبات",
-          "instructionsP1": "هناك صفحة لتسليم الواجبات مثل هذه لكل مقرر، لكن يلزم تسليم نموذج واحد فقط لكل نوع من أنواع الواجبات.",
-          "instructionsP2": {
-            "part1": "يرجى اختيار النموذج أدناه لنوع الواجب الذي تقوم بتسليمه. ثم استخدم النموذج لرفع مستند واحد لكل مقرر يتطلب ذلك الواجب.",
-            "strong": "نموذج تسليم التعريفات",
-            "part2": "ثم قم برفع أربعة مستندات: واحد لمقرر مدخل إلى القانون، وآخر للعقود، وآخر للقانون الجنائي، وآخر للضرر (التقادم)."
-          },
-          "clickToAccess": "انقر للدخول",
-          "forms": {
-            "definitions": { "title": "نموذج تسليم التعريفات", "description": "قم بتسليم التعريفات للمصطلحات والمفاهيم القانونية" },
-            "caseBriefs": { "title": "نموذج تسليم ملخصات القضايا", "description": "قم بتسليم ملخصات القضايا والتحليل القانوني" },
-            "miniThesis": { "title": "نموذج تسليم أوراق الأطروحة المصغرة", "description": "قم بتسليم أوراق الأطروحة المصغرة والبحوث" },
-            "midtermEssays": { "title": "نموذج تسليم مقالات منتصف الفصل", "description": "قم بتسليم اختبارات المقال" }
-          },
-          "importantNotesTitle": "ملاحظات مهمة",
-          "importantNotesList": [
-            "كل نوع من الواجبات يتطلب نموذج تسليم منفصل",
-            "يمكنك رفع مستندات عدة مقررات في نموذج واحد",
-            "تأكد من تضمين اسمك ومعلومات المقرر على كل مستند",
-            "قدم الواجبات قبل الموعد النهائي لتجنب الغرامات",
-            "تواصل مع المدرّس إذا كانت لديك أسئلة حول واجبات محددة"
-          ]
-        },
-        "caseBriefs": {
-          "title": "نموذج تسليم الملخصات القانونية",
-          "subtitle": "قم بتسليم الملخصات القانونية والتحليلات",
-          "instructionsTitle": "تعليمات واجب الملخص القانوني",
-          "instructionsP1": "يتيح لك هذا النموذج تسليم ملخصات القضايا القانونية لعدة مقررات. لكل مقرر، قدم معلومات المقرر والملخصات القانونية التفصيلية بما في ذلك الوقائع والقضايا والأحكام والمنطق.",
-          "instructionsP2": "يجب أن يتضمن كل ملخص قانوني جميع الأقسام المطلوبة. يمكنك إضافة عدة مقررات وعدة ملخصات قانونية لكل مقرر. تأكد من إكمال جميع الحقول المطلوبة قبل التسليم.",
-          "studentInfoTitle": "معلومات الطالب",
-          "courseTitle": "المقرر {{num}}",
-          "caseBriefsTitle": "الملخصات القانونية",
-          "caseBriefTitle": "الملخص القانوني {{num}}",
-          "addCaseBrief": "إضافة ملخص قانوني",
-          "addAnotherCourse": "إضافة مقرر آخر",
-          "submitButton": "تسليم الملخصات القانونية",
-          "submitting": "جاري التسليم...",
-          "submitSuccess": "تم تسليم الملخصات القانونية بنجاح!",
-          "fields": {
-            "studentName": "اسم الطالب *",
-            "studentId": "رقم الطالب *",
-            "courseName": "اسم المقرر *",
-            "courseCode": "رمز المقرر *",
-            "caseName": "اسم القضية *",
-            "citation": "المرجع",
-            "court": "المحكمة",
-            "date": "التاريخ",
-            "facts": "الوقائع *",
-            "issue": "القضية *",
-            "holding": "الحكم *",
-            "reasoning": "المنطق",
-            "dissent": "الرأي المخالف (إن وجد)",
-            "significance": "الأهمية"
-          },
-          "placeholders": {
-            "studentName": "أدخل اسمك الكامل",
-            "studentId": "أدخل رقم الطالب",
-            "courseName": "مثال: القانون الجنائي",
-            "courseCode": "مثال: CRIM201",
-            "caseName": "مثال: براون ضد مجلس التعليم",
-            "citation": "مثال: 347 U.S. 483 (1954)",
-            "court": "مثال: المحكمة العليا الأمريكية",
-            "facts": "لخص الوقائع الرئيسية للقضية...",
-            "issue": "ما هو السؤال القانوني الذي تتناوله المحكمة؟",
-            "holding": "ماذا قررت المحكمة؟",
-            "reasoning": "اشرح المنطق القانوني والتحليل الخاص بالمحكمة...",
-            "dissent": "لخص أي آراء مخالفة...",
-            "significance": "ما هو التأثير الأوسع لهذا القرار؟"
-          },
-          "validation": {
-            "studentName": "اسم الطالب مطلوب",
-            "studentId": "رقم الطالب مطلوب",
-            "courseName": "اسم المقرر مطلوب",
-            "courseCode": "رمز المقرر مطلوب",
-            "caseName": "اسم القضية مطلوب",
-            "facts": "الوقائع مطلوبة",
-            "issue": "القضية مطلوبة",
-            "holding": "الحكم مطلوب"
-          }
-        },
-        "midtermEssays": {
-          "title": "نموذج تسليم مقالات منتصف الفصل",
-          "subtitle": "قم بتسليم اختبارات المقال لمنتصف الفصل",
-          "instructionsTitle": "تعليمات اختبار المقال لمنتصف الفصل",
-          "instructionsP1": "يتيح لك هذا النموذج تسليم اختبارات المقال لمنتصف الفصل لعدة مقررات. يجب أن يتضمن كل اختبار تفاصيل الاختبار وأسئلة المقال وإجاباتك المكتوبة. تأكد من تضمين عدد الكلمات والوقت المستغرق في كل سؤال.",
-          "instructionsP2": "يجب أن تتم الإجابة على كل سؤال مقال بشكل شامل وأن تُظهر فهمك لمواد المقرر. يمكنك إضافة عدة مقررات وعدة أسئلة مقال لكل مقرر.",
-          "studentInfoTitle": "معلومات الطالب",
-          "courseTitle": "المقرر {{num}}",
-          "essayQuestionsTitle": "أسئلة المقال",
-          "essayQuestionTitle": "سؤال المقال {{num}}",
-          "addQuestion": "إضافة سؤال",
-          "addAnotherCourse": "إضافة مقرر آخر",
-          "submitButton": "تسليم مقالات منتصف الفصل",
-          "submitting": "جاري التسليم...",
-          "submitSuccess": "تم تسليم اختبارات المقال بنجاح!",
-          "importantNoticeTitle": "إشعار مهم للتسليم",
-          "importantNoticeList": [
-            "تأكد من إجابة جميع أسئلة المقال بشكل كامل وشامل",
-            "ضمّن المراجع القانونية ذات الصلة وقانون القضايا حيثما ينطبق",
-            "قدم قبل الموعد النهائي لتجنب الغرامات",
-            "تحقق مرتين من إجاباتك للدقة والاكتمال",
-            "تواصل مع مدرسك فوراً إذا واجهت مشاكل تقنية"
-          ],
-          "fields": {
-            "studentName": "اسم الطالب *",
-            "studentId": "رقم الطالب *",
-            "courseName": "اسم المقرر *",
-            "courseCode": "رمز المقرر *",
-            "examDate": "تاريخ الاختبار *",
-            "timeLimit": "الحد الزمني",
-            "questionNumber": "رقم السؤال *",
-            "wordCount": "عدد الكلمات",
-            "questionText": "نص السؤال *",
-            "answer": "إجابتك *",
-            "timeSpent": "الوقت المستغرق"
-          },
-          "placeholders": {
-            "studentName": "أدخل اسمك الكامل",
-            "studentId": "أدخل رقم الطالب",
-            "courseName": "مثال: الإجراءات الجنائية",
-            "courseCode": "مثال: CRIM302",
-            "timeLimit": "مثال: ساعتان، 90 دقيقة",
-            "questionNumber": "مثال: 1، 2، 3 أو أ، ب، ج",
-            "wordCount": "مثال: 500",
-            "questionText": "انسخ سؤال المقال من اختبارك...",
-            "answer": "اكتب إجابة شاملة لسؤال المقال. ضمّن المبادئ القانونية ذات الصلة وقانون القضايا والتحليل...",
-            "timeSpent": "مثال: 45 دقيقة، ساعة و15 دقيقة"
-          },
-          "validation": {
-            "studentName": "اسم الطالب مطلوب",
-            "studentId": "رقم الطالب مطلوب",
-            "courseName": "اسم المقرر مطلوب",
-            "courseCode": "رمز المقرر مطلوب",
-            "examDate": "تاريخ الاختبار مطلوب",
-            "questionNumber": "رقم السؤال مطلوب",
-            "questionText": "نص السؤال مطلوب",
-            "answer": "الإجابة مطلوبة"
-          }
-        },
-        "miniThesis": {
-          "title": "نموذج تسليم أوراق الأطروحة المصغرة",
-          "subtitle": "قم بتسليم أوراق الأطروحة المصغرة وواجبات البحث",
-          "instructionsTitle": "تعليمات واجب الأطروحة المصغرة",
-          "instructionsP1": "يتيح لك هذا النموذج تسليم أوراق الأطروحة المصغرة لعدة مقررات. يجب أن تتضمن كل أطروحة سؤال بحث واضح ومنهجية ونتائج وخاتمة. اتبع معايير الكتابة الأكاديمية وضمّن الاقتباسات المناسبة.",
-          "instructionsP2": "يجب أن تكون كل ورقة أطروحة منظمة بشكل جيد وتُظهر التفكير النقدي. يمكنك إضافة عدة مقررات وعدة أوراق أطروحة لكل مقرر. تأكد من إكمال جميع الحقول المطلوبة.",
-          "studentInfoTitle": "معلومات الطالب",
-          "courseTitle": "المقرر {{num}}",
-          "thesisPapersTitle": "أوراق الأطروحة",
-          "thesisPaperTitle": "ورقة الأطروحة {{num}}",
-          "addThesisPaper": "إضافة ورقة أطروحة",
-          "addAnotherCourse": "إضافة مقرر آخر",
-          "submitButton": "تسليم أوراق الأطروحة",
-          "submitting": "جاري التسليم...",
-          "submitSuccess": "تم تسليم أوراق الأطروحة المصغرة بنجاح!",
-          "fields": {
-            "studentName": "اسم الطالب *",
-            "studentId": "رقم الطالب *",
-            "courseName": "اسم المقرر *",
-            "courseCode": "رمز المقرر *",
-            "title": "عنوان الأطروحة *",
-            "topic": "موضوع البحث *",
-            "wordCount": "عدد الكلمات",
-            "keywords": "الكلمات المفتاحية",
-            "abstract": "الملخص *",
-            "introduction": "المقدمة *",
-            "literatureReview": "مراجعة الأدبيات",
-            "methodology": "المنهجية",
-            "findings": "النتائج",
-            "conclusion": "الخاتمة *",
-            "references": "المراجع"
-          },
-          "placeholders": {
-            "studentName": "أدخل اسمك الكامل",
-            "studentId": "أدخل رقم الطالب",
-            "courseName": "مثال: القانون الدستوري",
-            "courseCode": "مثال: CONST301",
-            "title": "أدخل عنوان أطروحتك",
-            "topic": "مثال: حرية التعبير في العصر الرقمي",
-            "wordCount": "مثال: 2500",
-            "keywords": "مثال: حرية التعبير، الحقوق الرقمية، القانون الدستوري",
-            "abstract": "قدم ملخصاً موجزاً لسؤال البحث والمنهجية والنتائج الرئيسية...",
-            "introduction": "قدم سؤال البحث، وقدم السياق، وحدد حجتك...",
-            "literatureReview": "راجع الأدبيات ذات الصلة وأسس السياق لبحثك...",
-            "methodology": "اوصف طرق البحث وجمع البيانات ونهج التحليل...",
-            "findings": "اعرض نتائج البحث والتحليل...",
-            "conclusion": "لخص النتائج، وناقش الآثار، واقترح البحوث المستقبلية...",
-            "references": "اذكر جميع المصادر المقتبسة في أطروحتك (استخدم تنسيق الاقتباس المناسب)..."
-          },
-          "validation": {
-            "studentName": "اسم الطالب مطلوب",
-            "studentId": "رقم الطالب مطلوب",
-            "courseName": "اسم المقرر مطلوب",
-            "courseCode": "رمز المقرر مطلوب",
-            "title": "عنوان الأطروحة مطلوب",
-            "topic": "الموضوع مطلوب",
-            "abstract": "الملخص مطلوب",
-            "introduction": "المقدمة مطلوبة",
-            "conclusion": "الخاتمة مطلوبة"
-          }
-        },
-        "studyPlan": {
-          "title": "خطة الدراسة",
-          "courseOverview": "نظرة عامة على المقرر",
-          "learningObjectives": "أهداف التعلم",
-          "prerequisites": "المتطلبات المسبقة",
-          "weeklyStudyPlan": "خطة الدراسة الأسبوعية",
-          "progressSummary": "ملخص التقدم",
-          "learningResources": "موارد التعلم",
-          "keyMilestones": "المراحل الرئيسية",
-          "totalHours": "إجمالي الساعات",
-          "difficulty": "مستوى الصعوبة",
-          "week": "الأسبوع {{num}}",
-          "topicsCovered": "المواضيع المغطاة",
-          "activities": "الأنشطة",
-          "deliverables": "المخرجات",
-          "estimatedHours": "{{hours}} ساعة",
-          "status": {
-            "completed": "مكتمل",
-            "inProgress": "قيد التنفيذ",
-            "notStarted": "لم يبدأ"
-          },
-          "resourceStatus": {
-            "available": "متاح",
-            "unavailable": "غير متاح"
-          },
-          "backButton": "رجوع",
-          "courseDuration": "{{course}} • {{duration}}",
-          "unknownCourse": "مقرر غير معروف",
-          "courses": {
-            "cyberSecurity": {
-              "title": "خطة دراسة الأمن السيبراني",
-              "description": "خطة دراسة شاملة تغطي أساسيات الأمن السيبراني والتهديدات وآليات الدفاع.",
-              "objectives": [
-                "فهم مبادئ الأمن السيبراني وأفضل الممارسات",
-                "تعلم التهديدات السيبرانية الشائعة ومتجهات الهجوم",
-                "إتقان أدوات الأمان وآليات الدفاع",
-                "تطوير مهارات الاستجابة للحوادث والتعافي"
-              ],
-              "prerequisites": ["أساسيات علوم الحاسوب", "أساسيات الشبكات"],
-              "weeks": {
-                "week1": {
-                  "title": "مقدمة في الأمن السيبراني",
-                  "topics": ["أساسيات الأمن السيبراني", "نظرة عامة على التهديدات", "مبادئ الأمان"],
-                  "activities": ["قراءة الفصل 1-2", "إكمال الاختبار 1", "الانضمام لمنتدى النقاش"],
-                  "deliverables": ["تقديم الاختبار", "المشاركة في النقاش"]
-                },
-                "week2": {
-                  "title": "أساسيات أمان الشبكات",
-                  "topics": ["بروتوكولات الشبكة", "تكوين جدار الحماية", "إعداد VPN"],
-                  "activities": ["تمارين المختبر", "التطبيق العملي", "تخطيط المشروع الجماعي"],
-                  "deliverables": ["تقرير المختبر", "مخطط المشروع"]
-                },
-                "week3": {
-                  "title": "أساسيات التشفير",
-                  "topics": ["خوارزميات التشفير", "دوال التجزئة", "التوقيعات الرقمية"],
-                  "activities": ["تمارين التشفير", "تنفيذ الكود", "تحليل الأمان"],
-                  "deliverables": ["تقديم الكود", "تقرير الأمان"]
-                },
-                "week4": {
-                  "title": "أمان تطبيقات الويب",
-                  "topics": ["OWASP Top 10", "حقن SQL", "منع XSS"],
-                  "activities": ["تقييم الثغرات", "اختبار الاختراق", "تدقيق الأمان"],
-                  "deliverables": ["تقرير الثغرات", "توصيات الأمان"]
-                },
-                "week5": {
-                  "title": "الاستجابة للحوادث",
-                  "topics": ["اكتشاف الحوادث", "إجراءات الاستجابة", "تخطيط التعافي"],
-                  "activities": ["دراسات الحالة", "تمارين المحاكاة", "التوثيق"],
-                  "deliverables": ["خطة الاستجابة للحوادث", "تحليل دراسة الحالة"]
-                }
-              },
-              "resources": [
-                { "type": "كتاب دراسي", "name": "أساسيات الأمن السيبراني", "author": "د. سارة جونسون" },
-                { "type": "دورة عبر الإنترنت", "name": "أساسيات الأمن السيبراني", "platform": "Coursera" },
-                { "type": "بيئة المختبر", "name": "مختبر الأمان الافتراضي", "platform": "VMware" },
-                { "type": "أدوات", "name": "Wireshark, Metasploit, Nmap", "platform": "مصدر مفتوح" }
-              ],
-              "milestones": [
-                { "title": "التقييم النصفي", "type": "امتحان" },
-                { "title": "المرحلة الأولى من المشروع", "type": "مشروع" },
-                { "title": "تدقيق الأمان", "type": "عملي" },
-                { "title": "المشروع النهائي", "type": "مشروع" }
-              ]
-            },
-            "advancedPython": {
-              "title": "خطة دراسة Python المتقدم",
-              "description": "إتقان مفاهيم Python المتقدمة وأفضل الممارسات والتطبيقات الواقعية.",
-              "objectives": [
-                "إتقان ميزات Python المتقدمة والتركيب",
-                "تعلم أنماط التصميم وأفضل الممارسات",
-                "تطوير التطبيقات الواقعية",
-                "فهم تحسين الأداء"
-              ],
-              "prerequisites": ["أساسيات Python", "البرمجة كائنية التوجه"],
-              "weeks": {
-                "week1": {
-                  "title": "ميزات Python المتقدمة",
-                  "topics": ["المزخرفات", "المولّدات", "مديري السياق"],
-                  "activities": ["أمثلة الكود", "تمارين الممارسة", "مشاريع مصغرة"],
-                  "deliverables": ["تقديم الكود", "عرض الميزات"]
-                },
-                "week2": {
-                  "title": "أنماط التصميم",
-                  "topics": ["الأنماط الإنشائية", "الأنماط الهيكلية", "الأنماط السلوكية"],
-                  "activities": ["تنفيذ الأنماط", "دراسات الحالة", "تمارين التصميم"],
-                  "deliverables": ["أمثلة الأنماط", "وثيقة التصميم"]
-                },
-                "week3": {
-                  "title": "تحسين الأداء",
-                  "topics": ["التحليل", "إدارة الذاكرة", "تحسين الخوارزميات"],
-                  "activities": ["اختبار الأداء", "تمارين التحسين", "المقارنة"],
-                  "deliverables": ["تقرير الأداء", "الكود المحسن"]
-                },
-                "week4": {
-                  "title": "الاختبار والتصحيح",
-                  "topics": ["الاختبار الوحدي", "الاختبار التكاملي", "تقنيات التصحيح"],
-                  "activities": ["كتابة الاختبارات", "ممارسة التصحيح", "تغطية الاختبار"],
-                  "deliverables": ["مجموعة الاختبارات", "تقرير التصحيح"]
-                }
-              },
-              "resources": [
-                { "type": "كتاب دراسي", "name": "كتاب Python", "author": "أ.د. مايكل تشين" },
-                { "type": "دورة عبر الإنترنت", "name": "برمجة Python المتقدمة", "platform": "edX" },
-                { "type": "بيئة التطوير", "name": "PyCharm Professional", "platform": "JetBrains" },
-                { "type": "المكتبات", "name": "NumPy, Pandas, Django", "platform": "مؤشر حزم Python" }
-              ],
-              "milestones": [
-                { "title": "تقييم الميزات", "type": "مراجعة الكود" },
-                { "title": "مشروع أنماط التصميم", "type": "مشروع" },
-                { "title": "تحدي الأداء", "type": "عملي" },
-                { "title": "التطبيق النهائي", "type": "مشروع" }
-              ]
-            },
-            "webDevelopment": {
-              "title": "خطة دراسة تطوير الويب",
-              "description": "تعلم تقنيات تطوير الويب الحديثة وأفضل الممارسات.",
-              "objectives": [
-                "إتقان تقنيات الويب الحديثة",
-                "تعلم مبادئ التصميم المتجاوب",
-                "فهم أفضل ممارسات أمان الويب",
-                "بناء تطبيقات الويب كاملة المكدس"
-              ],
-              "prerequisites": ["أساسيات HTML/CSS", "أساسيات JavaScript"],
-              "weeks": {
-                "week1": {
-                  "title": "HTML & CSS الحديث",
-                  "topics": ["HTML الدلالي", "CSS Grid", "Flexbox", "متغيرات CSS"],
-                  "activities": ["تمارين التخطيط", "التصميم المتجاوب", "رسوم CSS"],
-                  "deliverables": ["صفحة المحفظة", "عرض CSS"]
-                },
-                "week2": {
-                  "title": "JavaScript ES6+",
-                  "topics": ["الدوال السهمية", "التفكيك", "الوحدات", "Async/await"],
-                  "activities": ["تحديات الكود", "التطبيقات المصغرة", "ميزات ES6"],
-                  "deliverables": ["مشروع JavaScript", "عرض الميزات"]
-                },
-                "week3": {
-                  "title": "أطر العمل الأمامية",
-                  "topics": ["أساسيات React", "دورة حياة المكون", "إدارة الحالة"],
-                  "activities": ["دروس React", "بناء المكونات", "تمارين الحالة"],
-                  "deliverables": ["تطبيق React", "مكتبة المكونات"]
-                },
-                "week4": {
-                  "title": "تطوير الخلفية",
-                  "topics": ["Node.js", "Express.js", "تصميم API", "تكامل قاعدة البيانات"],
-                  "activities": ["إعداد الخادم", "تطوير API", "استعلامات قاعدة البيانات"],
-                  "deliverables": ["API الخلفية", "مخطط قاعدة البيانات"]
-                }
-              },
-              "resources": [
-                { "type": "كتاب دراسي", "name": "دليل تطوير الويب", "author": "د. إيميلي براون" },
-                { "type": "دورة عبر الإنترنت", "name": "تطوير الويب كامل المكدس", "platform": "Udemy" },
-                { "type": "أدوات التطوير", "name": "VS Code, Chrome DevTools", "platform": "متنوع" },
-                { "type": "أطر العمل", "name": "React, Node.js, Express", "platform": "مصدر مفتوح" }
-              ],
-              "milestones": [
-                { "title": "تقييم الواجهة الأمامية", "type": "مشروع" },
-                { "title": "تكامل الخلفية", "type": "مشروع" },
-                { "title": "تطبيق كامل المكدس", "type": "مشروع" },
-                { "title": "المحفظة النهائية", "type": "مشروع" }
-              ]
-            }
-          }
-        },
-        "checkMyVae": {
-          "title": "التحقق من الخبرة الأكاديمية (VAE)",
-          "lastUpdated": "آخر تحديث: {{date}}",
-          "refresh": "تحديث VAE",
-          "tabs": {
-            "overview": "نظرة عامة",
-            "course": "تفاصيل المقرر",
-            "requirements": "المتطلبات",
-            "progress": "تتبع التقدم"
-          },
-          "notFound": {
-            "title": "لم يتم العثور على المقرر",
-            "desc": "يرجى اختيار مقرر لعرض معلومات VAE.",
-            "backToCourses": "الرجوع إلى المقررات"
-          },
-          "overallStatusTitle": "الحالة الأكاديمية العامة",
-          "creditHours": "الساعات المعتمدة",
-          "complete": "مكتمل",
-          "gpa": "المعدل التراكمي",
-          "grade": "الدرجة",
-          "courses": "المقررات",
-          "completed": "مكتمل",
-          "total": "الإجمالي",
-          "standing": "الحالة",
-          "currentCourseTitle": "المقرر الحالي: {{course}}",
-          "courseProgress": "تقدم المقرر",
-          "attendance": "الحضور",
-          "assignments": "الواجبات",
-          "midtermGrade": "درجة الاختبار النصفي",
-          "nextMilestone": "المعلَم التالي",
-          "dueDate": "مستحق في: {{date}}",
-          "requirementsOverviewTitle": "نظرة عامة على متطلبات الدرجة",
-          "courseDetailsVaeTitle": "{{course}} - تفاصيل VAE",
-          "courseStats": "إحصائيات المقرر",
-          "attendanceRate": "نسبة الحضور",
-          "assignmentsCompleted": "الواجبات المكتملة",
-          "lastActivity": "آخر نشاط",
-          "gradesMilestones": "الدرجات والمعالم",
-          "due": "تاريخ الاستحقاق",
-          "courseRequirementsBreakdown": "تفصيل متطلبات المقرر",
-          "status": { "completed": "مكتمل", "inProgress": "قيد التنفيذ", "pending": "قيد الانتظار" },
-          "requirements": { "coreCourses": "المقررات الأساسية", "electives": "الاختيارية", "generalEducation": "التعليم العام" },
-          "progressTimeline": "الخط الزمني للتقدم الأكاديمي",
-          "timeline": {
-            "sem1": { "title": "الفصل 1", "desc": "إكمال 15 ساعة معتمدة بمعدل 3.2", "time": "خريف 2023" },
-            "sem2": { "title": "الفصل 2", "desc": "إكمال 18 ساعة معتمدة بمعدل 3.5", "time": "ربيع 2025" },
-            "current": { "title": "الفصل الحالي", "desc": "جارٍ بــ 12 ساعة معتمدة", "time": "خريف 2025" },
-            "future": { "title": "الفصول المستقبلية", "desc": "متبقٍ 45 ساعة معتمدة لإكمال الدرجة", "time": "2026-2025" }
-          },
-          "progressInsightsTitle": "رؤى التقدم",
-          "insights": {
-            "onTrack": { "title": "على المسار", "text": "أنت حاليًا على المسار لإكمال درجتك ضمن الإطار الزمني المتوقع." },
-            "improving": { "title": "يتحسن", "text": "تحسن معدلك التراكمي من 3.2 إلى 3.45 خلال الفصلين الماضيين." }
-          }
-        },
-        "zoolaReport": {
-          "title": "تقرير زولا الأكاديمي",
-          "generated": "تم الإنشاء: {{date}}",
-          "actions": { "exportPdf": "تصدير PDF", "refresh": "تحديث" },
-          "tabs": {
-            "vaeHours": "ساعات VAE",
-            "overview": "نظرة عامة",
-            "performance": "الأداء",
-            "analytics": "التحليلات",
-            "recommendations": "التوصيات",
-            "progress": "التقدم"
-          },
-          "notFound": {
-            "title": "لم يتم العثور على المقرر",
-            "desc": "يرجى اختيار مقرر لعرض تقرير زولا.",
-            "backToCourses": "الرجوع إلى المقررات"
-          },
-          "sections": {
-            "studentInfo": "معلومات الطالب",
-            "overallSummary": "ملخص الأداء العام",
-            "performanceBreakdown": "تفصيل الأداء حسب الفئة",
-            "learningAnalyticsOverview": "نظرة عامة على تحليلات التعلم",
-            "detailedPerformance": "تحليل الأداء التفصيلي",
-            "performanceMetrics": "مقاييس الأداء",
-            "comparativeAnalysis": "التحليل المقارن",
-            "analyticsDeepDive": "تحليل عميق لتحليلات التعلم",
-            "timeActivityAnalysis": "تحليل الوقت والنشاط",
-            "engagementMetrics": "مقاييس التفاعل",
-            "personalizedRecommendations": "توصيات مخصصة",
-            "weeklyProgress": "تتبع التقدم الأسبوعي",
-            "progressInsights": "رؤى التقدم",
-            "vaeHoursSummary": "ملخص ساعات VAE"
-          },
-          "labels": {
-            "studentId": "رقم الطالب",
-            "studentName": "اسم الطالب",
-            "academicPeriod": "الفترة الأكاديمية",
-            "overallScore": "النتيجة الإجمالية",
-            "currentGrade": "الدرجة الحالية",
-            "classRank": "الترتيب في الصف",
-            "of": "من",
-            "percentile": "النسبة المئوية",
-            "top": "الأعلى",
-            "trend": "الاتجاه",
-            "vsPrevious": "مقارنة بالسابق",
-            "weight": "الوزن",
-            "score": "النتيجة",
-            "totalStudyTime": "إجمالي وقت الدراسة",
-            "classAttendance": "الحضور",
-            "overallEngagement": "مستوى التفاعل العام",
-            "avgResponse": "متوسط الاستجابة",
-            "assignmentsSubmitted": "الواجبات المقدمة",
-            "quizzesCompleted": "الاختبارات المنجزة",
-            "lastActivity": "آخر نشاط",
-            "engagementScore": "درجة التفاعل",
-            "attendanceRate": "نسبة الحضور",
-            "responseTime": "وقت الاستجابة",
-            "days": "أيام",
-            "yourScore": "درجتك",
-            "targetScore": "الدرجة المستهدفة",
-            "improvement": "التحسن",
-            "activityName": "اسم النشاط",
-            "timeSpent": "الوقت المستغرق",
-            "aggregate": "إجمالي",
-            "total": "المجموع",
-            "totalActivities": "إجمالي الأنشطة",
-            "activitiesWithTime": "أنشطة تحتوي وقتًا",
-            "categories": "الفئات",
-            "impact": "التأثير",
-            "prioritySuffix": "أولوية"
-          },
-          "insights": {
-            "steadyImprovement": {
-              "title": "تحسّن ثابت",
-              "text": "تُظهر درجاتك تحسنًا مستمرًا خلال الأسابيع الثمانية الماضية، مما يشير إلى تقدم قوي في التعلم."
-            },
-            "targetAchievement": {
-              "title": "تحقيق الهدف",
-              "text": "أنت على المسار الصحيح لتحقيق الدرجة المستهدفة 90% مع الاستمرار في الجهد والتركيز."
-            },
-            "recommendationNote": "تم إنشاء هذه التوصية بناءً على أدائك الحالي وأنماط تعلمك."
-          },
-          "vaeHoursTitle": "{{course}} المقرر، الحصص المباشرة ومنتديات النقاش - ساعات VAE"
-        },
-        "weeklyContent": "محتوى أسبوعي",
-        "week": "الأسبوع {{num}}",
-        "viewPdf": "عرض PDF",
-        "watchVideo": "مشاهدة الفيديو",
-        "proBanner": "متاح في النسخة PRO"
-      }
-    },
-    "grades": {
-      "title": "درجاتي",
-      "searchPlaceholder": "ابحث في المقررات...",
-      "filters": "مزيد من عوامل التصفية",
-      "view": {
-        "grid": "عرض الشبكة",
-        "list": "عرض القائمة"
-      },
-      "semesters": {
-        "all": "كل الفصول",
-        "spring2025": "ربيع 2025",
-        "fall2023": "خريف 2023"
-      },
-      "overview": {
-        "gpa": "المعدل التراكمي العام",
-        "completed": "المقررات المكتملة",
-        "current": "المقررات الحالية"
-      },
-      "viewDetails": "عرض التفاصيل",
-      "list": {
-        "course": "المقرر",
-        "code": "الرمز",
-        "instructor": "المدرّس",
-        "grade": "الدرجة",
-        "trend": "الاتجاه",
-        "actions": "الإجراءات"
-      },
-      "modal": {
-        "courseInfo": "معلومات المقرر",
-        "courseCode": "رمز المقرر",
-        "instructor": "المدرّس",
-        "semester": "الفصل الدراسي",
-        "gradeSummary": "ملخص الدرجات",
-        "currentGrade": "الدرجة الحالية",
-        "trend": "الاتجاه",
-        "trendImproving": "يتحسن",
-        "trendDeclining": "يتراجع",
-        "assignmentDetails": "تفاصيل الواجبات",
-        "weight": "الوزن",
-        "contribution": "المساهمة",
-        "close": "إغلاق"
-      }
-    },
-    "assignments": {
-      "title": "إدارة الواجبات",
-      "create": "إنشاء واجب",
       "filters": {
-        "searchPlaceholder": "ابحث عن الواجبات...",
-        "allCourses": "جميع المقررات",
-        "allStatus": "جميع الحالات",
-        "status": { "active": "نشط", "completed": "مكتمل", "draft": "مسودة" },
-        "moreFilters": "مزيد من المرشحات"
+        "all": "الكل",
+        "questions": "الأسئلة",
+        "projects": "المشاريع"
       },
-      "card": {
-        "dueDate": "تاريخ الاستحقاق",
-        "submissions": "التسليمات",
-        "type": "النوع",
-        "points": "النقاط",
-        "status": { "active": "نشط", "completed": "مكتمل", "draft": "مسودة" },
-        "viewSubmissions": "عرض التسليمات"
-      },
-      "menu": { "viewDetails": "عرض التفاصيل", "edit": "تعديل", "download": "تنزيل التسليمات", "delete": "حذف" },
-      "modal": {
-        "title": "إنشاء واجب جديد",
-        "fields": {
-          "course": "المقرر",
-          "title": "العنوان",
-          "titlePlaceholder": "أدخل عنوان الواجب",
-          "description": "الوصف",
-          "descriptionPlaceholder": "أدخل وصف الواجب",
-          "dueDate": "تاريخ الاستحقاق",
-          "points": "النقاط",
-          "pointsPlaceholder": "مثال: 100",
-          "type": "نوع الواجب",
-          "uploadFiles": "رفع الملفات",
-          "dragHint": "اسحب وأفلت الملفات هنا أو انقر للاستعراض"
-        },
-        "actions": { "cancel": "إلغاء", "create": "إنشاء الواجب" }
-      },
-      "ai": {
-        "generateButton": "توليد بالذكاء الاصطناعي",
-        "title": "مولّد الواجبات بالذكاء الاصطناعي",
-        "fields": { "course": "المقرر", "type": "النوع", "topic": "الموضوع", "difficulty": "الصعوبة", "points": "النقاط" },
-        "anyCourse": "أي مقرر",
-        "placeholders": { "topic": "مثال: خوارزميات الفرز، الانحدار، أساسيات الأمن السيبراني" },
-        "generate": "توليد",
-        "generating": "جارٍ التوليد...",
-        "empty": "املأ التفاصيل واضغط توليد لإنشاء مسودة واجب.",
-        "copy": "نسخ المسودة",
-        "copied": "تم النسخ!",
-        "assist": "مساعدة بالذكاء الاصطناعي",
-        "apply": "تعبئة النموذج"
-      }
-    },
-    "assignments": {
-      "title": "واجباتي",
-      "searchPlaceholder": "ابحث في الواجبات...",
-      "filters": "مرشحات إضافية",
-      "status": {
-        "all": "جميع الحالات",
-        "pending": "قيد الانتظار",
-        "submitted": "مُقدّم",
-        "overdue": "متأخر"
-      },
-      "list": {
-        "assignment": "الواجب",
-        "course": "المقرر",
-        "due": "تاريخ الاستحقاق",
-        "status": "الحالة",
-        "type": "النوع",
-        "points": "النقاط",
-        "submitted": "مُقدّم",
-        "actions": "الإجراءات"
-      },
-      "buttons": {
-        "submit": "تقديم الواجب",
-        "viewDetails": "عرض التفاصيل"
-      },
-      "view": {
-        "grid": "عرض الشبكة",
-        "list": "عرض القائمة"
-      },
-      "modal": {
-        "details": "تفاصيل الواجب",
-        "submission": "حالة التقديم",
-        "status": "الحالة",
-        "submitted": "مُقدّم",
-        "dueDate": "تاريخ الاستحقاق",
-        "close": "إغلاق",
-        "dropHint": "اسحب وأفلت الملفات هنا أو انقر للاستعراض",
-        "submit": "تقديم الواجب"
-      }
-    },
-    "schedule": {
-      "title": "جدول الحصص",
-      "subtitle": "جدولك الأسبوعي بنظرة سريعة",
-      "views": { "weekly": "أسبوعي", "monthly": "شهري" },
-      "todayTitle": "حصص اليوم",
-      "noToday": "لا توجد حصص اليوم!",
-      "onlineAvailable": "متاح عبر الإنترنت",
-      "stats": {
-        "title": "إحصائيات سريعة",
-        "totalClasses": "إجمالي الحصص",
-        "thisSemester": "هذا الفصل",
-        "onlineClasses": "حصص عبر الإنترنت",
-        "availableOnline": "متاح عبر الإنترنت",
-        "totalHours": "إجمالي الساعات",
-        "weeklyHours": "ساعات أسبوعية",
-        "attendance": "نسبة الحضور",
-        "currentRate": "النسبة الحالية"
+      "privacy": {
+        "onlyVisibleToClassmates": "مرئي فقط لزملاء الدراسة"
       },
       "actions": {
-        "title": "إجراءات سريعة",
-        "joinNext": "انضم للحصة القادمة",
-        "setReminder": "تعيين تذكير",
-        "syncCalendar": "مزامنة التقويم",
-        "viewMap": "عرض الخريطة"
+        "share": "مشاركة",
+        "report": "إبلاغ",
+        "reply": "رد"
+      },
+      "activity": {
+        "overview": "نظرة عامة على النشاط",
+        "activeDiscussions": "المناقشات النشطة",
+        "collaborators": "المتعاونون"
+      },
+      "stats": {
+        "collaborationStats": "إحصائيات التعاون",
+        "postsThisWeek": "المنشورات هذا الأسبوع",
+        "repliesGiven": "الردود المقدمة",
+        "projectsShared": "المشاريع المشتركة",
+        "mentorSessions": "جلسات المرشد"
       },
       "popups": {
-        "joiningClass": "الانضمام للحصة",
-        "joiningClassMessage": "الانضمام لجلسة {{course}} عبر الإنترنت...",
-        "calendarUpdated": "تم تحديث التقويم",
-        "calendarUpdatedMessage": "تم إضافة {{course}} إلى تقويمك",
-        "joiningNextClass": "الانضمام للحصة القادمة",
-        "joiningNextClassMessage": "الانضمام لـ {{course}} في {{time}}",
-        "noClasses": "لا توجد حصص",
-        "noClassesMessage": "لم يتم العثور على حصص قادمة",
-        "remindersSet": "تم تعيين التذكيرات",
-        "remindersSetMessage": "تم تعيين تذكير لجميع الحصص هذا الأسبوع!",
-        "calendarSynced": "تمت مزامنة التقويم",
-        "calendarSyncedMessage": "تمت مزامنة التقويم بنجاح! تم إضافة جميع الحصص إلى تقويمك.",
-        "openingMap": "فتح الخريطة",
-        "openingMapMessage": "فتح خريطة الحرم الجامعي..."
+        "postPublished": "تم نشر المنشور",
+        "postPublishedMessage": "تم نشر منشورك بنجاح!",
+        "replyPosted": "تم نشر الرد",
+        "replyPostedMessage": "تم نشر ردك بنجاح!",
+        "postLiked": "تم الإعجاب بالمنشور",
+        "postLikedMessage": "تمت إضافة المنشور إلى العناصر المعجبة بك",
+        "postUnliked": "تم إلغاء الإعجاب بالمنشور",
+        "postUnlikedMessage": "تم إزالة المنشور من العناصر المعجبة بك",
+        "postShared": "تم مشاركة المنشور",
+        "postSharedMessage": "تم نسخ رابط المنشور إلى الحافظة!",
+        "reportSubmitted": "تم تقديم البلاغ",
+        "reportSubmittedMessage": "شكراً لك على بلاغك. سنراجعه قريباً.",
+        "openingMessage": "جاري فتح {{description}}...",
+        "itemsAvailable": "{{description}} - {{count}} عنصر متاح"
       },
-      "days": { "short": { "sun": "أحد", "mon": "اثن", "tue": "ثلث", "wed": "أربع", "thu": "خميس", "fri": "جمعة", "sat": "سبت" } },
-      "weekly": {
-        "header": "حصص يوم {{day}}",
-        "noClasses": "لا توجد حصص مجدولة ليوم {{day}}.",
-        "joinOnline": "انضم عبر الإنترنت",
-        "addCalendar": "أضف إلى التقويم"
-      },
-      "dateSystem": {
-        "label": "نظام التاريخ:",
-        "gregorian": "ميلادي",
-        "hijri": "هجري"
-      },
-      "holidayKSA": "عطلة في السعودية",
-      "fridayHint": "الجمعة (صلاة الجمعة)"
-    },
-    "messages": {
-      "searchPlaceholder": "ابحث في المحادثات...",
-      "send": "إرسال",
-      "typing": "جاري الكتابة...",
-      "inputPlaceholder": "اكتب رسالة...",
-      "you": "أنت",
-      "attachments": { "image": "صورة", "file": "ملف" },
-      "empty": { "title": "اختر محادثة", "subtitle": "اختر محادثة لبدء المراسلة" },
-      "menu": {
-        "blockUser": "حظر المستخدم",
-        "reportUser": "الإبلاغ عن المستخدم",
-        "clearChat": "مسح الدردشة",
-        "exportChat": "تصدير الدردشة"
-      },
-      "actionStatus": {
-        "title": "حالة الإجراء"
-      }
-    },
-    "profile": {
-      "completion": "اكتمال الملف الشخصي",
-      "viewDataRetention": "📄 عرض سياسة الاحتفاظ بالبيانات",
-      "accessibility": "إظهار شريط إمكانية الوصول",
-      "form": {
-        "fullName": "الاسم الكامل",
-        "email": "البريد الإلكتروني",
-        "phone": "الهاتف",
-        "program": "البرنامج",
-        "year": "السنة",
-        "dob": "تاريخ الميلاد",
-        "gender": "الجنس",
-        "genderSelect": "اختر الجنس",
-        "genderMale": "ذكر",
-        "genderFemale": "أنثى",
-        "genderOther": "آخر",
-        "address": "العنوان",
-        "nationality": "الجنسية",
-        "role": "الدور",
-        "save": "حفظ التغييرات"
-      },
-      "social": { "linkedin": "لينكدإن", "github": "جيتهاب" },
-      "activity": {
-        "title": "نشاط الحساب",
-        "lastLogin": "آخر تسجيل دخول",
-        "courses": "المقررات المسجلة",
-        "assignments": "الواجبات المعلقة",
-        "score": "درجة النشاط",
-        "monthly": "النشاط (شهريًا)"
-      }
-    },
-    "sageAI": {
-      "header": {
-        "title": "سايج الذكي",
-        "backToDashboard": "العودة إلى لوحة التحكم",
-        "newChat": "بدء محادثة جديدة",
-        "showHistory": "إظهار سجل المحادثات",
-        "hideHistory": "إخفاء سجل المحادثات"
-      },
-      "welcome": {
-        "title": "كيف يمكنني مساعدتك اليوم؟",
-        "subtitle": "أنا هنا لمساعدتك في دراستك واحتياجاتك الأكاديمية."
-      },
-      "prompts": {
-        "courseSummary": {
-          "title": "ملخص المقرر",
-          "description": "احصل على ملخص شامل لأي موضوع دراسي"
-        },
-        "studyTips": {
-          "title": "نصائح الدراسة",
-          "description": "احصل على استراتيجيات ونصائح دراسية مخصصة"
-        },
-        "practiceQuestions": {
-          "title": "أسئلة التدريب",
-          "description": "أنشئ أسئلة تدريبية لأي مادة"
-        },
-        "examRoadmapping": {
-          "title": "خريطة طريق الامتحان",
-          "description": "احصل على خرائط طريق دراسية لشهادات الشبكات"
-        }
-      },
-      "certifications": {
-        "ciscoCCNA": {
-          "title": "سيسكو CCNA",
-          "subtitle": "شهادة سيسكو المعتمدة لشبكات الحاسوب – 200-301",
-          "description": "أتقن أساسيات الشبكات، اتصال IP، الأمان، والأتمتة"
-        },
-        "comptiaNetwork": {
-          "title": "كومبتيا نيتورك+",
-          "subtitle": "N10-008",
-          "description": "مفاهيم الشبكات الأساسية لمتخصصي تكنولوجيا المعلومات"
-        },
-        "juniperJNCIA": {
-          "title": "جونيبر JNCIA-Junos",
-          "subtitle": "JN0-104",
-          "description": "شهادة جونيبر المعتمدة للمساعد - Junos"
-        },
-        "moreCourses": {
-          "title": "المزيد من الدورات",
-          "subtitle": "",
-          "description": "دورات شهادات إضافية متاحة مع النسخة المميزة"
-        }
-      },
-      "roadmap": {
-        "prompt": "أريد التحضير لشهادة",
-        "topics": "هل يمكنك مساعدتي في إنشاء خريطة طريق دراسية تغطي هذه المواضيع",
-        "duration": "الشهادة تستغرق عادة",
-        "complete": "لإكمالها وهي",
-        "level": "مستوى"
-      },
-      "input": {
-        "placeholder": "رسالة إلى سايج الذكي...",
-        "attachFile": "إرفاق ملف",
-        "voiceInput": "إدخال صوتي",
-        "sendMessage": "إرسال رسالة",
-        "disclaimer": "سايج الذكي قد يخطئ. يرجى التحقق من المعلومات المهمة."
-      },
-      "history": {
-        "deleteChat": "حذف المحادثة",
-        "newChat": "محادثة جديدة"
-      },
-      "upgrade": {
-        "title": "الترقية إلى النسخة المميزة",
-        "continueConversation": "استمر في محادثتك مع مساعدة ذكية غير محدودة",
-        "accessFeatures": "الوصول إلى سجل محادثات غير محدود وميزات متقدمة",
-        "button": "ترقية الآن"
-      },
-      "modal": {
-        "chooseCertification": "اختر الشهادة",
-        "close": "إغلاق النافذة",
-        "proVersion": "متاح مع النسخة المميزة",
-        "selectCertification": "اختر {{certification}}"
-      },
-      "panel": {
-        "summaryTitle": "ملخص الذكاء",
-        "poweredBy": "مدعوم بواسطة سايج الذكي",
-        "closeAria": "إغلاق لوحة الملخص",
-        "documentTitle": "المستند",
-        "aiGenerated": "ملخص مولّد بالذكاء الاصطناعي",
-        "upsell": {
-          "title": "الترقية إلى النسخة المميزة",
-          "desc": "احصل على رؤى ذكية غير محدودة وتحليلات متقدمة",
-          "button": "ترقية الآن"
-        },
-        "generating": "جاري إنشاء الملخص...",
-        "noSummary": "لا يوجد ملخص متاح",
-        "copy": {
-          "button": "نسخ الملخص",
-          "copied": "تم النسخ!"
-        },
-        "footer": {
-          "line1": "رؤى مدعومة بالذكاء الاصطناعي لتعلم أفضل",
-          "line2": "مولّد بتقنية سايج الذكي"
-        }
-      },
-      "header": {
-        "title": "سايج الذكي",
-        "backToDashboard": "العودة إلى لوحة التحكم",
-        "newChat": "بدء محادثة جديدة",
-        "showHistory": "إظهار سجل المحادثات",
-        "hideHistory": "إخفاء سجل المحادثات"
-      },
-      "welcome": {
-        "title": "كيف يمكنني مساعدتك اليوم؟",
-        "subtitle": "أنا هنا لمساعدتك في دراستك واحتياجاتك الأكاديمية."
-      },
-      "prompts": {
-        "courseSummary": { "title": "ملخص المقرر", "description": "احصل على ملخص شامل لأي موضوع دراسي" },
-        "studyTips": { "title": "نصائح الدراسة", "description": "احصل على استراتيجيات ونصائح دراسية مخصصة" },
-        "practiceQuestions": { "title": "أسئلة التدريب", "description": "أنشئ أسئلة تدريبية لأي مادة" },
-        "examRoadmapping": { "title": "خريطة طريق الامتحان", "description": "احصل على خرائط طريق دراسية لشهادات الشبكات" }
-      },
-      "certifications": {
-        "ciscoCCNA": { "title": "سيسكو CCNA", "subtitle": "شهادة سيسكو المعتمدة لشبكات الحاسوب – 200-301", "description": "أتقن أساسيات الشبكات، اتصال IP، الأمان، والأتمتة" },
-        "comptiaNetwork": { "title": "كومبتيا نيتورك+", "subtitle": "N10-008", "description": "مفاهيم الشبكات الأساسية لمتخصصي تكنولوجيا المعلومات" },
-        "juniperJNCIA": { "title": "جونيبر JNCIA-Junos", "subtitle": "JN0-104", "description": "شهادة جونيبر المعتمدة للمساعد - Junos" },
-        "moreCourses": { "title": "المزيد من الدورات", "subtitle": "", "description": "دورات شهادات إضافية متاحة مع النسخة المميزة" }
-      },
-      "roadmap": {
-        "prompt": "أريد التحضير لشهادة",
-        "topics": "هل يمكنك مساعدتي في إنشاء خريطة طريق دراسية تغطي هذه المواضيع",
-        "duration": "الشهادة تستغرق عادة",
-        "complete": "لإكمالها وهي",
-        "level": "مستوى"
-      },
-      "input": {
-        "placeholder": "رسالة إلى سايج الذكي...",
-        "attachFile": "إرفاق ملف",
-        "voiceInput": "إدخال صوتي",
-        "sendMessage": "إرسال رسالة",
-        "disclaimer": "سايج الذكي قد يخطئ. يرجى التحقق من المعلومات المهمة."
-      },
-      "history": {
-        "deleteChat": "حذف المحادثة",
-        "newChat": "محادثة جديدة"
-      },
-      "upgrade": {
-        "title": "الترقية إلى النسخة المميزة",
-        "continueConversation": "استمر في محادثتك مع مساعدة ذكية غير محدودة",
-        "accessFeatures": "الوصول إلى سجل محادثات غير محدود وميزات متقدمة",
-        "button": "ترقية الآن"
-      },
-      "modal": {
-        "chooseCertification": "اختر الشهادة",
-        "close": "إغلاق النافذة",
-        "proVersion": "متاح مع النسخة المميزة",
-        "selectCertification": "اختر {{certification}}"
-      }
+      "emptyStateMessage": "ابدأ مناقشة للتواصل مع زملائك!"
     },
     "notifications": {
       "title": "الإشعارات",
@@ -3300,7 +2180,7 @@
         "upload": { "title": "رفع المواد", "desc": "أضف ملفات PDF واختبارات وموارد جديدة لمقررك." },
         "list": { "title": "مكتبة المواد", "desc": "أدر الملفات المرفوعة وعدّل التفاصيل." }
       },
-      "messages": {
+              "messages": {
           "header": { "title": "رسائل الطلاب", "desc": "مرحباً بك في مركز رسائل الطلاب. تواصل مباشرة مع الطلاب الأفراد أو المجموعات من خلال واجهة محادثة حديثة." },
           "new": { "title": "رسالة جديدة", "desc": "انقر على هذا الزر لإنشاء رسالة جديدة للطلاب المحددين." },
           "search": { "title": "البحث في الطلاب", "desc": "ابحث بسرعة عن طلاب محددين بكتابة اسمهم أو اسم المقرر." },
@@ -3308,9 +2188,707 @@
           "sort": { "title": "ترتيب الرسائل", "desc": "رتب الرسائل بالأحدث أو الأقدم أولاً لتنظيم محادثاتك زمنياً." },
           "studentsList": { "title": "قائمة الطلاب", "desc": "تصفّح جميع طلابك مع مؤشرات الرسائل غير المقروءة. انقر على أي طالب لبدء أو متابعة محادثة." },
           "chatHeader": { "title": "رأس المحادثة", "desc": "اعرض معلومات الطالب المحدد وتفاصيل المقرر في رأس المحادثة." },
-          "chatArea": { "title": "سجل الرسائل", "desc": "اعرض كامل تاريخ المحادثة مع الطالب المحدد. الرسائل ملوّنة: الأزرق للمرسلة، والأبيض للمستلمة." },
-          "input": { "title": "إدخال الرسالة", "desc": "اكتب رسالتك هنا واضغط Enter أو انقر إرسال للتواصل مع الطالب المحدد." }
+          "chatArea": { "title": "تاريخ الرسائل", "desc": "اعرض تاريخ المحادثة الكامل مع الطالب المحدد. الرسائل ملونة: أزرق للمرسلة، أبيض للمستلمة." },
+          "input": { "title": "إدخال الرسالة", "desc": "اكتب رسالتك هنا واضغط Enter أو انقر على إرسال للتواصل مع الطالب المحدد." }
+        },
+        "events": {
+          "header": { "title": "نظرة عامة على الأحداث", "desc": "مرحباً بك في صفحة الأحداث. هنا يمكنك عرض وإدارة جميع أحداثك المجدولة والمحاضرات والأنشطة." },
+          "search": { "title": "البحث في الأحداث", "desc": "ابحث بسرعة عن أحداث محددة بكتابة عنوان الحدث أو المقرر أو الوصف." },
+          "filter": { "title": "تصفية الأحداث", "desc": "صف الأحداث حسب النوع: المحاضرات، المختبرات، الاجتماعات، ساعات العمل المكتبي، والمزيد." },
+          "viewToggle": { "title": "خيارات العرض", "desc": "بدّل بين عرض الشبكة (البطاقات) وعرض القائمة (الجدول) لرؤية الأحداث بتخطيطات مختلفة." },
+          "grid": { "title": "عرض الأحداث", "desc": "كل بطاقة حدث تعرض تفاصيل مثل الوقت والموقع والحضور والنوع. انقر على الأحداث للانتقال إلى الصفحات ذات الصلة." }
+        },
+        "insights": {
+          "header": { "title": "رؤى التحليلات", "desc": "مرحباً بك في صفحة الرؤى. هنا يمكنك تحليل أداءك التعليمي ومشاركة الطلاب ومقاييس المقررات." },
+          "metricSelector": { "title": "اختيار المقاييس", "desc": "اختر أي مقياس لتحليله: أداء المقرر، مشاركة الطلاب، الوقت المستغرق، أو تتبع التقدم." },
+          "timeRange": { "title": "النطاق الزمني", "desc": "اختر الفترة الزمنية لتحليلك: آخر 7 أيام، الفصل الدراسي السابق، أو العام السابق." },
+          "chart": { "title": "تصور البيانات", "desc": "اعرض مقاييسك المحددة في مخطط تفاعلي. مرر المؤشر فوق نقاط البيانات لرؤية القيم التفصيلية." },
+          "metrics": { "title": "المقاييس الرئيسية", "desc": "راجع الإحصائيات المهمة مثل المتوسط والقيم القصوى والدنيا وتحليل الاتجاهات للمقياس المحدد." }
+        },
+        "grades": {
+          "header": { "title": "إدارة الدرجات", "desc": "مرحباً بك في صفحة إدارة الدرجات. هنا يمكنك مراجعة وتعديل وإدارة درجات الطلاب في جميع مقرراتك." },
+          "courseSelector": { "title": "اختيار المقرر", "desc": "اختر المقرر الذي تريد إدارة درجاته. كل مقرر يعرض طلاب مختلفين ودرجات واجباتهم." },
+          "table": { "title": "نظرة عامة على الدرجات", "desc": "راجع وعدّل الدرجات النهائية والتعليقات. كل صف يعرض طالب مع درجات واجباته والدرجة النهائية." },
+          "edit": { "title": "تعديل الدرجات", "desc": "انقر على زر التعديل لتعديل درجات الطالب وإضافة تعليقات. هذا يفتح نافذة إدارة الدرجات التفصيلية." },
+          "message": { "title": "تواصل الطالب", "desc": "انقر على زر الرسالة لإرسال رسائل مباشرة للطلاب حول درجاتهم أو تعليقاتهم أو أي أمور أكاديمية أخرى." }
+        },
+        "materials": {
+          "header": { "title": "إدارة مواد المقرر", "desc": "مرحباً بك في صفحة إدارة مواد المقرر. هنا يمكنك رفع وتنظيم وإدارة جميع موارد مقرراتك." },
+          "search": { "title": "البحث في المواد", "desc": "ابحث بسرعة عن مواد محددة بكتابة العنوان أو اسم الملف أو النوع." },
+          "viewToggle": { "title": "خيارات العرض", "desc": "بدّل بين عرض الشبكة (البطاقات) وعرض القائمة (الجدول) لرؤية موادك بتخطيطات مختلفة." },
+          "upload": { "title": "رفع المواد", "desc": "أضف ملفات PDF جديدة أو اختبارات أو موارد لمقررك." },
+          "list": { "title": "مكتبة المواد", "desc": "أدر الملفات المرفوعة وعدّل التفاصيل." }
+        },
+      "notifications": {
+        "header": { "title": "إدارة الإشعارات", "desc": "مرحباً بك في صفحة إدارة الإشعارات. أنشئ وأدر الإعلانات لطلابك بأولويات وجماهير مستهدفة مختلفة." },
+        "new": { "title": "إنشاء إشعار جديد", "desc": "انقر على هذا الزر لإنشاء إعلان أو إشعار جديد لطلابك." },
+        "search": { "title": "البحث في الإشعارات", "desc": "ابحث بسرعة عن إشعارات محددة بكتابة العنوان أو محتوى الرسالة." },
+        "filter": { "title": "تصفية حسب النوع", "desc": "صف الإشعارات حسب النوع: الجدول، الامتحان، الواجب، المواد، الملاحظات، أو الإعلانات العامة." },
+        "sort": { "title": "ترتيب الإشعارات", "desc": "رتب الإشعارات بالأحدث أو الأقدم أولاً لتنظيم إعلاناتك زمنياً." },
+        "viewToggle": { "title": "خيارات العرض", "desc": "بدّل بين عرض الشبكة (البطاقات) وعرض القائمة (الجدول) لرؤية إشعاراتك بتخطيطات مختلفة." },
+        "list": { "title": "قائمة الإشعارات", "desc": "اعرض جميع إشعاراتك مع مؤشرات الأولوية والطوابع الزمنية ومعلومات الجمهور المستهدف. انقر على أي إشعار لتعديله أو حذفه." },
+        "actions": { "title": "إجراءات الإشعارات", "desc": "عدّل أو احذف الإشعارات باستخدام أزرار الإجراءات. كل إشعار يعرض نوعه ومستوى الأولوية والجمهور المستهدف." }
+      },
+      "profile": {
+        "actions": { "title": "الملف والإجراءات", "desc": "حدّث البيانات، غيّر كلمة المرور، وادخل إلى الروابط السريعة." }
+      },
+      "complete": {
+        "title": "اكتملت جولة المدرّس!",
+        "desc": "لقد أكملت جولة المدرّس واستكشفت الميزات الأساسية للتدريس. أنت جاهز للانطلاق!",
+        "restart": "إعادة تشغيل الجولة"
+      }
+    }
+  },
+  "admin": {
+    "dashboard": {
+      "welcome": "مرحباً بعودتك، {{name}}!",
+      "roleDept": "مسؤول | قسم تقنية المعلومات",
+      "profileCompletion": "اكتمال الملف الشخصي",
+      "stats": { "students": "الطلاب", "instructors": "المدربون", "courses": "المقررات", "revenue": "الإيرادات" },
+      "quickActions": { "addCourse": "إضافة مقرر", "manageUsers": "إدارة المستخدمين", "viewReports": "عرض التقارير", "systemSettings": "إعدادات النظام" },
+      "charts": { "enrollmentTrends": "اتجاهات التسجيل", "courseCompletions": "إكمال المقررات" },
+      "recentActivity": "النشاط الأخير",
+      "announcements": { "title": "الإعلانات", "table": { "title": "العنوان", "by": "بواسطة", "date": "التاريخ", "views": "المشاهدات" } },
+      "pendingApprovals": { "title": "الموافقات المعلقة", "none": "لا توجد عناصر معلقة.", "by": "بواسطة" },
+      "systemHealth": {
+        "title": "صحة النظام والاستخدام",
+        "server": "الخادم",
+        "uptime": "مدة التشغيل",
+        "api": "واجهة البرمجة",
+        "activeUsers": "المستخدمون النشطون",
+        "peakTime": "وقت الذروة"
+      },
+      "topCourses": "أفضل المقررات أداءً",
+      "feedbackSupport": "الملاحظات والدعم",
+      "upcomingEvents": "الفعاليات القادمة",
+      "instructorLeaderboard": "لوحة صدارة المدرسين",
+      "studentProgress": "نظرة عامة على تقدم الطلاب",
+      "quickLinks": {
+        "title": "روابط وموارد سريعة",
+        "helpCenter": "مركز المساعدة",
+        "adminDocs": "وثائق المسؤول",
+        "lmsRoadmap": "خريطة طريق النظام"
+      },
+      "systemAnnouncements": "إعلانات النظام",
+      "recentLogins": "تسجيلات الدخول الأخيرة",
+      "completions": "{{count}} إكمال"
+    },
+    "profile": {
+      "completion": "اكتمال الملف الشخصي",
+      "viewDataRetention": "📄 عرض سياسة الاحتفاظ بالبيانات",
+      "accessibility": "إظهار شريط إمكانية الوصول",
+      "social": { "linkedin": "لينكدإن", "github": "جيتهاب" },
+      "form": {
+        "fullName": "الاسم الكامل",
+        "email": "البريد الإلكتروني",
+        "phone": "الهاتف",
+        "department": "القسم",
+        "dob": "تاريخ الميلاد",
+        "gender": "الجنس",
+        "genderSelect": "اختر الجنس",
+        "genderMale": "ذكر",
+        "genderFemale": "أنثى",
+        "genderOther": "آخر",
+        "address": "العنوان",
+        "nationality": "الجنسية",
+        "role": "الدور",
+        "save": "حفظ التغييرات"
+      },
+      "password": { "changeTitle": "تغيير كلمة المرور", "new": "كلمة مرور جديدة", "confirm": "تأكيد كلمة المرور", "update": "تحديث كلمة المرور" },
+      "activity": {
+        "title": "نشاط الحساب",
+        "lastLogin": "آخر تسجيل دخول",
+        "coursesEnrolled": "المقررات المسجلة",
+        "billsPaid": "الفواتير المدفوعة",
+        "score": "درجة النشاط",
+        "monthly": "النشاط (شهريًا)"
+      }
+    },
+    "notifications": {
+      "title": "الإشعارات والاستفسارات",
+      "actions": { "sendNotification": "إرسال إشعار", "reply": "رد", "send": "إرسال", "cancel": "إلغاء", "sendReply": "إرسال الرد" },
+      "queries": {
+        "title": "الاستفسارات",
+        "table": {
+          "sender": "المرسل",
+          "role": "الدور",
+          "message": "الرسالة",
+          "date": "التاريخ",
+          "status": "الحالة",
+          "actions": "الإجراءات"
+        },
+        "status": { "open": "مفتوح", "closed": "مغلق" },
+        "replyModal": {
+          "title": "الرد على الاستفسار",
+          "query": "الاستفسار",
+          "yourReply": "ردك"
+        }
+      },
+      "sent": {
+        "title": "الإشعارات المرسلة",
+        "table": { "recipient": "المستلم", "email": "البريد الإلكتروني", "message": "الرسالة", "date": "التاريخ" }
+      },
+      "sendModal": {
+        "title": "إرسال إشعار",
+        "fields": {
+          "recipient": "المستلم",
+          "selectRecipient": "اختر المستلم",
+          "email": "عنوان البريد الإلكتروني",
+          "message": "الرسالة"
+        },
+        "recipientOptions": {
+          "all": "جميع المستخدمين",
+          "students": "جميع الطلاب",
+          "instructors": "جميع المدرسين",
+          "custom": "بريد محدد"
         }
       }
+    },
+    "documentManagement": {
+      "title": "إدارة المستندات",
+      "uploadButton": "رفع مستند",
+      "table": {
+        "title": "العنوان",
+        "category": "الفئة",
+        "uploadedBy": "تم الرفع بواسطة",
+        "uploadDate": "تاريخ الرفع",
+        "file": "الملف",
+        "actions": "الإجراءات"
+      },
+      "actions": { "download": "تنزيل", "delete": "حذف" },
+      "uploadModal": {
+        "title": "رفع مستند",
+        "fields": { "title": "العنوان", "category": "الفئة", "description": "الوصف", "file": "الملف" },
+        "drop": { "chooseOrDrag": "اختر ملفًا أو اسحبه هنا", "supported": "الصيغ المدعومة: .xlsx، .xls، .csv" },
+        "buttons": { "cancel": "إلغاء", "upload": "رفع", "downloadTemplate": "تنزيل القالب" }
+      }
+    },
+    "instructorManagement": {
+      "title": "إدارة المدرسين",
+      "addNew": "إضافة مدرس جديد",
+      "table": {
+        "name": "الاسم",
+        "email": "البريد الإلكتروني",
+        "department": "القسم",
+        "courses": "المقررات",
+        "batches": "المجموعات",
+        "engagement": "المشاركة",
+        "actions": "الإجراءات"
+      },
+      "actions": { "edit": "تعديل", "delete": "حذف" },
+      "addModal": {
+        "title": "إضافة مدرس جديد",
+        "fields": { "name": "الاسم", "email": "البريد الإلكتروني", "department": "القسم", "selectDepartment": "اختر القسم" },
+        "buttons": { "cancel": "إلغاء", "add": "إضافة المدرس" }
+      },
+      "editModal": {
+        "title": "تعديل المدرس",
+        "fields": { "name": "الاسم", "email": "البريد الإلكتروني", "department": "القسم", "selectDepartment": "اختر القسم" },
+        "buttons": { "cancel": "إلغاء", "save": "حفظ التغييرات" }
+      }
+    },
+    "courseManagement": {
+      "title": "إدارة المقررات",
+      "filters": {
+        "allLevels": "كل المستويات",
+        "undergraduate": "مرحلة البكالوريوس",
+        "masters": "الماجستير",
+        "searchPlaceholder": "ابحث بالاسم أو الكود...",
+        "reset": "إعادة تعيين المقررات إلى الافتراضي",
+        "addNew": "إضافة مقرر جديد"
+      },
+      "table": {
+        "name": "الاسم",
+        "code": "الكود",
+        "credits": "الساعات المعتمدة",
+        "hours": "الساعات",
+        "source": "المصدر",
+        "actions": "الإجراءات"
+      },
+      "source": { "marln": "مارلن", "university": "الجامعة" },
+      "predefined": {
+        "title": "مقررات مارلن الجاهزة",
+        "addToUniversity": "إضافة إلى الجامعة",
+        "added": "تمت الإضافة"
+      },
+      "addModal": {
+        "title": "إضافة مقرر جديد",
+        "fields": {
+          "name": "اسم المقرر",
+          "code": "رمز المقرر",
+          "credits": "الساعات المعتمدة",
+          "hours": "ساعات التدريس",
+          "description": "الوصف"
+        },
+        "buttons": { "cancel": "إلغاء", "add": "إضافة المقرر" }
+      },
+      "editModal": {
+        "title": "تعديل المقرر",
+        "fields": {
+          "name": "اسم المقرر",
+          "code": "رمز المقرر",
+          "credits": "الساعات المعتمدة",
+          "hours": "ساعات التدريس",
+          "description": "الوصف"
+        },
+        "buttons": { "cancel": "إلغاء", "save": "حفظ التغييرات" }
+      },
+      "viewModal": {
+        "titleSuffix": " - التفاصيل",
+        "labels": { "code": "الرمز", "credits": "الساعات المعتمدة", "hours": "ساعات التدريس", "source": "المصدر", "description": "الوصف" }
+      }
+    },
+    "studentsManagement": {
+      "title": "إدارة الطلاب",
+      "buttons": {
+        "upload": "رفع الطلاب",
+        "addNew": "إضافة طالب جديد",
+        "moreFilters": "فلاتر إضافية",
+        "export": "تصدير",
+        "cancel": "إلغاء",
+        "save": "حفظ التغييرات",
+        "add": "إضافة الطالب",
+        "delete": "حذف"
+      },
+      "searchPlaceholder": "ابحث عن الطلاب...",
+      "filters": {
+        "all": "كل الطلاب",
+        "active": "نشط",
+        "inactive": "غير نشط",
+        "graduated": "متخرج"
+      },
+      "table": {
+        "name": "الاسم",
+        "email": "البريد الإلكتروني",
+        "program": "البرنامج",
+        "year": "السنة",
+        "status": "الحالة",
+        "enrollmentDate": "تاريخ الالتحاق",
+        "actions": "الإجراءات"
+      },
+      "status": { "active": "نشط", "inactive": "غير نشط", "graduated": "متخرج" },
+      "pagination": {
+        "summary": "عرض {{from}} إلى {{to}} من {{total}} سجلات",
+        "previous": "السابق",
+        "next": "التالي"
+      },
+      "addModal": {
+        "title": "إضافة طالب جديد",
+        "fields": {
+          "fullName": "الاسم الكامل",
+          "email": "البريد الإلكتروني",
+          "program": "البرنامج",
+          "selectProgram": "اختر البرنامج",
+          "year": "السنة",
+          "selectYear": "اختر السنة",
+          "phone": "الهاتف",
+          "dateOfBirth": "تاريخ الميلاد",
+          "gender": "النوع",
+          "selectGender": "اختر النوع",
+          "male": "ذكر",
+          "female": "أنثى",
+          "other": "آخر",
+          "nationality": "الجنسية",
+          "address": "العنوان"
+        }
+      },
+      "uploadModal": {
+        "title": "رفع الطلاب",
+        "chooseOrDrag": "اختر ملفًا أو اسحبه هنا",
+        "supportedFormats": "الأنساق المدعومة: ‎.xlsx‎, ‎.xls‎, ‎.csv",
+        "downloadTemplate": "تنزيل القالب",
+        "messages": {
+          "noValidData": "لا توجد بيانات صالحة في الملف",
+          "processingError": "حدث خطأ أثناء معالجة الملف. يرجى التحقق من التنسيق.",
+          "readingError": "حدث خطأ أثناء قراءة الملف",
+          "success_one": "تمت إضافة {{count}} طالب بنجاح",
+          "success_other": "تمت إضافة {{count}} طلاب بنجاح"
+        }
+      },
+      "actionMenu": { "edit": "تعديل", "delete": "حذف", "viewResults": "عرض النتائج" },
+      "resultsModal": {
+        "title": "نتائج الطالب - {{name}}",
+        "overview": {
+          "overallGPA": "المعدل التراكمي",
+          "attendance": "الحضور",
+          "courses": "المقررات",
+          "progress": "التقدم"
+        },
+        "sections": {
+          "coursePerformance": "أداء المقررات",
+          "gpaProgress": "تطور المعدل التراكمي"
+        }
+      },
+      "deleteModal": {
+        "confirm": "هل أنت متأكد أنك تريد حذف {{name}}؟ هذا الإجراء لا يمكن التراجع عنه."
+      }
+    },
+    "programManagement": {
+      "title": "إدارة البرامج",
+      "buttons": { "addNew": "إضافة برنامج جديد", "cancel": "إلغاء", "add": "إضافة البرنامج", "save": "حفظ التغييرات" },
+      "table": {
+        "name": "الاسم",
+        "durationYears": "المدة (بالسنوات)",
+        "specialization": "التخصص",
+        "actions": "الإجراءات"
+      },
+      "addModal": {
+        "title": "إضافة برنامج جديد",
+        "fields": { "name": "اسم البرنامج", "durationYears": "المدة (بالسنوات)", "specialization": "التخصص" }
+      },
+      "editModal": {
+        "title": "تعديل البرنامج",
+        "fields": { "name": "اسم البرنامج", "durationYears": "المدة (بالسنوات)", "specialization": "التخصص" }
+      },
+      "viewModal": {
+        "titleSuffix": " - الفصول/الفترات",
+        "termLabel": "الفصل/الفترة {{term}}",
+        "coursesCount": "المقررات: {{count}}",
+        "manageCourses": "إدارة المقررات"
+      },
+      "manageCoursesModal": {
+        "title": "إدارة المقررات لِـ {{program}} - الفصل {{term}}",
+        "currentCourses": "المقررات الحالية:",
+        "noCourses": "لا توجد مقررات مُسندة.",
+        "addCourse": "إضافة مقرر:",
+        "remove": "إزالة",
+        "add": "إضافة"
+      }
+    },
+    "academicCalendar": {
+      "title": "التقويم الأكاديمي",
+      "buttons": { "addEvent": "إضافة حدث", "cancel": "إلغاء", "add": "إضافة الحدث" },
+      "table": { "title": "العنوان", "date": "التاريخ", "type": "النوع", "description": "الوصف", "actions": "الإجراءات" },
+      "types": { "event": "حدث", "exam": "امتحان", "holiday": "عطلة" },
+      "addModal": {
+        "title": "إضافة حدث أكاديمي",
+        "fields": {
+          "title": "العنوان",
+          "date": "التاريخ",
+          "type": "النوع",
+          "selectType": "اختر النوع",
+          "description": "الوصف"
+        }
+      }
+    },
+    "reports": {
+      "title": "التقارير والتحليلات",
+      "dateRange": { "to": "إلى" },
+      "cards": {
+        "totalEnrollments": "إجمالي التسجيلات",
+        "courseCompletions": "إكمال المقررات",
+        "marlnPerformance": "أداء مارلن"
+      },
+      "table": {
+        "courseName": "اسم المقرر",
+        "enrollments": "التسجيلات",
+        "completions": "الإكمالات",
+        "type": "النوع"
+      }
+    },
+    "departmentDashboard": {
+      "title": "هيكل الجامعة",
+      "roles": {
+        "universityDean": "عميد الجامعة",
+        "collegeDean": "عميد الكلية",
+        "hod": "رئيس القسم",
+        "instructor": "محاضر"
+      }
+    },
+    "systemSettings": {
+      "title": "إعدادات النظام وتكامل مارلن",
+      "availableCourses": {
+        "title": "دورات مارلن المتاحة",
+        "purchaseAccess": "شراء الوصول",
+        "priceSuffix": "/شهر"
+      },
+      "activeCourses": {
+        "title": "الدورات النشطة/المشتراة",
+        "none": "لا توجد دورات مارلن نشطة.",
+        "table": { "course": "الدورة", "expires": "ينتهي" }
+      },
+      "bills": {
+        "title": "فواتير مارلن القادمة",
+        "none": "لا توجد فواتير قادمة.",
+        "table": { "description": "الوصف", "dueDate": "تاريخ الاستحقاق", "amount": "المبلغ", "actions": "الإجراءات" },
+        "payNow": "ادفع الآن"
+      },
+      "purchaseModal": {
+        "title": "شراء دورات مارلن",
+        "fields": { "durationMonths": "المدة (بالأشهر)" },
+        "totalPrice": "السعر الإجمالي: ${{price}}",
+        "buttons": { "cancel": "إلغاء", "purchase": "شراء" }
+      },
+      "alerts": {
+        "coursesPurchased": "تم شراء الدورات وتفعيلها!",
+        "billPaid": "تم سداد الفاتورة!"
+      }
+    },
+    "userManagement": {
+      "title": "إدارة المستخدمين",
+      "tabs": { "active": "المستخدمون النشطون", "deleted": "المستخدمون المحذوفون" },
+      "headers": {
+        "name": "الاسم",
+        "email": "البريد الإلكتروني",
+        "role": "الدور",
+        "status": "الحالة",
+        "program": "البرنامج",
+        "credentials": "بيانات الاعتماد",
+        "actions": "الإجراءات"
+      },
+      "deletedHeaders": { "name": "الاسم", "email": "البريد الإلكتروني", "role": "الدور", "program": "البرنامج", "actions": "الإجراءات" },
+      "statuses": { "active": "نشط", "suspended": "موقوف" },
+      "roles": { "student": "طالب", "instructor": "محاضر" },
+      "credentials": { "created": "تم الإنشاء", "create": "إنشاء بيانات اعتماد" },
+      "actions": {
+        "resetPassword": "إعادة تعيين كلمة المرور",
+        "suspend": "إيقاف",
+        "unsuspend": "إلغاء الإيقاف",
+        "upgradeProgram": "ترقية البرنامج",
+        "deleteUser": "حذف المستخدم",
+        "restore": "استعادة"
+      },
+      "emptyDeleted": { "title": "لا يوجد مستخدمون محذوفون", "subtitle": "ستظهر هنا حسابات المستخدمين المحذوفة" },
+      "upgradeModal": {
+        "title": "ترقية البرنامج",
+        "selectNewProgram": "اختر برنامجًا جديدًا",
+        "selectProgram": "اختر البرنامج",
+        "buttons": { "cancel": "إلغاء", "upgrade": "ترقية" }
+      },
+      "resetModal": {
+        "title": "إعادة تعيين كلمة المرور",
+        "prompt": "إرسال رابط إعادة تعيين كلمة المرور إلى {{email}}؟",
+        "buttons": { "cancel": "إلغاء", "sendLink": "إرسال الرابط" }
+      },
+      "credentialsModal": {
+        "title": "إنشاء بيانات اعتماد",
+        "fields": { "usernameEmail": "اسم المستخدم (البريد الإلكتروني)", "password": "كلمة المرور" },
+        "requireChange": "يتطلب تغيير كلمة المرور عند أول تسجيل دخول",
+        "sendEmail": "إرسال بيانات الاعتماد عبر البريد الإلكتروني",
+        "emailSent": "تم إرسال البريد الإلكتروني!",
+        "buttons": { "cancel": "إلغاء", "create": "إنشاء" }
+      },
+      "alerts": {
+        "resetSent": "تم إرسال رابط إعادة تعيين كلمة المرور إلى {{email}}",
+        "credentialsCreated": "تم إنشاء بيانات الاعتماد لـ {{name}}",
+        "emailSentTo": "تم إرسال بيانات الاعتماد إلى {{email}}"
+      }
+    },
+    "dataRetentionPolicy": {
+      "compliance": {
+        "title": "قائمة التوافق",
+        "intro": "تلتزم منصة مارلن بالامتثال الكامل لجميع قوانين حماية البيانات ذات الصلة وأفضل الممارسات. نقوم بمراجعة وتحديث سياساتنا بانتظام لضمان الاستمرارية في الالتزام.",
+        "items": {
+          "gdpr": { "label": "اللائحة العامة لحماية البيانات (GDPR)", "status": "متوافق" },
+          "pdpl": { "label": "نظام حماية البيانات الشخصية السعودي (PDPL)", "status": "متوافق" },
+          "shariah": { "label": "مبادئ الشريعة", "status": "متوافق" },
+          "best": { "label": "أفضل الممارسات في خصوصية البيانات", "status": "معتمد" }
+        }
+      },
+      "header": {
+        "title": "سياسة الاحتفاظ بالبيانات",
+        "subtitle": "كيف ندير ونحتفظ ببياناتك في منصة مارلن"
+      },
+      "info": {
+        "text": "تلخص هذه الصفحة كيفية الاحتفاظ ببيانات المستخدمين والمقررات وإدارتها وفقًا للالتزامات القانونية (GDPR). للاستفسارات، تواصل مع المسؤول."
+      },
+      "tableCard": {
+        "title": "تفاصيل الاحتفاظ",
+        "table": {
+          "headers": {
+            "area": "المجال",
+            "category": "الفئة",
+            "purpose": "الغرض",
+            "retention": "فترة الاحتفاظ",
+            "lawful": "الأسس القانونية والملاحظات"
+          },
+          "rows": {
+            "site": {
+              "area": "الموقع",
+              "category": "فئة تجريبية",
+              "purpose": "غرض تجريبي",
+              "retention": "سنة واحدة",
+              "lawful": { "tag": "GDPR المادة 6.1(ج)", "desc": "المعالجة ضرورية للامتثال لالتزام قانوني يخضع له المتحكم" }
+            },
+            "users": {
+              "area": "المستخدمون",
+              "category": "فئة تجريبية",
+              "purpose": "غرض تجريبي",
+              "retention": "سنة واحدة",
+              "lawful": { "tag": "GDPR المادة 6.1(ج)", "desc": "المعالجة ضرورية للامتثال لالتزام قانوني يخضع له المتحكم" }
+            },
+            "courseCategories": { "area": "فئات المقررات", "category": "-", "purpose": "-", "retention": "لا توجد فترة احتفاظ", "lawful": "-" },
+            "courses": { "area": "المقررات", "category": "-", "purpose": "-", "retention": "لا توجد فترة احتفاظ", "lawful": "-" },
+            "activityModules": { "area": "وحدات النشاط", "category": "-", "purpose": "-", "retention": "لا توجد فترة احتفاظ", "lawful": "-" },
+            "blocks": { "area": "الكتل", "category": "-", "purpose": "-", "retention": "لا توجد فترة احتفاظ", "lawful": "-" }
+          }
+        }
+      },
+      "legal": {
+        "title": "الملاءمة القانونية: نظام PDPL السعودي ومبادئ الشريعة",
+        "intro": "تتوافق منصة مارلن مع المعايير الدولية والمحلية لحماية البيانات. فيما يلي مواءمة مبادئ نظام حماية البيانات الشخصية السعودي (PDPL) مع مفاهيم الشريعة، لضمان الالتزام القانوني والثقافي.",
+        "table": {
+          "headers": { "pdplPrinciple": "مبدأ PDPL", "shariah": "مواءمة الشريعة" },
+          "rows": {
+            "lawful": { "pdpl": "معالجة مشروعة وشفافة", "shariah": "الرضا والثقة (أمانة)" },
+            "purpose": { "pdpl": "تحديد الغرض", "shariah": "المصلحة (يجب أن يكون الاستخدام نافعًا)" },
+            "min": { "pdpl": "تقليل البيانات", "shariah": "منع التطفل غير الضروري" },
+            "rights": { "pdpl": "حقوق صاحب البيانات (الوصول، التصحيح)", "shariah": "حق الخصوصية والعدالة" },
+            "security": { "pdpl": "الأمن والسرية", "shariah": "الضرر والأمانة" }
+          }
+        },
+        "note": "ملاحظة: يُعد PDPL (2021، المعدل 2023) القانون الأساسي لحماية البيانات في السعودية. وصُممت مبادئه لتكون متوافقة مع الشريعة، بما يضمن حوكمة بيانات قانونية وأخلاقية في منصة مارلن."
+      }
+    }
+  },
+  "sidebar": {
+    "brand": "مارلن",
+    "profile": { "ariaEdit": "تعديل الملف الشخصي" },
+    "roles": { "admin": "مسؤول", "instructor": "محاضر", "student": "طالب", "user": "مستخدم" },
+  "unauthorized": {
+    "title": "تم رفض الوصول",
+    "subtitle": "ليس لديك صلاحية للوصول إلى هذه الصفحة",
+    "alert": {
+      "title": "لماذا أرى هذا؟",
+      "message": "تتطلب هذه الصفحة صلاحيات محددة أو دور مستخدم مختلف. يرجى الاتصال بالمسؤول إذا كنت تعتقد أن هذا خطأ."
+    },
+    "actions": {
+      "goHome": "الذهاب إلى الصفحة الرئيسية",
+      "goBack": "العودة"
+    },
+    "help": "تحتاج مساعدة؟ اتصل بالدعم على support@university.edu"
+  },
+  "student": {
+    "sageAI": {
+      "panel": {
+        "summaryTitle": "ملخص الذكاء الاصطناعي",
+        "poweredBy": "مدعوم بواسطة Sage AI",
+        "closeAria": "إغلاق لوحة الملخص",
+        "documentTitle": "المستند",
+        "aiGenerated": "ملخص مولّد بالذكاء الاصطناعي",
+        "upsell": {
+          "title": "ترقية إلى النسخة المدفوعة",
+          "desc": "احصل على رؤى ذكاء اصطناعي غير محدودة وتحليلات متقدمة",
+          "button": "ترقية الآن"
+        },
+        "generating": "جاري إنشاء الملخص...",
+        "noSummary": "لا يوجد ملخص متاح",
+        "copy": {
+          "button": "نسخ الملخص",
+          "copied": "تم النسخ!"
+        },
+        "footer": {
+          "line1": "رؤى مدعومة بالذكاء الاصطناعي لتعلم أفضل",
+          "line2": "مولّد بواسطة تقنية Sage AI"
+        }
+      }
+    }
+  },
+  "instructor": {
+    "studentsInsights": {
+    "title": "تحليل أداء الطالب",
+    "academicProgress": "التقدم الأكاديمي",
+    "completionRate": "معدل الإنجاز",
+    "performanceLevel": "مستوى الأداء",
+    "attendanceRate": "معدل الحضور",
+    "engagement": "الانخراط",
+    "lastActivity": "آخر نشاط",
+    "instructorObservations": "ملاحظات المحاضر",
+    "keyInsights": "الرؤى الرئيسية",
+    "recommendedActions": "الإجراءات الموصى بها",
+    "focusAreas": "مجالات التركيز للأسبوع القادم",
+    "noNotes": "لا توجد ملاحظات محاضر متاحة بعد.",
+    "performance": {
+      "excellent": "ممتاز",
+      "good": "جيد",
+      "needsImprovement": "يحتاج تحسين"
+    },
+    "attendance": {
+      "veryStrong": "قوي جداً",
+      "solid": "مستقر",
+      "low": "منخفض"
+    },
+    "progressInsight": {
+      "excellent": "أداء أكاديمي قوي مع تقدم ثابت",
+      "good": "تقدم جيد مع مجال للتحسين",
+      "needsSupport": "يحتاج دعم إضافي وتدخل"
+    },
+    "attendanceInsight": {
+      "excellent": "الحضور الممتاز يظهر الالتزام",
+      "acceptable": "الحضور مقبول ولكن يمكن تحسينه",
+      "needsAttention": "الحضور يحتاج اهتمام فوري"
+    },
+    "engagementInsight": {
+      "active": "الطالب منخرط بنشاط في المواد الدراسية",
+      "disengaged": "النشاط الأخير يشير إلى بعض الانفصال"
+    },
+    "actions": {
+      "progress": {
+        "low": "جدولة اجتماع فردي لمناقشة التحديات الأكاديمية وإنشاء خطة تحسين",
+        "high": "الحفاظ على مستوى الدعم الحالي وتشجيع التميز المستمر"
+      },
+      "attendance": {
+        "low": "إرسال تذكير حضور مخصص وتقديم موارد دعم إضافية",
+        "high": "الإقرار بالحضور الجيد وتشجيع المشاركة المستمرة"
+      },
+      "engagement": {
+        "low": "التواصل عبر الرسائل للتحقق من انخراط الطالب وتقديم المساعدة",
+        "high": "الاستمرار في مراقبة الانخراط وتقديم التعزيز الإيجابي"
+      }
+    },
+    "focusAreas": {
+      "progress": {
+        "low": "استهداف مجالات الضعف المحددة في الواجبات القادمة",
+        "high": "تحدي بمواضيع متقدمة للحفاظ على الانخراط"
+      },
+      "attendance": {
+        "low": "تنفيذ نظام تتبع الحضور والمتابعة",
+        "high": "تشجيع القيادة في مناقشات الفصل والأنشطة الجماعية"
+      },
+      "feedback": "تقديم تغذية راجعة في الوقت المناسب على جميع الأعمال المقدمة للحفاظ على الزخم"
+    }
+  }
+},
+    "menu": {
+      "admin": {
+        "dashboard": "لوحة التحكم",
+        "students": "إدارة الطلاب",
+        "instructors": "إدارة المحاضرين",
+        "programs": "إدارة البرامج",
+        "courses": "إدارة المقررات",
+        "documents": "إدارة المستندات",
+        "calendar": "التقويم التدريبي",
+        "notifications": "الإشعارات/الاستفسارات",
+        "reports": "التقارير والتحليلات",
+        "users": "إدارة المستخدمين",
+        "settings": "إعدادات النظام"
+      },
+      "instructor": {
+        "dashboard": "لوحة التحكم",
+        "courses": "مقرراتي",
+        "students": "إدارة الطلاب",
+        "assignments": "الواجبات",
+        "grades": "الدرجات والتقييم",
+        "calendar": "جدول التدريس",
+        "materials": "مواد المقرر",
+        "messages": "رسائل الطلاب",
+        "notifications": "الإشعارات",
+        "sage-ai": "سيدج AI"
+      },
+      "student": {
+        "dashboard": "لوحة التحكم",
+        "my-courses": "مقرراتي",
+        "assignments": "الواجبات",
+        "grades": "درجاتي",
+        "schedule": "الجدول الدراسي",
+        "materials": "مواد المقرر",
+        "messages": "الرسائل",
+        "notifications": "الإشعارات",
+        "ecollab": "التعاون الإلكتروني",
+        "sage-ai": "سيدج AI"
+      }
+    },
+    "theme": { "dark": "الوضع الداكن", "light": "الوضع الفاتح", "toggleAria": "تبديل الوضع الداكن/الفاتح" },
+    "logout": "تسجيل الخروج"
   }
 } 
