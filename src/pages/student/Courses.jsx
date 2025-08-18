@@ -18,7 +18,9 @@ const courses = [
     description: 'A comprehensive course on cyber security principles, threats, and defense mechanisms.',
     icon: Shield,
     iconColor: 'text-red-600',
-    iconBg: 'bg-red-100 dark:bg-red-900/20'
+    iconBg: 'bg-red-100 dark:bg-red-900/20',
+    cardBg: 'bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/10 dark:to-red-800/10',
+    cardBorder: 'border-red-200 dark:border-red-700'
   },
   {
     id: 2,
@@ -32,7 +34,9 @@ const courses = [
     description: 'Master advanced Python concepts, best practices, and real-world applications.',
     icon: Code,
     iconColor: 'text-blue-600',
-    iconBg: 'bg-blue-100 dark:bg-blue-900/20'
+    iconBg: 'bg-blue-100 dark:bg-blue-900/20',
+    cardBg: 'bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/10 dark:to-blue-800/10',
+    cardBorder: 'border-blue-200 dark:border-blue-700'
   },
   {
     id: 3,
@@ -46,7 +50,9 @@ const courses = [
     description: 'Learn modern web development technologies and best practices.',
     icon: Globe,
     iconColor: 'text-green-600',
-    iconBg: 'bg-green-100 dark:bg-green-900/20'
+    iconBg: 'bg-green-100 dark:bg-green-900/20',
+    cardBg: 'bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/10 dark:to-green-800/10',
+    cardBorder: 'border-green-200 dark:border-green-700'
   },
 ];
 
@@ -209,7 +215,7 @@ function Courses() {
               {filteredCourses.map((course) => (
                 <div
                   key={course.id}
-                  className="bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden"
+                  className={`${course.cardBg} ${course.cardBorder} rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden border`}
                 >
                   <div className="p-6">
                     <div className="flex items-center gap-3 mb-3">
