@@ -10,7 +10,7 @@ const statsData = {
     { labelKey: 'student.dashboard.stats.enrolledCourses', value: '5', icon: BookOpen, color: 'text-blue-600', bg: 'bg-blue-50' },
     { labelKey: 'student.dashboard.stats.pendingAssignments', value: '3', icon: ClipboardList, color: 'text-yellow-600', bg: 'bg-yellow-50' },
     { labelKey: 'student.dashboard.stats.averageGrade', value: '85%', icon: Award, color: 'text-green-600', bg: 'bg-green-50' },
-    { labelKey: 'student.dashboard.stats.nextClass', value: 'Math 101', icon: Calendar, color: 'text-purple-600', bg: 'bg-purple-50' },
+    { labelKey: 'student.dashboard.stats.nextClass', value: 'Mathematics', icon: Calendar, color: 'text-purple-600', bg: 'bg-purple-50' },
   ],
   'last': [
     { labelKey: 'student.dashboard.stats.enrolledCourses', value: '4', icon: BookOpen, color: 'text-blue-600', bg: 'bg-blue-50' },
@@ -21,9 +21,9 @@ const statsData = {
 };
 
 const messages = [
-  { name: 'Dr. Emily Carter', time: '10:15 AM', msg: 'Your assignment has been graded. Great work!', avatar: '', color: 'bg-blue-200' },
-  { name: 'Study Group', time: 'Yesterday', msg: 'Meeting tomorrow at 2 PM in Library', avatar: '', color: 'bg-green-200' },
-  { name: 'Academic Advisor', time: '2 days ago', msg: 'Course registration opens next week', avatar: '', color: 'bg-yellow-200' },
+  { name: 'Dr. Emily Carter', time: '10:15 AM', msg: 'Your assignment has been graded. Great work!', avatar: '', color: 'bg-blue-200', status: 'online', unread: true },
+  { name: 'Study Group', time: 'Yesterday', msg: 'Meeting tomorrow at 2 PM in Library', avatar: '', color: 'bg-green-200', status: 'typing', unread: false },
+  { name: 'Academic Advisor', time: '2 days ago', msg: 'Course registration opens next week', avatar: '', color: 'bg-yellow-200', status: 'offline', unread: false },
 ];
 
 const activities = [
@@ -325,15 +325,38 @@ export default function StudentDashboard() {
         {/* Top Stats */}
         <div id="stat-cards" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6" data-tour="stat-cards">
           {statsData[selectedSemester].map((stat) => (
-            <div key={stat.labelKey} className={`rounded-xl shadow p-6 flex items-center gap-4 ${stat.bg} dark:bg-gray-800`}>
+            <button
+              key={stat.labelKey}
+              onClick={() => {
+                if (stat.labelKey === 'student.dashboard.stats.enrolledCourses') {
+                  navigate('/student/courses');
+                } else if (stat.labelKey === 'student.dashboard.stats.pendingAssignments') {
+                  navigate('/student/assignments');
+                } else if (stat.labelKey === 'student.dashboard.stats.averageGrade') {
+                  navigate('/student/grades');
+                } else if (stat.labelKey === 'student.dashboard.stats.nextClass') {
+                  navigate('/student/schedule');
+                }
+              }}
+              className={`rounded-xl shadow p-6 flex items-center gap-4 ${stat.bg} dark:bg-gray-800 hover:shadow-lg transition-all duration-200 hover:scale-105 cursor-pointer`}
+            >
               <stat.icon size={36} className={stat.color} />
               <div>
                 <div className="text-2xl font-bold text-gray-800 dark:text-gray-100">
-                  {stat.value === 'N/A' ? 'N/A' : <AnimatedNumber value={parseInt(stat.value)} />}
+                  {stat.value === 'N/A' ? 'N/A' : 
+                   stat.value === 'Mathematics' ? stat.value :
+                   stat.value.includes('%') ? (
+                     <>
+                       <AnimatedNumber value={parseInt(stat.value)} />
+                       <span>%</span>
+                     </>
+                   ) : (
+                     <AnimatedNumber value={parseInt(stat.value)} />
+                   )}
                 </div>
                 <div className="text-gray-500 dark:text-gray-300 text-sm">{t(stat.labelKey)}</div>
               </div>
-            </div>
+            </button>
           ))}
         </div>
 
@@ -376,7 +399,33 @@ export default function StudentDashboard() {
                       item.trend.startsWith('+') ? 'text-green-600' : 'text-red-600'
                     }`}>{item.trend}</span>
                   </div>
-                  <div className="text-2xl font-bold text-gray-800 dark:text-gray-100">{item.value}</div>
+                  <div className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+                    {item.value.includes('%') ? (
+                      <>
+                        <AnimatedNumber value={parseInt(item.value)} />
+                        <span>%</span>
+                      </>
+                    ) : item.value.includes('h') ? (
+                      <>
+                        <AnimatedNumber value={parseInt(item.value)} />
+                        <span>h</span>
+                      </>
+                    ) : item.value.includes('/') ? (
+                      item.value.split('/').map((part, i) => (
+                        <span key={i}>
+                          {i === 0 ? <AnimatedNumber value={parseInt(part)} /> : parseInt(part)}
+                          {i === 0 ? '/' : ''}
+                        </span>
+                      ))
+                    ) : item.value.includes('.') ? (
+                      <>
+                        <AnimatedNumber value={parseFloat(item.value) * 10} />
+                        <span>/10</span>
+                      </>
+                    ) : (
+                      <AnimatedNumber value={parseInt(item.value)} />
+                    )}
+                  </div>
                   <div className="text-sm text-gray-500 dark:text-gray-300">{t(item.labelKey)}</div>
                 </div>
               ))}
@@ -448,14 +497,24 @@ export default function StudentDashboard() {
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-4 mb-6" data-tour="messages">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
-                  <MessageCircle size={18} className="text-blue-600" />
+                  <div className="relative">
+                    <MessageCircle size={18} className="text-blue-600" />
+                    {/* Subtle notification dot */}
+                    <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></div>
+                  </div>
                   <span className="font-medium text-gray-700 dark:text-gray-100">{t('student.dashboard.widgets.messages')}</span>
+                  <span className="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded-full">
+                    {messages.filter(m => m.unread).length} new
+                  </span>
                 </div>
                 <button 
                   onClick={() => navigate('/student/messages')}
-                  className="text-blue-600 dark:text-blue-400 text-sm hover:underline hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
+                  className="text-blue-600 dark:text-blue-400 text-sm hover:underline hover:text-blue-700 dark:hover:text-blue-300 transition-colors flex items-center gap-1 group"
                 >
                   {t('common.viewAll')}
+                  <svg className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                  </svg>
                 </button>
               </div>
               <div className="space-y-3">
@@ -463,12 +522,51 @@ export default function StudentDashboard() {
                   <button 
                     key={idx} 
                     onClick={() => navigate('/student/messages')}
-                    className="w-full text-left flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                    className={`w-full text-left flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 relative group ${
+                      m.unread ? 'bg-blue-50 dark:bg-blue-900/10' : ''
+                    }`}
                   >
-                    <div className={`w-8 h-8 rounded-full ${m.color}`}></div>
-                    <div>
-                      <div className="text-sm font-medium text-gray-700 dark:text-gray-200">{m.name}</div>
-                      <div className="text-xs text-gray-500 dark:text-gray-300">{m.msg} • {m.time}</div>
+                    <div className="relative">
+                      <div className={`w-8 h-8 rounded-full ${m.color} flex items-center justify-center text-xs font-medium text-gray-700 group-hover:scale-110 transition-transform duration-200`}>
+                        {m.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                      </div>
+                      {/* Status indicator */}
+                      {m.status === 'online' && (
+                        <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-800"></div>
+                      )}
+                      {m.status === 'typing' && (
+                        <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-blue-500 rounded-full border-2 border-white dark:border-gray-800"></div>
+                      )}
+                      {m.status === 'offline' && (
+                        <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-gray-400 rounded-full border-2 border-white dark:border-gray-800"></div>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <div className="text-sm font-medium text-gray-700 dark:text-gray-200 truncate">{m.name}</div>
+                        <div className="flex items-center gap-1">
+                          {m.unread && (
+                            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                          )}
+                          <span className="text-xs text-gray-500 dark:text-gray-400">{m.time}</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="text-xs text-gray-500 dark:text-gray-300 truncate flex-1">
+                          {m.status === 'typing' ? (
+                            <span className="flex items-center gap-1">
+                              <span className="text-blue-500">Typing</span>
+                              <div className="flex gap-0.5">
+                                <div className="w-1 h-1 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                                <div className="w-1 h-1 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                                <div className="w-1 h-1 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                              </div>
+                            </span>
+                          ) : (
+                            m.msg
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </button>
                 ))}

@@ -95,6 +95,7 @@ function Materials() {
   const [selectedType, setSelectedType] = useState('all');
   const [selectedMaterial, setSelectedMaterial] = useState(null);
   const [viewMode, setViewMode] = useState('grid');
+  const [isDownloading, setIsDownloading] = useState(false);
   const { startTour } = useTour();
 
   const filteredMaterials = materials.filter(material => {
@@ -139,6 +140,37 @@ function Materials() {
     const key = type;
     // Map to translation key under student.materials.types
     return t(`student.materials.types.${key}`, type.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '));
+  };
+
+  const handleDownload = async (material) => {
+    setIsDownloading(true);
+    
+    try {
+      // Simulate download process
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Create a dummy file for download
+      const content = `This is a sample ${material.format.toUpperCase()} file for: ${material.title}\n\nCourse: ${material.course}\nInstructor: ${material.instructor}\nDescription: ${material.description}\n\nThis is a demo file. In a real application, this would be the actual file content.`;
+      
+      const blob = new Blob([content], { type: 'text/plain' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${material.title.replace(/[^a-zA-Z0-9]/g, '_')}.${material.format}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      
+      // Show success message
+      alert(t('student.materials.downloadSuccess', 'File downloaded successfully!'));
+      
+    } catch (error) {
+      console.error('Download failed:', error);
+      alert(t('student.materials.downloadError', 'Download failed. Please try again.'));
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   const startMaterialsTour = () => {
@@ -322,14 +354,26 @@ function Materials() {
                       <span className="text-sm text-gray-500 dark:text-gray-400">
                         {t('student.materials.labels.uploaded')}: {new Date(material.uploadedAt).toLocaleDateString()}
                       </span>
-                      <button
-                        onClick={() => setSelectedMaterial(material)}
-                        className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
-                        data-tour="view-details-btn"
-                      >
-                        {t('student.materials.labels.viewDetails')}
-                        <ChevronRight className="h-4 w-4" />
-                      </button>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => handleDownload(material)}
+                          disabled={isDownloading}
+                          className={`flex items-center gap-2 px-3 py-2 text-sm font-medium text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 transition-colors ${
+                            isDownloading ? 'opacity-50 cursor-not-allowed' : ''
+                          }`}
+                        >
+                          <Download className={`h-4 w-4 ${isDownloading ? 'animate-pulse' : ''}`} />
+                          {isDownloading ? t('student.materials.downloading', 'Downloading...') : t('student.materials.download', 'Download')}
+                        </button>
+                        <button
+                          onClick={() => setSelectedMaterial(material)}
+                          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                          data-tour="view-details-btn"
+                        >
+                          {t('student.materials.labels.viewDetails')}
+                          <ChevronRight className="h-4 w-4" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -394,13 +438,24 @@ function Materials() {
                           {t('student.materials.labels.downloadCount_other', { count: material.downloads })}
                         </td>
                         <td className="px-4 py-3 text-sm font-medium">
-                          <button
-                            onClick={() => setSelectedMaterial(material)}
-                            className="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 px-3 py-1 rounded hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
-                            data-tour="view-details-btn"
-                          >
-                            {t('student.materials.labels.viewDetails')}
-                          </button>
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => handleDownload(material)}
+                              disabled={isDownloading}
+                              className={`text-green-600 dark:text-green-400 hover:text-green-900 dark:hover:text-green-300 px-3 py-1 rounded hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors ${
+                                isDownloading ? 'opacity-50 cursor-not-allowed' : ''
+                              }`}
+                            >
+                              {isDownloading ? t('student.materials.downloading', 'Downloading...') : t('student.materials.download', 'Download')}
+                            </button>
+                            <button
+                              onClick={() => setSelectedMaterial(material)}
+                              className="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 px-3 py-1 rounded hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+                              data-tour="view-details-btn"
+                            >
+                              {t('student.materials.labels.viewDetails')}
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}
@@ -470,10 +525,14 @@ function Materials() {
                 {t('student.materials.modal.close')}
               </button>
               <button
-                className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 flex items-center gap-2"
+                onClick={() => handleDownload(selectedMaterial)}
+                disabled={isDownloading}
+                className={`px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 flex items-center gap-2 transition-colors ${
+                  isDownloading ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
               >
-                <Download className="h-4 w-4" />
-                {t('student.materials.modal.download')}
+                <Download className={`h-4 w-4 ${isDownloading ? 'animate-pulse' : ''}`} />
+                {isDownloading ? t('student.materials.modal.downloading', 'Downloading...') : t('student.materials.modal.download')}
               </button>
             </div>
           </div>

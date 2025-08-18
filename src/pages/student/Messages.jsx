@@ -30,7 +30,9 @@ const conversations = [
     time: '10:30 AM',
     unread: 2,
     avatar: 'SJ',
-    online: true
+    online: true,
+    status: 'online',
+    typing: false
   },
   {
     id: 2,
@@ -41,7 +43,9 @@ const conversations = [
     time: 'Yesterday',
     unread: 0,
     avatar: 'MC',
-    online: false
+    online: false,
+    status: 'offline',
+    typing: false
   },
   {
     id: 3,
@@ -52,7 +56,9 @@ const conversations = [
     time: '2 days ago',
     unread: 0,
     avatar: 'EB',
-    online: true
+    online: true,
+    status: 'typing',
+    typing: true
   },
   {
     id: 4,
@@ -63,7 +69,9 @@ const conversations = [
     time: '3 days ago',
     unread: 0,
     avatar: 'JW',
-    online: false
+    online: false,
+    status: 'offline',
+    typing: false
   }
 ];
 
@@ -341,6 +349,15 @@ function Messages() {
         {/* Conversations List */}
         <div className="w-80 bg-white dark:bg-gray-800 border-r dark:border-gray-700 flex flex-col">
           <div className="p-4 border-b dark:border-gray-700 flex-shrink-0">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">Messages</h3>
+              <div className="flex items-center gap-2">
+                <span className="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded-full">
+                  {conversations.filter(c => c.unread > 0).length} new
+                </span>
+                <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+              </div>
+            </div>
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500" size={20} />
               <input
@@ -369,8 +386,15 @@ function Messages() {
                     <div className="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-semibold">
                       {conversation.avatar}
                     </div>
-                    {conversation.online && (
-                      <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white" />
+                    {/* Status indicators */}
+                    {conversation.status === 'online' && (
+                      <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-800"></div>
+                    )}
+                    {conversation.status === 'typing' && (
+                      <div className="absolute bottom-0 right-0 w-3 h-3 bg-blue-500 rounded-full border-2 border-white dark:border-gray-800"></div>
+                    )}
+                    {conversation.status === 'offline' && (
+                      <div className="absolute bottom-0 right-0 w-3 h-3 bg-gray-400 rounded-full border-2 border-white dark:border-gray-800"></div>
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -388,7 +412,20 @@ function Messages() {
                         )}
                       </div>
                     </div>
-                    <p className="text-sm text-gray-600 dark:text-gray-300 truncate mt-1">{conversation.lastMessage}</p>
+                    <div className="flex items-center gap-2 mt-1">
+                      {conversation.typing ? (
+                        <span className="flex items-center gap-1 text-blue-500 text-sm">
+                          <span>Typing</span>
+                          <div className="flex gap-0.5">
+                            <div className="w-1 h-1 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                            <div className="w-1 h-1 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                            <div className="w-1 h-1 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                          </div>
+                        </span>
+                      ) : (
+                        <p className="text-sm text-gray-600 dark:text-gray-300 truncate">{conversation.lastMessage}</p>
+                      )}
+                    </div>
                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{conversation.course}</p>
                   </div>
                 </div>
@@ -408,12 +445,31 @@ function Messages() {
                     <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-semibold">
                       {selectedConversation.avatar}
                     </div>
-                    {selectedConversation.online && (
-                      <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white dark:border-gray-800" />
+                    {/* Status indicators */}
+                    {selectedConversation.status === 'online' && (
+                      <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white dark:border-gray-800"></div>
+                    )}
+                    {selectedConversation.status === 'typing' && (
+                      <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-blue-500 rounded-full border-2 border-white dark:border-gray-800"></div>
+                    )}
+                    {selectedConversation.status === 'offline' && (
+                      <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-gray-400 rounded-full border-2 border-white dark:border-gray-800"></div>
                     )}
                   </div>
                   <div>
-                    <h2 className="font-medium text-gray-900 dark:text-gray-100">{selectedConversation.name}</h2>
+                    <div className="flex items-center gap-2">
+                      <h2 className="font-medium text-gray-900 dark:text-gray-100">{selectedConversation.name}</h2>
+                      {selectedConversation.typing && (
+                        <span className="flex items-center gap-1 text-blue-500 text-xs">
+                          <span>typing</span>
+                          <div className="flex gap-0.5">
+                            <div className="w-1 h-1 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                            <div className="w-1 h-1 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                            <div className="w-1 h-1 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                          </div>
+                        </span>
+                      )}
+                    </div>
                     <p className="text-sm text-gray-500 dark:text-gray-400">{selectedConversation.role}</p>
                   </div>
                 </div>
@@ -487,13 +543,14 @@ function Messages() {
               {/* Messages */}
               <div className="flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-gray-900 min-h-0">
                 <div className="max-w-3xl mx-auto space-y-4">
-                  {chatMessages[selectedConversation.id]?.map(message => (
+                  {chatMessages[selectedConversation.id]?.map((message, index) => (
                     <div
                       key={message.id}
-                      className={`flex ${message.isInstructor ? 'justify-start' : 'justify-end'}`}
+                      className={`flex ${message.isInstructor ? 'justify-start' : 'justify-end'} animate-in slide-in-from-bottom-2 duration-300`}
+                      style={{ animationDelay: `${index * 50}ms` }}
                     >
                       <div
-                        className={`max-w-[70%] rounded-lg p-3 ${
+                        className={`max-w-[70%] rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow duration-200 ${
                           message.isInstructor
                             ? 'bg-white dark:bg-gray-800 border dark:border-gray-700'
                             : 'bg-blue-600 text-white'
@@ -505,15 +562,25 @@ function Messages() {
                             {message.isInstructor ? message.sender : t('student.messages.you')}
                           </span>
                           <span className="text-xs opacity-75">{message.time}</span>
+                          {message.isInstructor && (
+                            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                          )}
                         </div>
                         <p className="text-sm">{message.content}</p>
                       </div>
                     </div>
                   ))}
                   {isReplying && (
-                    <div className="flex justify-start">
-                      <div className="max-w-[70%] rounded-lg p-3 bg-white dark:bg-gray-800 border dark:border-gray-700 opacity-60 italic text-gray-400 dark:text-gray-500" dir={isRTL ? 'rtl' : 'ltr'}>
-                        {t('student.messages.typing')}
+                    <div className="flex justify-start animate-in slide-in-from-bottom-2 duration-300">
+                      <div className="max-w-[70%] rounded-lg p-3 bg-white dark:bg-gray-800 border dark:border-gray-700 shadow-sm" dir={isRTL ? 'rtl' : 'ltr'}>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm text-gray-500 dark:text-gray-400">{t('student.messages.typing')}</span>
+                          <div className="flex gap-1">
+                            <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                            <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                            <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   )}
@@ -547,10 +614,10 @@ function Messages() {
                       </button>
                       <button
                         onClick={handleSendMessage}
-                        className="bg-blue-600 text-white px-4 py-1 rounded-lg hover:bg-blue-700 flex items-center gap-2"
+                        className="bg-blue-600 text-white px-4 py-1 rounded-lg hover:bg-blue-700 flex items-center gap-2 transition-all duration-200 hover:scale-105 active:scale-95"
                         id="send-message"
                       >
-                        <Send size={16} />
+                        <Send size={16} className="group-hover:translate-x-0.5 transition-transform" />
                         {t('student.messages.send')}
                       </button>
                     </div>

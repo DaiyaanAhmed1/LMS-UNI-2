@@ -606,6 +606,10 @@
       "title": "مواد المقرر",
       "searchPlaceholder": "ابحث في المواد...",
       "filters": "مزيد من عوامل التصفية",
+      "download": "تحميل",
+      "downloading": "جاري التحميل...",
+      "downloadSuccess": "تم تحميل الملف بنجاح!",
+      "downloadError": "فشل التحميل. يرجى المحاولة مرة أخرى.",
       "view": {
         "grid": "عرض الشبكة",
         "list": "عرض القائمة"
@@ -649,7 +653,8 @@
         "type": "النوع",
         "uploaded": "تم الرفع",
         "close": "إغلاق",
-        "download": "تنزيل"
+        "download": "تنزيل",
+        "downloading": "جاري التحميل..."
       }
     },
     "courses": {
@@ -683,6 +688,18 @@
           "assignmentSubmissionForm": "نموذج تسليم الواجب",
           "checkMyVae": "تحقق من VAE الخاص بي",
           "zoolaReport": "تقرير زولا"
+        },
+        "quickActions": {
+          "title": "إجراءات سريعة",
+          "materials": "المواد",
+          "messages": "الرسائل",
+          "schedule": "الجدول",
+          "grades": "الدرجات"
+        },
+        "details": {
+          "instructor": "المدرّس",
+          "schedule": "الجدول",
+          "room": "القاعه"
         },
         "assignmentSubmission": {
           "title": "تسليم الواجبات",

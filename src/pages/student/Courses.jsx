@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from '../../components/Sidebar';
-import { BookOpen, Clock, Users, Calendar, ChevronRight, Search, FileText, Video, ShieldCheck, CalendarDays, Grid3X3, List, X } from 'lucide-react';
+import { BookOpen, Clock, Users, Calendar, ChevronRight, Search, FileText, Video, ShieldCheck, CalendarDays, Grid3X3, List, X, Shield, Code, Globe, MessageCircle, Award } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useTour } from '../../context/TourContext.jsx';
@@ -16,6 +16,9 @@ const courses = [
     enrolledStudents: 45,
     room: 'Room 101',
     description: 'A comprehensive course on cyber security principles, threats, and defense mechanisms.',
+    icon: Shield,
+    iconColor: 'text-red-600',
+    iconBg: 'bg-red-100 dark:bg-red-900/20'
   },
   {
     id: 2,
@@ -27,6 +30,9 @@ const courses = [
     enrolledStudents: 38,
     room: 'Room 203',
     description: 'Master advanced Python concepts, best practices, and real-world applications.',
+    icon: Code,
+    iconColor: 'text-blue-600',
+    iconBg: 'bg-blue-100 dark:bg-blue-900/20'
   },
   {
     id: 3,
@@ -38,6 +44,9 @@ const courses = [
     enrolledStudents: 42,
     room: 'Room 305',
     description: 'Learn modern web development technologies and best practices.',
+    icon: Globe,
+    iconColor: 'text-green-600',
+    iconBg: 'bg-green-100 dark:bg-green-900/20'
   },
 ];
 
@@ -203,7 +212,12 @@ function Courses() {
                   className="bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden"
                 >
                   <div className="p-6">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">{course.title}</h3>
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className={`p-2 rounded-lg ${course.iconBg}`}>
+                        <course.icon className={`w-6 h-6 ${course.iconColor}`} />
+                      </div>
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{course.title}</h3>
+                    </div>
                     <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">{course.description}</p>
                     
                     <div className="space-y-3">
@@ -213,7 +227,7 @@ function Courses() {
                       </div>
                       <div className="flex items-center text-sm text-gray-600 dark:text-gray-300">
                         <Clock className="h-4 w-4 mr-2" />
-                        <span>{course.schedule}</span>
+                        <span className="whitespace-nowrap">{course.schedule}</span>
                       </div>
                       <div className="flex items-center text-sm text-gray-600 dark:text-gray-300">
                         <Calendar className="h-4 w-4 mr-2" />
@@ -278,10 +292,15 @@ function Courses() {
                   <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                     {filteredCourses.map((course) => (
                       <tr key={course.id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                        <td className="px-4 py-4 whitespace-nowrap">
-                          <div className="max-w-xs">
-                            <div className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{course.title}</div>
-                            <div className="text-sm text-gray-500 dark:text-gray-400 truncate">{course.description}</div>
+                        <td className="px-4 py-4 align-top whitespace-normal">
+                          <div className="flex items-start gap-3 max-w-xs">
+                            <div className={`p-1.5 rounded-md ${course.iconBg}`}>
+                              <course.icon className={`w-4 h-4 ${course.iconColor}`} />
+                            </div>
+                            <div className="min-w-0">
+                              <div className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{course.title}</div>
+                              <div className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2">{course.description}</div>
+                            </div>
                           </div>
                         </td>
                         <td className="px-4 py-4 whitespace-nowrap">
@@ -293,7 +312,7 @@ function Courses() {
                         <td className="px-4 py-4 whitespace-nowrap">
                           <div className="flex items-center max-w-xs">
                             <Clock className="h-4 w-4 mr-2 text-gray-400 flex-shrink-0" />
-                            <span className="text-sm text-gray-900 dark:text-gray-100 truncate">{course.schedule}</span>
+                            <span className="text-sm text-gray-900 dark:text-gray-100 truncate whitespace-nowrap">{course.schedule}</span>
                           </div>
                         </td>
                         <td className="px-4 py-4 whitespace-nowrap">
@@ -337,8 +356,8 @@ function Courses() {
 
         {/* Course Details Modal */}
         {selectedCourse && (
-          <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex items-center justify-center p-2 z-50">
-            <div className="relative bg-white dark:bg-gray-900 rounded-2xl shadow-lg max-w-2xl w-full p-0 overflow-y-auto max-h-[90vh] border border-blue-50 dark:border-blue-900">
+          <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+            <div className="relative bg-white dark:bg-gray-900 rounded-2xl shadow-lg max-w-4xl w-full p-0 overflow-y-auto max-h-[90vh] border border-blue-50 dark:border-blue-900">
               {/* Accent Bar & Floating Close Button */}
               <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-500 via-purple-400 to-pink-400 rounded-t-2xl" />
               <button
@@ -350,36 +369,52 @@ function Courses() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
-              <div className="p-5 pt-4 pb-2">
-                <div className="flex items-center gap-2 mb-1">
-                  <ShieldCheck className="text-blue-500 w-5 h-5" />
-                  <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">{selectedCourse.title}</h2>
-                </div>
-                <p className="text-gray-600 dark:text-gray-300 text-base mb-4">{selectedCourse.description}</p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
-                  <div>
-                    <h3 className="flex items-center gap-1 text-blue-600 dark:text-blue-400 font-semibold text-base mb-1"><BookOpen className="w-4 h-4" /> {t('student.courses.modal.courseDetails')}</h3>
-                    <ul className="mt-1 space-y-1">
-                      <li className="flex items-center text-sm text-gray-700 dark:text-gray-200"><Users className="h-4 w-4 mr-1 text-blue-300" />{t('student.courses.card.instructor')} <span className="ml-1 font-medium">{selectedCourse.instructor}</span></li>
-                      <li className="flex items-center text-sm text-gray-700 dark:text-gray-200"><Clock className="h-4 w-4 mr-1 text-purple-300" />Schedule: <span className="ml-1 font-medium">{selectedCourse.schedule}</span></li>
-                      <li className="flex items-center text-sm text-gray-700 dark:text-gray-200"><BookOpen className="h-4 w-4 mr-1 text-pink-300" />Room: <span className="ml-1 font-medium">{selectedCourse.room}</span></li>
-                    </ul>
+              <div className="flex">
+                {/* Left Column - Course Details */}
+                <div className="flex-1 p-5 pt-4 pb-2">
+                  <div className="flex items-center gap-3 mb-1">
+                    <div className={`p-2 rounded-lg ${selectedCourse.iconBg}`}>
+                      <selectedCourse.icon className={`w-6 h-6 ${selectedCourse.iconColor}`} />
+                    </div>
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">{selectedCourse.title}</h2>
                   </div>
-                  <div>
-                    <h3 className="flex items-center gap-1 text-blue-600 font-semibold text-base mb-1"><CalendarDays className="w-4 h-4" /> {t('student.courses.modal.classInfo')}</h3>
-                    <ul className="mt-1 space-y-1">
-                      <li className="text-sm text-gray-700">{t('student.courses.modal.enrolled', { count: selectedCourse.enrolledStudents })}</li>
-                      <li className="text-sm text-gray-700">{t('student.courses.modal.next', { date: new Date(selectedCourse.nextClass).toLocaleString() })}</li>
-                      <li className="text-sm text-gray-700">{t('student.courses.modal.progress', { percent: selectedCourse.progress })}</li>
-                    </ul>
+                  <p className="text-gray-600 dark:text-gray-300 text-base mb-4">{selectedCourse.description}</p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                      <h3 className="flex items-center gap-1 text-blue-600 dark:text-blue-400 font-semibold text-base mb-1"><BookOpen className="w-4 h-4" /> {t('student.courses.modal.courseDetails')}</h3>
+                      <ul className="mt-1 space-y-1" dir={isRTL ? 'rtl' : 'ltr'}>
+                        <li className="flex items-center text-sm text-gray-700 dark:text-gray-200">
+                          <Users className={`${isRTL ? 'ml-1' : 'mr-1'} h-4 w-4 text-blue-300`} />
+                          <span className="text-gray-600 dark:text-gray-300">{t('student.courses.modal.details.instructor')}:</span>
+                          <span className={`${isRTL ? 'mr-1' : 'ml-1'} font-medium text-gray-900 dark:text-gray-100`}>{selectedCourse.instructor}</span>
+                        </li>
+                        <li className="flex items-center text-sm text-gray-700 dark:text-gray-200">
+                          <Clock className={`${isRTL ? 'ml-1' : 'mr-1'} h-4 w-4 text-purple-300`} />
+                          <span className="text-gray-600 dark:text-gray-300">{t('student.courses.modal.details.schedule')}:</span>
+                          <span className={`${isRTL ? 'mr-1' : 'ml-1'} font-medium text-gray-900 dark:text-gray-100 whitespace-nowrap`}>{selectedCourse.schedule}</span>
+                        </li>
+                        <li className="flex items-center text-sm text-gray-700 dark:text-gray-200">
+                          <BookOpen className={`${isRTL ? 'ml-1' : 'mr-1'} h-4 w-4 text-pink-300`} />
+                          <span className="text-gray-600 dark:text-gray-300">{t('student.courses.modal.details.room')}:</span>
+                          <span className={`${isRTL ? 'mr-1' : 'ml-1'} font-medium text-gray-900 dark:text-gray-100`}>{selectedCourse.room}</span>
+                        </li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h3 className="flex items-center gap-1 text-blue-600 font-semibold text-base mb-1"><CalendarDays className="w-4 h-4" /> {t('student.courses.modal.classInfo')}</h3>
+                      <ul className="mt-1 space-y-1">
+                        <li className="text-sm text-gray-700">{t('student.courses.modal.enrolled', { count: selectedCourse.enrolledStudents })}</li>
+                        <li className="text-sm text-gray-700">{t('student.courses.modal.next', { date: new Date(selectedCourse.nextClass).toLocaleString() })}</li>
+                        <li className="text-sm text-gray-700">{t('student.courses.modal.progress', { percent: selectedCourse.progress })}</li>
+                      </ul>
+                    </div>
                   </div>
-                </div>
                 {/* In-depth content for courses */}
-                {(selectedCourse.title === 'Cyber Security' || selectedCourse.title === 'Advanced Python' || selectedCourse.title === 'Web Development') && courseContents[selectedCourse.title] && (
-                  <div className="mt-1">
-                    <h3 className="flex items-center gap-1 text-base font-bold text-purple-600 mb-2">
-                      <FileText className="w-5 h-5" /> {t('student.courses.modal.courseSyllabus')}
-                    </h3>
+                <div className="mt-1">
+                  <h3 className="flex items-center gap-1 text-base font-bold text-purple-600 mb-2">
+                    <FileText className="w-5 h-5" /> {t('student.courses.modal.courseSyllabus')}
+                  </h3>
+                  {courseContents[selectedCourse.title] ? (
                     <button
                       onClick={() => navigate(`/student/courses/${selectedCourse.id}/pdf/syllabus`, {
                         state: {
@@ -392,66 +427,169 @@ function Courses() {
                     >
                       <FileText className="mr-2 w-4 h-4" /> {t('student.courses.modal.viewSyllabus')}
                     </button>
+                  ) : (
+                    <button
+                      onClick={() => alert('Syllabus not available for this course yet')}
+                      className="inline-flex items-center px-4 py-2 bg-gray-400 text-white rounded-lg shadow-sm font-medium text-sm mb-4 transition cursor-not-allowed"
+                      disabled
+                    >
+                      <FileText className="mr-2 w-4 h-4" /> Syllabus Not Available
+                    </button>
+                  )}
                     
-                    {/* Action Buttons */}
-                    <div className="relative mb-4">
-                      <div className={`space-y-3 ${selectedCourse.title === 'Web Development' ? 'blur-sm' : ''}`}>
-                        <button
-                          onClick={() => navigate('/student/study-plan', { state: { course: selectedCourse } })}
-                          className="w-full flex items-center justify-center px-4 py-2 bg-green-600 text-white rounded-lg shadow-sm hover:bg-green-700 font-medium text-sm transition"
-                          disabled={selectedCourse.title === 'Web Development'}
-                        >
-                          <FileText className="mr-2 w-4 h-4" /> {t('student.courses.modal.actionButtons.studyPlan')}
-                        </button>
-                        <button
-                          onClick={() => navigate('/student/assignment-submission', { state: { course: selectedCourse } })}
-                          className="w-full flex items-center justify-center px-4 py-2 bg-orange-600 text-white rounded-lg shadow-sm hover:bg-orange-700 font-medium text-sm transition"
-                          disabled={selectedCourse.title === 'Web Development'}
-                        >
-                          <FileText className="mr-2 w-4 h-4" /> {t('student.courses.modal.actionButtons.assignmentSubmissionForm')}
-                        </button>
-                        <button
-                          onClick={() => navigate('/student/check-my-vae', { state: { course: selectedCourse } })}
-                          className="w-full flex items-center justify-center px-4 py-2 bg-purple-600 text-white rounded-lg shadow-sm hover:bg-purple-700 font-medium text-sm transition"
-                          disabled={selectedCourse.title === 'Web Development'}
-                        >
-                          <svg className="mr-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                          </svg>
-                          {t('student.courses.modal.actionButtons.checkMyVae')}
-                        </button>
-                        <button
-                          onClick={() => navigate('/student/zoola-report', { state: { course: selectedCourse } })}
-                          className="w-full flex items-center justify-center px-4 py-2 bg-pink-600 text-white rounded-lg shadow-sm hover:bg-pink-700 font-medium text-sm transition"
-                          disabled={selectedCourse.title === 'Web Development'}
-                        >
-                          <svg className="mr-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                          </svg>
-                          {t('student.courses.modal.actionButtons.zoolaReport')}
-                        </button>
+                  </div>
+
+                {/* Action Buttons - Always Show */}
+                <div className="relative mb-4" style={{ zIndex: 10 }}>
+                  <div className={`space-y-3 ${selectedCourse.title === 'Web Development' ? 'blur-sm' : ''}`}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        console.log('Study Plan button clicked for course:', selectedCourse.title);
+                        const courseToOpen = { id: selectedCourse.id, title: selectedCourse.title };
+                        navigate('/student/study-plan', { replace: true, state: { course: courseToOpen, returnTo: '/student/courses' } });
+                        setTimeout(() => setSelectedCourse(null), 0);
+                      }}
+                      className="w-full flex items-center justify-center px-4 py-2 bg-green-600 text-white rounded-lg shadow-sm hover:bg-green-700 font-medium text-sm transition"
+                      disabled={selectedCourse.title === 'Web Development'}
+                    >
+                      <FileText className="mr-2 w-4 h-4" /> {t('student.courses.modal.actionButtons.studyPlan')}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        console.log('Assignment Submission button clicked for course:', selectedCourse.title);
+                        const courseToOpen = { id: selectedCourse.id, title: selectedCourse.title };
+                        navigate('/student/assignment-submission', { replace: true, state: { course: courseToOpen, returnTo: '/student/courses' } });
+                        setTimeout(() => setSelectedCourse(null), 0);
+                      }}
+                      className="w-full flex items-center justify-center px-4 py-2 bg-orange-600 text-white rounded-lg shadow-sm hover:bg-orange-700 font-medium text-sm transition"
+                      disabled={selectedCourse.title === 'Web Development'}
+                    >
+                      <FileText className="mr-2 w-4 h-4" /> {t('student.courses.modal.actionButtons.assignmentSubmissionForm')}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        console.log('Check My VAE button clicked for course:', selectedCourse.title);
+                        const courseToOpen = { id: selectedCourse.id, title: selectedCourse.title };
+                        navigate('/student/check-my-vae', { replace: true, state: { course: courseToOpen, returnTo: '/student/courses' } });
+                        setTimeout(() => setSelectedCourse(null), 0);
+                      }}
+                      className="w-full flex items-center justify-center px-4 py-2 bg-purple-600 text-white rounded-lg shadow-sm hover:bg-purple-700 font-medium text-sm transition"
+                      disabled={selectedCourse.title === 'Web Development'}
+                    >
+                      <svg className="mr-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      {t('student.courses.modal.actionButtons.checkMyVae')}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        console.log('Zoola Report button clicked for course:', selectedCourse.title);
+                        const courseToOpen = { id: selectedCourse.id, title: selectedCourse.title };
+                        navigate('/student/zoola-report', { replace: true, state: { course: courseToOpen, returnTo: '/student/courses' } });
+                        setTimeout(() => setSelectedCourse(null), 0);
+                      }}
+                      className="w-full flex items-center justify-center px-4 py-2 bg-pink-600 text-white rounded-lg shadow-sm hover:bg-pink-700 font-medium text-sm transition"
+                      disabled={selectedCourse.title === 'Web Development'}
+                    >
+                      <svg className="mr-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                      </svg>
+                      {t('student.courses.modal.actionButtons.zoolaReport')}
+                    </button>
+                  </div>
+                  {selectedCourse.title === 'Web Development' && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-white/10 dark:bg-gray-900/10 rounded-lg pointer-events-none">
+                      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-full shadow-lg font-semibold text-lg flex items-center gap-2 pointer-events-auto">
+                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                        </svg>
+                        {t('student.courses.modal.proBanner')}
                       </div>
-                      {selectedCourse.title === 'Web Development' && (
-                        <div className="absolute inset-0 flex items-center justify-center bg-white/10 dark:bg-gray-900/10 rounded-lg">
-                          <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-full shadow-lg font-semibold text-lg flex items-center gap-2">
-                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                            </svg>
-                            {t('student.courses.modal.proBanner')}
-                          </div>
-                        </div>
-                      )}
                     </div>
-                    
-                    <h3 className="flex items-center gap-1 text-base font-bold text-pink-600 mb-2">
-                      <Video className="w-5 h-5" /> {t('student.courses.modal.weeklyContent')}
+                  )}
+                </div>
+
+                  {/* Quick Actions */}
+                  <div className="relative mb-4 bg-gray-50 dark:bg-gray-800/40 border border-gray-200 dark:border-gray-700 rounded-lg p-3" dir={isRTL ? 'rtl' : 'ltr'}>
+                    <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-3">
+                      {t('student.courses.modal.quickActions.title', 'Quick Actions')}
+                    </h3>
+                    <div className={`grid grid-cols-2 md:grid-cols-4 gap-2 ${selectedCourse.title === 'Web Development' ? 'blur-sm' : ''}`}>
+                      <button
+                        onClick={() => {
+                          const courseToOpen = { id: selectedCourse.id, title: selectedCourse.title };
+                          navigate('/student/materials', { state: { course: courseToOpen, returnTo: '/student/courses' } });
+                        }}
+                        className="w-full flex items-center justify-center px-3 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md text-xs font-medium text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition"
+                        disabled={selectedCourse.title === 'Web Development'}
+                      >
+                        <BookOpen className={`${isRTL ? 'ml-1.5' : 'mr-1.5'} w-3 h-3 text-blue-500`} /> {t('student.courses.modal.quickActions.materials', 'Materials')}
+                      </button>
+                      <button
+                        onClick={() => {
+                          navigate('/student/messages', { state: { returnTo: '/student/courses' } });
+                        }}
+                        className="w-full flex items-center justify-center px-3 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md text-xs font-medium text-gray-700 dark:text-gray-200 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition"
+                        disabled={selectedCourse.title === 'Web Development'}
+                      >
+                        <MessageCircle className={`${isRTL ? 'ml-1.5' : 'mr-1.5'} w-3 h-3 text-purple-500`} /> {t('student.courses.modal.quickActions.messages', 'Messages')}
+                      </button>
+                      <button
+                        onClick={() => {
+                          navigate('/student/schedule', { state: { returnTo: '/student/courses' } });
+                        }}
+                        className="w-full flex items-center justify-center px-3 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md text-xs font-medium text-gray-700 dark:text-gray-200 hover:bg-green-50 dark:hover:bg-green-900/20 transition"
+                        disabled={selectedCourse.title === 'Web Development'}
+                      >
+                        <CalendarDays className={`${isRTL ? 'ml-1.5' : 'mr-1.5'} w-3 h-3 text-green-600`} /> {t('student.courses.modal.quickActions.schedule', 'Schedule')}
+                      </button>
+                      <button
+                        onClick={() => {
+                          navigate('/student/grades', { state: { returnTo: '/student/courses' } });
+                        }}
+                        className="w-full flex items-center justify-center px-3 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md text-xs font-medium text-gray-700 dark:text-gray-200 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition"
+                        disabled={selectedCourse.title === 'Web Development'}
+                      >
+                        <Award className={`${isRTL ? 'ml-1.5' : 'mr-1.5'} w-3 h-3 text-amber-600`} /> {t('student.courses.modal.quickActions.grades', 'Grades')}
+                      </button>
+                    </div>
+                    {selectedCourse.title === 'Web Development' && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-white/10 dark:bg-gray-900/10 rounded-lg pointer-events-none">
+                        <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-full shadow-lg font-semibold text-lg flex items-center gap-2 pointer-events-auto">
+                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                          </svg>
+                          {t('student.courses.modal.proBanner')}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Right Column - Weekly Content */}
+                {(selectedCourse.title === 'Cyber Security' || selectedCourse.title === 'Advanced Python' || selectedCourse.title === 'Web Development') && courseContents[selectedCourse.title] && (
+                  <div className="w-80 border-l border-gray-200 dark:border-gray-700 p-5 pt-4 pb-2">
+                    <h3 className="flex items-center gap-2 text-lg font-bold text-gray-800 dark:text-gray-100 mb-4">
+                      <Video className="w-5 h-5 text-purple-600" />
+                      {t('student.courses.modal.weeklyContent')}
                     </h3>
                     <div className="relative" data-tour="weekly-content">
-                      <div className={`space-y-4 ${selectedCourse.title === 'Web Development' ? 'blur-sm' : ''}`}>
+                      <div className={`space-y-3 ${selectedCourse.title === 'Web Development' ? 'blur-sm' : ''}`}>
                         {courseContents[selectedCourse.title].weeks.map((week) => (
-                          <div key={week.week} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                            <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-3">{t('student.courses.modal.week', { num: week.week })}</h4>
-                            <div className="flex flex-wrap gap-2">
+                          <div key={week.week} className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-600 hover:shadow-md transition-all duration-200">
+                            <div className="flex items-center justify-between mb-2">
+                              <h4 className="text-sm font-semibold text-gray-800 dark:text-gray-100">
+                                {t('student.courses.modal.week', { num: week.week })}
+                              </h4>
+                              <div className="w-6 h-6 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
+                                <span className="text-xs font-bold text-blue-600 dark:text-blue-400">{week.week}</span>
+                              </div>
+                            </div>
+                            <div className="space-y-2">
                               <button
                                 onClick={() => navigate(`/student/courses/${selectedCourse.id}/pdf/${week.week}`, {
                                   state: {
@@ -459,9 +597,9 @@ function Courses() {
                                     title: `${selectedCourse.title} - Week ${week.week} Materials`
                                   }
                                 })}
-                                className="inline-flex items-center px-3 py-1.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600"
+                                className="w-full flex items-center justify-center px-3 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-xs font-medium text-gray-700 dark:text-gray-200 rounded-md hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-300 dark:hover:border-blue-600 transition-all duration-200"
                               >
-                                <FileText className="mr-1.5 w-4 h-4 text-blue-500" />
+                                <FileText className="mr-1.5 w-3 h-3 text-blue-500" />
                                 {t('student.courses.modal.viewPdf')}
                               </button>
                               <button
@@ -471,9 +609,9 @@ function Courses() {
                                     title: `${selectedCourse.title} - Week ${week.week} Lecture`
                                   }
                                 })}
-                                className="inline-flex items-center px-3 py-1.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600"
+                                className="w-full flex items-center justify-center px-3 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-xs font-medium text-gray-700 dark:text-gray-200 rounded-md hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:border-purple-300 dark:hover:border-purple-600 transition-all duration-200"
                               >
-                                <Video className="mr-1.5 w-4 h-4 text-pink-500" />
+                                <Video className="mr-1.5 w-3 h-3 text-purple-500" />
                                 {t('student.courses.modal.watchVideo')}
                               </button>
                             </div>
@@ -481,8 +619,8 @@ function Courses() {
                         ))}
                       </div>
                       {selectedCourse.title === 'Web Development' && (
-                        <div className="absolute inset-0 flex items-center justify-center bg-white/10 dark:bg-gray-900/10 rounded-lg">
-                          <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-full shadow-lg font-semibold text-lg flex items-center gap-2">
+                        <div className="absolute inset-0 flex items-center justify-center bg-white/10 dark:bg-gray-900/10 rounded-lg pointer-events-none">
+                          <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-full shadow-lg font-semibold text-lg flex items-center gap-2 pointer-events-auto">
                             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                               <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
                             </svg>

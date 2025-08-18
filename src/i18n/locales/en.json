@@ -517,6 +517,10 @@
       "title": "Course Materials",
       "searchPlaceholder": "Search materials...",
       "filters": "More Filters",
+      "download": "Download",
+      "downloading": "Downloading...",
+      "downloadSuccess": "File downloaded successfully!",
+      "downloadError": "Download failed. Please try again.",
       "view": {
         "grid": "Grid View",
         "list": "List View"
@@ -560,7 +564,8 @@
         "type": "Type",
         "uploaded": "Uploaded",
         "close": "Close",
-        "download": "Download"
+        "download": "Download",
+        "downloading": "Downloading..."
       }
     },
     "courses": {
@@ -599,6 +604,18 @@
           "assignmentSubmissionForm": "Assignment Submission Form",
           "checkMyVae": "Check My VAE",
           "zoolaReport": "Zoola Report"
+        },
+        "quickActions": {
+          "title": "Quick Actions",
+          "materials": "Materials",
+          "messages": "Messages",
+          "schedule": "Schedule",
+          "grades": "Grades"
+        },
+        "details": {
+          "instructor": "Instructor",
+          "schedule": "Schedule",
+          "room": "Room"
         },
         "assignmentSubmission": {
           "title": "Assignment Submission",
