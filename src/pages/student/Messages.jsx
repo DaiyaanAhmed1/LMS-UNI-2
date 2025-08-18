@@ -17,6 +17,7 @@ import {
   MessageCircle
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useLanguage } from '../../context/LanguageContext';
 import { useTour } from '../../context/TourContext.jsx';
 
 const conversations = [
@@ -94,6 +95,7 @@ const initialMessages = {
 
 function Messages() {
   const { t } = useTranslation();
+  const { isRTL } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [newMessage, setNewMessage] = useState('');
@@ -451,30 +453,30 @@ function Messages() {
                     
                     {/* More Menu Dropdown */}
                     {showMoreMenu && (
-                      <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border dark:border-gray-700 py-2 z-20" ref={moreMenuRef}>
+                      <div className={`absolute ${isRTL ? 'left-0' : 'right-0'} top-full mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border dark:border-gray-700 py-2 z-20`} ref={moreMenuRef}>
                         <button
                           onClick={() => handleMoreMenuAction('block')}
-                          className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                          className={`w-full px-4 py-2 ${isRTL ? 'text-right' : 'text-left'} text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700`}
                         >
-                          Block User
+                          {t('student.messages.menu.blockUser')}
                         </button>
                         <button
                           onClick={() => handleMoreMenuAction('report')}
-                          className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                          className={`w-full px-4 py-2 ${isRTL ? 'text-right' : 'text-left'} text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700`}
                         >
-                          Report User
+                          {t('student.messages.menu.reportUser')}
                         </button>
                         <button
                           onClick={() => handleMoreMenuAction('clear')}
-                          className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                          className={`w-full px-4 py-2 ${isRTL ? 'text-right' : 'text-left'} text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700`}
                         >
-                          Clear Chat
+                          {t('student.messages.menu.clearChat')}
                         </button>
                         <button
                           onClick={() => handleMoreMenuAction('export')}
-                          className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                          className={`w-full px-4 py-2 ${isRTL ? 'text-right' : 'text-left'} text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700`}
                         >
-                          Export Chat
+                          {t('student.messages.menu.exportChat')}
                         </button>
                       </div>
                     )}
@@ -496,10 +498,11 @@ function Messages() {
                             ? 'bg-white dark:bg-gray-800 border dark:border-gray-700'
                             : 'bg-blue-600 text-white'
                         }`}
+                        dir={isRTL ? 'rtl' : 'ltr'}
                       >
-                        <div className="flex items-center gap-2 mb-1">
+                        <div className={`flex items-center gap-2 mb-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
                           <span className="text-sm font-medium">
-                            {message.isInstructor ? message.sender : 'You'}
+                            {message.isInstructor ? message.sender : t('student.messages.you')}
                           </span>
                           <span className="text-xs opacity-75">{message.time}</span>
                         </div>
@@ -509,7 +512,7 @@ function Messages() {
                   ))}
                   {isReplying && (
                     <div className="flex justify-start">
-                      <div className="max-w-[70%] rounded-lg p-3 bg-white dark:bg-gray-800 border dark:border-gray-700 opacity-60 italic text-gray-400 dark:text-gray-500">
+                      <div className="max-w-[70%] rounded-lg p-3 bg-white dark:bg-gray-800 border dark:border-gray-700 opacity-60 italic text-gray-400 dark:text-gray-500" dir={isRTL ? 'rtl' : 'ltr'}>
                         {t('student.messages.typing')}
                       </div>
                     </div>
@@ -523,7 +526,7 @@ function Messages() {
                   <div className="relative">
                     <button
                       onClick={() => setShowAttachments(!showAttachments)}
-                      className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400"
+                      className={`absolute ${isRTL ? 'right-3' : 'left-3'} top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400`}
                       id="toggle-attachments"
                     >
                       <Paperclip size={20} />
@@ -534,10 +537,11 @@ function Messages() {
                       value={newMessage}
                       onChange={(e) => setNewMessage(e.target.value)}
                       onKeyPress={handleKeyPress}
-                      className="w-full pl-10 pr-24 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700 text-gray-900 dark:text-gray-100"
+                      className={`w-full ${isRTL ? 'pr-10 pl-24' : 'pl-10 pr-24'} py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700 text-gray-900 dark:text-gray-100`}
                       id="message-input"
+                      dir={isRTL ? 'rtl' : 'ltr'}
                     />
-                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-2">
+                    <div className={`absolute ${isRTL ? 'left-3' : 'right-3'} top-1/2 transform -translate-y-1/2 flex items-center gap-2`}>
                       <button className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400">
                         <Smile size={20} />
                       </button>
@@ -554,7 +558,7 @@ function Messages() {
 
                   {/* Attachments Menu */}
                   {showAttachments && (
-                    <div className="absolute bottom-full left-0 mb-2 bg-white dark:bg-gray-800 rounded-lg shadow-lg border dark:border-gray-700 p-2 z-10">
+                    <div className={`absolute bottom-full ${isRTL ? 'right-0' : 'left-0'} mb-2 bg-white dark:bg-gray-800 rounded-lg shadow-lg border dark:border-gray-700 p-2 z-10`}>
                       <div className="grid grid-cols-4 gap-2">
                         <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg flex flex-col items-center gap-1">
                           <ImageIcon size={20} className="text-blue-600 dark:text-blue-400" />
@@ -588,15 +592,15 @@ function Messages() {
       {showActionPopup && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={closeActionPopup}></div>
-          <div className="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto p-6">
+          <div className="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto p-6" dir={isRTL ? 'rtl' : 'ltr'}>
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">Action Status</h3>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('student.messages.actionStatus.title')}</h3>
               <button onClick={closeActionPopup} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
                 <X className="w-6 h-6 text-gray-500 dark:text-gray-400" />
               </button>
             </div>
             <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap break-words">{actionMessage}</p>
-            <div className="flex justify-end mt-6">
+            <div className={`flex ${isRTL ? 'justify-start' : 'justify-end'} mt-6`}>
               <button
                 onClick={closeActionPopup}
                 className="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg transition-colors"

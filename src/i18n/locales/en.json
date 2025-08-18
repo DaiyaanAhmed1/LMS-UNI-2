@@ -461,6 +461,9 @@
         "message": "Message",
         "course": "Course",
         "type": "Type"
+      },
+      "actionRequired": {
+        "title": "Action Required"
       }
     },
     "dashboard": {
@@ -1274,8 +1277,18 @@
       "send": "Send",
       "typing": "Typing...",
       "inputPlaceholder": "Type a message...",
+      "you": "You",
       "attachments": { "image": "Image", "file": "File" },
-      "empty": { "title": "Select a conversation", "subtitle": "Choose a conversation to start messaging" }
+      "empty": { "title": "Select a conversation", "subtitle": "Choose a conversation to start messaging" },
+      "menu": {
+        "blockUser": "Block User",
+        "reportUser": "Report User",
+        "clearChat": "Clear Chat",
+        "exportChat": "Export Chat"
+      },
+      "actionStatus": {
+        "title": "Action Status"
+      }
     },
     "profile": {
       "completion": "Profile Completion",

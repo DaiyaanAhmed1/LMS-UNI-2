@@ -550,6 +550,9 @@
         "message": "الرسالة",
         "course": "المقرر",
         "type": "النوع"
+      },
+      "actionRequired": {
+        "title": "إجراء مطلوب"
       }
     },
     "dashboard": {
@@ -1407,8 +1410,18 @@
       "send": "إرسال",
       "typing": "جاري الكتابة...",
       "inputPlaceholder": "اكتب رسالة...",
+      "you": "أنت",
       "attachments": { "image": "صورة", "file": "ملف" },
-      "empty": { "title": "اختر محادثة", "subtitle": "اختر محادثة لبدء المراسلة" }
+      "empty": { "title": "اختر محادثة", "subtitle": "اختر محادثة لبدء المراسلة" },
+      "menu": {
+        "blockUser": "حظر المستخدم",
+        "reportUser": "الإبلاغ عن المستخدم",
+        "clearChat": "مسح الدردشة",
+        "exportChat": "تصدير الدردشة"
+      },
+      "actionStatus": {
+        "title": "حالة الإجراء"
+      }
     },
     "profile": {
       "completion": "اكتمال الملف الشخصي",
