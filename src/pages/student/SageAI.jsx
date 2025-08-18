@@ -3,6 +3,7 @@ import Sidebar from '../../components/Sidebar';
 import { Bot, Sparkles, BookOpen, Lightbulb, Target, Zap, Lock, X, Send, MessageCircle, Plus, Mic, ArrowRight, Trash2, Paperclip, ChevronLeft, ChevronRight, Crown, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '../../context/LanguageContext';
 
 const availablePrompts = [
   {
@@ -86,6 +87,7 @@ const certificationRoadmaps = [
 
 // Markdown renderer component
 const MarkdownRenderer = ({ content, isTyping = false }) => {
+  const { isRTL } = useLanguage();
   const [displayedContent, setDisplayedContent] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -115,28 +117,28 @@ const MarkdownRenderer = ({ content, isTyping = false }) => {
         }
         // Headers
         if (line.startsWith('**') && line.endsWith('**')) {
-          return `<h3 class="text-lg font-semibold mb-2">${line.replace(/\*\*/g, '')}</h3>`;
+          return `<h3 class="text-lg font-semibold mb-2 ${isRTL ? 'text-right' : 'text-left'}">${line.replace(/\*\*/g, '')}</h3>`;
         }
         // Lists
         if (line.trim().startsWith('•')) {
-          return `<li class="ml-4">${line.trim().substring(1)}</li>`;
+          return `<li class="${isRTL ? 'mr-4' : 'ml-4'}">${line.trim().substring(1)}</li>`;
         }
         // Code blocks
         if (line.includes('```')) {
-          return `<pre class="bg-gray-100 dark:bg-gray-800 p-3 rounded-lg my-2 overflow-x-auto"><code>${line.replace(/```/g, '')}</code></pre>`;
+          return `<pre class="bg-gray-100 dark:bg-gray-800 p-3 rounded-lg my-2 overflow-x-auto ${isRTL ? 'text-right' : 'text-left'}"><code>${line.replace(/```/g, '')}</code></pre>`;
         }
         // Regular paragraphs
         if (line.trim() === '') {
           return '<br>';
         }
-        return `<p class="mb-2">${line}</p>`;
+        return `<p class="mb-2 ${isRTL ? 'text-right' : 'text-left'}">${line}</p>`;
       })
       .join('');
   };
 
   return (
     <div 
-      className="prose dark:prose-invert max-w-none"
+      className={`prose dark:prose-invert max-w-none ${isRTL ? 'text-right' : 'text-left'}`}
       dangerouslySetInnerHTML={{ __html: renderMarkdown(displayedContent) }}
     />
   );
@@ -144,6 +146,7 @@ const MarkdownRenderer = ({ content, isTyping = false }) => {
 
 export default function SageAI() {
   const { t } = useTranslation();
+  const { isRTL } = useLanguage();
   const navigate = useNavigate();
   const [chats, setChats] = useState([]);
   const [currentChatId, setCurrentChatId] = useState(null);
@@ -588,13 +591,13 @@ I'd love to help you further with your studies! However, to continue our convers
       <div className="flex-1 flex flex-col">
         {/* Chat Header */}
         <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center space-x-3">
+          <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
             <button
               onClick={() => navigate('/student/dashboard')}
               className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-              title="Back to Dashboard"
+              title={isRTL ? "العودة إلى لوحة التحكم" : "Back to Dashboard"}
             >
-              <ChevronLeft className="w-5 h-5" />
+              {isRTL ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
             </button>
             <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
               <Bot className="w-5 h-5 text-white" />
@@ -604,12 +607,12 @@ I'd love to help you further with your studies! However, to continue our convers
             </span>
           </div>
           
-          <div className="flex items-center space-x-2">
+          <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'}`}>
             {/* New Chat Button */}
             <button
               onClick={createNewChat}
               className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-              title="Start New Chat"
+              title={isRTL ? "بدء محادثة جديدة" : "Start New Chat"}
             >
               <Plus className="w-5 h-5" />
             </button>
@@ -618,7 +621,7 @@ I'd love to help you further with your studies! However, to continue our convers
             <button
               onClick={() => setShowChatHistory(!showChatHistory)}
               className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-              title={showChatHistory ? 'Hide Chat History' : 'Show Chat History'}
+              title={showChatHistory ? (isRTL ? 'إخفاء سجل المحادثات' : 'Hide Chat History') : (isRTL ? 'عرض سجل المحادثات' : 'Show Chat History')}
             >
               {showChatHistory ? <PanelLeftClose className="w-5 h-5" /> : <PanelLeftOpen className="w-5 h-5" />}
             </button>
@@ -636,8 +639,12 @@ I'd love to help you further with your studies! However, to continue our convers
                 <div className="w-24 h-24 bg-gradient-to-br from-green-100 to-blue-100 dark:from-green-900/40 dark:to-blue-900/40 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg animate-pulse hover:animate-none hover:scale-110 transition-all duration-300 hover:shadow-xl">
                   <Bot className="w-12 h-12 text-green-600 dark:text-green-400 animate-bounce" style={{ animationDuration: '2s', animationIterationCount: 'infinite' }} />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3">How can I help you today?</h3>
-                <p className="text-gray-500 dark:text-gray-400 mb-8">I'm here to assist with your studies and academic needs.</p>
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3">
+                  {isRTL ? "كيف يمكنني مساعدتك اليوم؟" : "How can I help you today?"}
+                </h3>
+                <p className="text-gray-500 dark:text-gray-400 mb-8">
+                  {isRTL ? "أنا هنا لمساعدتك في دراستك واحتياجاتك الأكاديمية." : "I'm here to assist with your studies and academic needs."}
+                </p>
                 
                 {/* Quick Prompts */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -645,15 +652,15 @@ I'd love to help you further with your studies! However, to continue our convers
                     <button
                       key={prompt.id}
                       onClick={() => handlePromptClick(prompt.prompt)}
-                      className="p-3 text-left border border-gray-200 dark:border-gray-700 rounded-lg hover:border-green-300 dark:hover:border-green-600 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200 group"
+                      className={`p-3 ${isRTL ? 'text-right' : 'text-left'} border border-gray-200 dark:border-gray-700 rounded-lg hover:border-green-300 dark:hover:border-green-600 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200 group`}
                     >
-                      <div className="flex items-center space-x-3">
+                      <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
                         <prompt.icon className="w-5 h-5 text-green-600 dark:text-green-400" />
                         <div>
                           <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm">{prompt.title}</h4>
                           <p className="text-gray-500 dark:text-gray-400 text-xs">{prompt.description}</p>
                         </div>
-                        <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors ml-auto" />
+                        <ArrowRight className={`w-4 h-4 text-gray-400 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors ${isRTL ? 'mr-auto' : 'ml-auto'}`} />
                       </div>
                     </button>
                   ))}
@@ -671,26 +678,26 @@ I'd love to help you further with your studies! However, to continue our convers
                       : 'bg-gray-50 dark:bg-gray-900'
                   }`}
                 >
-                  <div className="max-w-3xl mx-auto flex space-x-4">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                      message.type === 'user' 
-                        ? 'bg-blue-500' 
-                        : 'bg-green-500'
-                    }`}>
-                      {message.type === 'user' ? (
-                        <div className="w-5 h-5 text-white text-sm font-medium">U</div>
-                      ) : (
-                        <Bot className="w-5 h-5 text-white" />
-                      )}
-                    </div>
-                    <div className="flex-1 min-w-0">
+                                  <div className={`max-w-3xl mx-auto flex ${isRTL ? 'space-x-reverse space-x-4' : 'space-x-4'}`}>
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                    message.type === 'user' 
+                      ? 'bg-blue-500' 
+                      : 'bg-green-500'
+                  }`}>
+                    {message.type === 'user' ? (
+                      <div className="w-5 h-5 text-white text-sm font-medium">U</div>
+                    ) : (
+                      <Bot className="w-5 h-5 text-white" />
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
                       {message.type === 'ai' ? (
                         <MarkdownRenderer 
                           content={message.content} 
                           isTyping={isTyping && message.id === currentChat.messages[currentChat.messages.length - 1]?.id}
                         />
                       ) : (
-                        <div className="whitespace-pre-wrap text-gray-900 dark:text-gray-100 leading-relaxed">
+                        <div className={`whitespace-pre-wrap text-gray-900 dark:text-gray-100 leading-relaxed ${isRTL ? 'text-right' : 'text-left'}`}>
                           {message.content}
                         </div>
                       )}
@@ -700,12 +707,12 @@ I'd love to help you further with your studies! However, to continue our convers
               ))}
               {isLoading && (
                 <div className="py-6 px-4 bg-gray-50 dark:bg-gray-900">
-                  <div className="max-w-3xl mx-auto flex space-x-4">
+                  <div className={`max-w-3xl mx-auto flex ${isRTL ? 'space-x-reverse space-x-4' : 'space-x-4'}`}>
                     <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
                       <Bot className="w-5 h-5 text-white" />
                     </div>
                     <div className="flex-1">
-                      <div className="flex items-center space-x-2">
+                      <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'}`}>
                         <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
                         <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
                         <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
@@ -727,25 +734,25 @@ I'd love to help you further with your studies! However, to continue our convers
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder="Message Sage AI..."
-                className="w-full p-4 pr-24 border border-gray-300 dark:border-gray-600 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
+                placeholder={isRTL ? "رسالة إلى Sage AI..." : "Message Sage AI..."}
+                className={`w-full p-4 border border-gray-300 dark:border-gray-600 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 ${isRTL ? 'pr-4 pl-24' : 'pr-24'}`}
                 rows={1}
                 style={{ minHeight: '52px', maxHeight: '200px' }}
               />
               
               {/* Action Buttons */}
-              <div className="absolute right-2 bottom-2 flex items-center space-x-1">
+              <div className={`absolute bottom-2 flex items-center ${isRTL ? 'left-2 space-x-reverse space-x-1' : 'right-2 space-x-1'}`}>
                 <button
                   onClick={handleFileAttachment}
                   className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
-                  title="Attach file"
+                  title={isRTL ? "إرفاق ملف" : "Attach file"}
                 >
                   <Paperclip className="w-4 h-4" />
                 </button>
                 <button
                   onClick={handleVoiceInput}
                   className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
-                  title="Voice input"
+                  title={isRTL ? "إدخال صوتي" : "Voice input"}
                 >
                   <Mic className="w-4 h-4" />
                 </button>
@@ -753,14 +760,14 @@ I'd love to help you further with your studies! However, to continue our convers
                   onClick={handleSendMessage}
                   disabled={!inputMessage.trim() || isLoading}
                   className="p-2 text-gray-400 hover:text-green-600 dark:hover:text-green-400 disabled:text-gray-300 disabled:cursor-not-allowed rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
-                  title="Send message"
+                  title={isRTL ? "إرسال الرسالة" : "Send message"}
                 >
                   <Send className="w-5 h-5" />
                 </button>
               </div>
             </div>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
-              Sage AI can make mistakes. Consider checking important information.
+              {isRTL ? "قد يرتكب Sage AI أخطاء. يُنصح بمراجعة المعلومات المهمة." : "Sage AI can make mistakes. Consider checking important information."}
             </p>
           </div>
         </div>
@@ -768,7 +775,7 @@ I'd love to help you further with your studies! However, to continue our convers
 
       {/* Chat History Sidebar - Right Side */}
       {showChatHistory && (
-        <div className="w-80 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 flex flex-col">
+        <div className={`w-80 bg-white dark:bg-gray-800 flex flex-col ${isRTL ? 'border-r border-gray-200 dark:border-gray-700' : 'border-l border-gray-200 dark:border-gray-700'}`}>
           {/* Chat History */}
           <div className="flex-1 overflow-y-auto">
             {visibleChats.map((chat) => (
@@ -779,12 +786,12 @@ I'd love to help you further with your studies! However, to continue our convers
                 }`}
                 onClick={() => setCurrentChatId(chat.id)}
               >
-                <div className="flex items-center justify-between">
+                <div className={`flex items-center ${isRTL ? 'justify-between' : 'justify-between'}`}>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
+                    <p className={`text-sm font-medium text-gray-900 dark:text-gray-100 truncate ${isRTL ? 'text-right' : 'text-left'}`}>
                       {chat.title}
                     </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                    <p className={`text-xs text-gray-500 dark:text-gray-400 ${isRTL ? 'text-right' : 'text-left'}`}>
                       {new Date(chat.createdAt).toLocaleDateString()}
                     </p>
                   </div>
@@ -794,7 +801,7 @@ I'd love to help you further with your studies! However, to continue our convers
                       deleteChat(chat.id);
                     }}
                     className="p-1 text-gray-400 hover:text-red-600 dark:hover:text-red-400 rounded transition-colors"
-                    title="Delete chat"
+                    title={isRTL ? "حذف المحادثة" : "Delete chat"}
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -806,21 +813,23 @@ I'd love to help you further with your studies! However, to continue our convers
             {!isProUser && (chats.length > 2 || hasUpgradeMessage) && (
               <div className="p-4 border-t border-gray-200 dark:border-gray-700">
                 <div className="bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-lg p-3 border border-green-200 dark:border-green-800">
-                  <div className="flex items-center space-x-2 mb-2">
+                  <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'} mb-2`}>
                     <Crown className="w-4 h-4 text-green-600 dark:text-green-400" />
-                    <span className="text-sm font-medium text-gray-900 dark:text-gray-100">Upgrade to Pro</span>
+                    <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                      {isRTL ? "الترقية إلى النسخة المميزة" : "Upgrade to Pro"}
+                    </span>
                   </div>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 mb-3">
+                  <p className={`text-xs text-gray-600 dark:text-gray-400 mb-3 ${isRTL ? 'text-right' : 'text-left'}`}>
                     {hasUpgradeMessage 
-                      ? "Continue your conversation with unlimited AI assistance"
-                      : "Access unlimited chat history and advanced features"
+                      ? (isRTL ? "استمر في محادثتك مع مساعدة ذكية غير محدودة" : "Continue your conversation with unlimited AI assistance")
+                      : (isRTL ? "احصل على سجل محادثات غير محدود وميزات متقدمة" : "Access unlimited chat history and advanced features")
                     }
                   </p>
                   <button
                     onClick={handleUpgradeToPro}
                     className="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white text-xs font-medium py-2 px-3 rounded-lg hover:from-green-700 hover:to-blue-700 transition-all duration-200"
                   >
-                    Upgrade Now
+                    {isRTL ? "ترقية الآن" : "Upgrade Now"}
                   </button>
                 </div>
               </div>
@@ -831,10 +840,10 @@ I'd love to help you further with your studies! However, to continue our convers
           <div className="p-4 border-t border-gray-200 dark:border-gray-700">
             <button
               onClick={createNewChat}
-              className="w-full flex items-center justify-center space-x-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors duration-200"
+              className={`w-full flex items-center justify-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'} bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors duration-200`}
             >
               <Plus className="w-5 h-5" />
-              <span>New Chat</span>
+              <span>{isRTL ? "محادثة جديدة" : "New Chat"}</span>
             </button>
           </div>
         </div>
@@ -844,14 +853,14 @@ I'd love to help you further with your studies! However, to continue our convers
       {showExamSelection && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4 shadow-xl">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                Choose Certification
+            <div className={`flex items-center ${isRTL ? 'justify-between' : 'justify-between'} mb-4`}>
+              <h3 className={`text-lg font-semibold text-gray-900 dark:text-gray-100 ${isRTL ? 'text-right' : 'text-left'}`}>
+                {isRTL ? "اختر الشهادة" : "Choose Certification"}
               </h3>
               <button
                 onClick={() => setShowExamSelection(false)}
                 className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                title="Close modal"
+                title={isRTL ? "إغلاق النافذة" : "Close modal"}
               >
                 <X className="w-5 h-5" />
               </button>
@@ -862,14 +871,14 @@ I'd love to help you further with your studies! However, to continue our convers
                   <button
                     onClick={() => !certification.isPro && handleRoadmapClick(certification)}
                     disabled={certification.isPro}
-                    className={`w-full p-4 border border-gray-200 dark:border-gray-700 rounded-lg transition-all duration-200 text-left focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 ${
+                    className={`w-full p-4 border border-gray-200 dark:border-gray-700 rounded-lg transition-all duration-200 ${isRTL ? 'text-right' : 'text-left'} focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 ${
                       certification.isPro 
                         ? 'opacity-60 cursor-not-allowed' 
                         : 'hover:border-green-300 dark:hover:border-green-600 hover:bg-gray-50 dark:hover:bg-gray-700'
                     }`}
-                    title={certification.isPro ? 'Available with PRO version' : `Select ${certification.title}`}
+                    title={certification.isPro ? (isRTL ? 'متاح مع النسخة المميزة' : 'Available with PRO version') : (isRTL ? `اختر ${certification.title}` : `Select ${certification.title}`)}
                   >
-                    <div className="flex items-center space-x-3">
+                    <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
                       <certification.icon className="w-5 h-5 text-green-600 dark:text-green-400" />
                       <div>
                         <h4 className="font-semibold text-gray-900 dark:text-gray-100 text-sm">{certification.title}</h4>

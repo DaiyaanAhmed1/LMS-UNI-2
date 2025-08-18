@@ -503,7 +503,7 @@ export default function InstructorDashboard() {
                       />
                     </div>
                     <div className="text-gray-500 dark:text-gray-300 text-sm font-medium">{t(stat.labelKey)}</div>
-                  </div>
+                </div>
                 </button>
               ))}
             </div>
@@ -644,7 +644,7 @@ export default function InstructorDashboard() {
                         {label}
                       </text>
                     ))}
-                  </svg>
+                </svg>
                 </div>
               </div>
 
@@ -770,8 +770,8 @@ export default function InstructorDashboard() {
                       >
                         {label}
                       </text>
-                    ))}
-                  </svg>
+                  ))}
+                </svg>
                 </div>
               </div>
             </div>
@@ -818,7 +818,7 @@ export default function InstructorDashboard() {
                           </div>
                           <div className="text-xs text-gray-600 dark:text-gray-400 mb-1 line-clamp-1">{msg.course}</div>
                           <div className="text-xs text-gray-700 dark:text-gray-300 line-clamp-2">{msg.msg}</div>
-                        </div>
+                      </div>
                       </div>
                       
                       {/* Hover effect */}
@@ -923,7 +923,7 @@ export default function InstructorDashboard() {
                               {e.duration}
                             </span>
                           </div>
-                        </div>
+                      </div>
                       </div>
                       
                       {/* Hover effect */}

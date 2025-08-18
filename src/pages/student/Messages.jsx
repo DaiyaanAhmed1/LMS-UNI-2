@@ -458,7 +458,7 @@ function Messages() {
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <h2 className="font-medium text-gray-900 dark:text-gray-100">{selectedConversation.name}</h2>
+                    <h2 className="font-medium text-gray-900 dark:text-gray-100">{selectedConversation.name}</h2>
                       {selectedConversation.typing && (
                         <span className="flex items-center gap-1 text-blue-500 text-xs">
                           <span>typing</span>
@@ -533,7 +533,7 @@ function Messages() {
                           className={`w-full px-4 py-2 ${isRTL ? 'text-right' : 'text-left'} text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700`}
                         >
                           {t('student.messages.menu.exportChat')}
-                        </button>
+                  </button>
                       </div>
                     )}
                   </div>
