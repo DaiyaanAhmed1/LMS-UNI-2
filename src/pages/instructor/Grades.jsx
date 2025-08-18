@@ -34,6 +34,9 @@ export default function Grades() {
   const [activeStudent, setActiveStudent] = useState(null);
   const [editFinal, setEditFinal] = useState('');
   const [editFeedback, setEditFeedback] = useState('');
+  const [showMessageModal, setShowMessageModal] = useState(false);
+  const [messageRecipient, setMessageRecipient] = useState(null);
+  const [messageText, setMessageText] = useState('');
 
   useEffect(() => {
     const onLaunch = () => {
@@ -82,11 +85,32 @@ export default function Grades() {
     setShowModal(false);
   };
 
+  const openMessageModal = (student) => {
+    setMessageRecipient(student);
+    setMessageText('');
+    setShowMessageModal(true);
+  };
+
+  const closeMessageModal = () => {
+    setShowMessageModal(false);
+    setMessageRecipient(null);
+    setMessageText('');
+  };
+
+  const sendMessage = () => {
+    // Here you would typically send the message to the backend
+    console.log(`Sending message to ${messageRecipient.name}: ${messageText}`);
+    closeMessageModal();
+  };
+
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
       <Sidebar role="instructor" />
       <div className="flex-1 overflow-auto p-8">
-        <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-8">{t('instructor.grades.title')}</h1>
+        <div className="flex items-center gap-3 mb-8">
+          <BarChart2 className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">{t('instructor.grades.title')}</h1>
+        </div>
         {/* Course Selector */}
         <div className="mb-6 flex items-center gap-4">
           <BarChart2 size={24} className="text-blue-600 dark:text-blue-400" />
@@ -124,7 +148,13 @@ export default function Grades() {
                   <td className="py-3 px-4 text-center font-bold text-lg text-blue-700 dark:text-blue-400">{s.final}</td>
                   <td className="py-3 px-4 text-center">
                     <button className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200 mr-2" title={t('instructor.grades.actions.editGrade')} onClick={() => openModal(s)}><Edit size={18} /></button>
-                    <button className="text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-200" title={t('instructor.grades.actions.message')}><MessageCircle size={18} /></button>
+                    <button 
+                      onClick={() => openMessageModal(s)}
+                      className="text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-200" 
+                      title={t('instructor.grades.actions.message')}
+                    >
+                      <MessageCircle size={18} />
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -162,6 +192,51 @@ export default function Grades() {
                 <div className="font-semibold text-gray-700 dark:text-gray-200 mb-1 flex items-center gap-2"><Edit size={18}/> {t('instructor.grades.modal.feedback')}</div>
                 <textarea className="w-full border border-gray-300 dark:border-gray-600 rounded p-2 dark:bg-gray-900 dark:text-gray-100" rows={3} value={editFeedback} onChange={e => setEditFeedback(e.target.value)} placeholder={t('instructor.grades.modal.feedbackPlaceholder')} />
                 <button className="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800" onClick={saveGrade}>{t('instructor.grades.modal.save')}</button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Message Modal */}
+        {showMessageModal && messageRecipient && (
+          <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-lg p-8 relative animate-fadeIn">
+              <button className="absolute top-4 right-4 text-gray-400 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-100" onClick={closeMessageModal}><X size={28} /></button>
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
+                  <UserCircle size={48} className="text-blue-600 dark:text-blue-400" />
+                </div>
+                <div>
+                  <div className="text-xl font-bold text-gray-800 dark:text-gray-100">{messageRecipient.name}</div>
+                  <div className="text-gray-500 dark:text-gray-300">{messageRecipient.email}</div>
+                </div>
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                  {t('instructor.grades.messageModal.subject', 'Message')}
+                </label>
+                <textarea
+                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg p-3 dark:bg-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  rows={4}
+                  value={messageText}
+                  onChange={(e) => setMessageText(e.target.value)}
+                  placeholder={t('instructor.grades.messageModal.placeholder', 'Type your message here...')}
+                />
+              </div>
+              <div className="flex justify-end gap-3">
+                <button
+                  onClick={closeMessageModal}
+                  className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-900 dark:text-gray-100"
+                >
+                  {t('instructor.grades.messageModal.cancel', 'Cancel')}
+                </button>
+                <button
+                  onClick={sendMessage}
+                  disabled={!messageText.trim()}
+                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {t('instructor.grades.messageModal.send', 'Send Message')}
+                </button>
               </div>
             </div>
           </div>

@@ -53,6 +53,8 @@ import AccessibilityBar from './components/AccessibilityBar.jsx';
 import React from 'react';
 import DataRetentionPolicy from './pages/admin/DataRetentionPolicy.jsx';
 import InstructorSageAI from './pages/instructor/SageAI.jsx';
+import Insights from './pages/instructor/Insights.jsx';
+import Events from './pages/instructor/Events.jsx';
 import { TourProvider } from './context/TourContext.jsx';
 import TourLauncher from './components/TourLauncher.jsx';
 
@@ -129,6 +131,8 @@ function App() {
                     <Route path="/instructor/messages" element={<InstructorStudentMessages />} />
                     <Route path="/instructor/notifications" element={<NotificationsInstructor />} />
                     <Route path="/instructor/sage-ai" element={<InstructorSageAI />} />
+                    <Route path="/instructor/insights" element={<Insights />} />
+                    <Route path="/instructor/events" element={<Events />} />
                   </Route>
                   <Route element={<PrivateRoute allowedRoles={['student']} />}>
                     <Route path="/student/dashboard" element={<StudentDashboard />} />

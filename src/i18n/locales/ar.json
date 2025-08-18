@@ -1574,15 +1574,61 @@
       "targetAudience": "الجمهور المستهدف",
       "targetAudienceLabel": "الجمهور المستهدف",
       "allStudents": "جميع الطلاب",
-      "fields": { "title": "العنوان", "message": "الرسالة" },
+      "searchPlaceholder": "البحث في الإشعارات...",
+      "noNotifications": "لا توجد إشعارات",
+      "yesterday": "أمس",
+      "filters": {
+        "all": "جميع الأنواع",
+        "schedule": "الجدول",
+        "exam": "الامتحان",
+        "assignment": "الواجب",
+        "material": "المواد",
+        "feedback": "التعليقات",
+        "general": "عام"
+      },
+      "sort": {
+        "newest": "الأحدث أولاً",
+        "oldest": "الأقدم أولاً"
+      },
+      "priority": {
+        "high": "عالي",
+        "medium": "متوسط",
+        "low": "منخفض"
+      },
+      "table": {
+        "notification": "الإشعار",
+        "type": "النوع",
+        "priority": "الأولوية",
+        "audience": "الجمهور",
+        "date": "التاريخ",
+        "actions": "الإجراءات"
+      },
+      "fields": { 
+        "title": "العنوان", 
+        "message": "الرسالة",
+        "type": "النوع",
+        "priority": "الأولوية"
+      },
       "actions": { "save": "حفظ التغييرات", "post": "نشر الإشعار" }
     },
     "myCourses": {
       "title": "مقرراتي",
+      "searchPlaceholder": "البحث في المقررات...",
+      "gridView": "عرض الشبكة",
+      "listView": "عرض القائمة",
+      "noDescription": "لا يوجد وصف متاح",
       "students": "{{count}} طالبًا",
       "weeks": "{{count}} أسابيع",
       "lastUpdated": "آخر تحديث: {{date}}",
       "viewEdit": "عرض / تعديل",
+      "table": {
+        "course": "المقرر",
+        "semester": "الفصل الدراسي",
+        "students": "الطلاب",
+        "weeks": "الأسابيع",
+        "lastUpdated": "آخر تحديث",
+        "actions": "الإجراءات"
+      },
       "modal": {
         "save": "حفظ",
         "cancel": "إلغاء",
@@ -1609,7 +1655,22 @@
       "charts": {
         "coursePerformance": "أداء المقرر",
         "studentEngagement": "تفاعل الطلاب",
-        "range": { "last7": "آخر 7 حصص", "lastSemester": "الفصل الدراسي الماضي" }
+        "performance": "اتجاه الأداء",
+        "engagement": "مستوى التفاعل",
+        "current": "الحالي",
+        "average": "المتوسط",
+        "peak": "الذروة",
+        "trendingUp": "في ارتفاع",
+        "trendDescription": "تحسن الأداء بنسبة 12% في هذه الفترة",
+        "engagementTrendDescription": "زادت مشاركة الطلاب بنسبة 8%",
+        "insights": {
+          "view": "عرض الرؤى",
+          "viewDetailed": "عرض الرؤى التفصيلية",
+          "clickForDetails": "انقر للحصول على تحليلات مفصلة",
+          "performance": "رؤى أداء المقرر: أداء مقرراتك جيد مع اتجاه تصاعدي ثابت. الأداء الحالي 92% يشير إلى نتائج طلابية قوية وطرق تدريس فعالة.",
+          "engagement": "رؤى مشاركة الطلاب: مشاركة الطلاب تظهر نمواً إيجابياً، حيث وصلت إلى 68% هذا الأسبوع. هذا يشير إلى مشاركة نشطة واهتمام بمقرراتك."
+        },
+        "range": { "last7": "آخر 7 أيام", "lastSemester": "الفصل الدراسي الماضي" }
       },
       "sections": {
         "messages": "رسائل الطلاب",
@@ -1618,7 +1679,112 @@
         "noticeBoard": "لوحة الإعلانات",
         "recentActivity": "النشاط الأخير"
       },
+      "quickAccess": {
+        "gradebook": "دفتر الدرجات",
+        "gradebookDesc": "إدارة درجات الطلاب والتقييمات",
+        "materials": "المواد",
+        "materialsDesc": "رفع وتنظيم مواد المقرر",
+        "attendance": "الحضور",
+        "attendanceDesc": "تتبع حضور الطلاب والمشاركة",
+        "messages": "الرسائل",
+        "messagesDesc": "التواصل مع الطلاب",
+        "courses": "المقررات",
+        "coursesDesc": "إدارة محتوى المقرر والإعدادات",
+        "schedule": "الجدول",
+        "scheduleDesc": "عرض وإدارة جدول التدريس"
+      },
+      "messages": {
+        "viewAll": "عرض جميع الرسائل"
+      },
+      "noticeBoard": {
+        "viewAll": "عرض الكل"
+      },
+      "recentActivity": {
+        "viewAll": "عرض الكل"
+      },
+      "notifications": {
+        "viewAll": "الإشعارات"
+      },
+      "events": {
+        "count": "فعاليات",
+        "viewAll": "عرض جميع الفعاليات",
+        "viewCalendar": "عرض التقويم الكامل",
+        "goToCalendar": "الذهاب إلى التقويم",
+        "close": "إغلاق",
+        "location": "الموقع",
+        "course": "المقرر",
+        "instructor": "المحاضر",
+        "attendees": "حاضر",
+        "students": "طالب",
+        "types": {
+          "lecture": "محاضرة",
+          "lab": "مختبر",
+          "officeHours": "ساعات مكتبية",
+          "other": "أخرى"
+        }
+      },
       "table": { "title": "العنوان", "by": "بواسطة", "date": "التاريخ", "views": "المشاهدات" }
+    },
+    "events": {
+      "title": "جميع الفعاليات",
+      "subtitle": "إدارة وعرض جميع الفعاليات والأنشطة القادمة",
+      "backToDashboard": "العودة إلى لوحة التحكم",
+      "searchPlaceholder": "البحث في الفعاليات...",
+      "noResults": "لم يتم العثور على فعاليات",
+      "noResultsDesc": "حاول تعديل معايير البحث أو التصفية",
+      "attendees": "حاضر",
+      "filters": {
+        "all": "جميع الفعاليات",
+        "lectures": "المحاضرات",
+        "labs": "المختبرات",
+        "meetings": "الاجتماعات",
+        "officeHours": "الساعات المكتبية",
+        "webinars": "الندوات الإلكترونية",
+        "other": "أخرى"
+      },
+      "gridView": "شبكة",
+      "listView": "قائمة",
+      "table": {
+        "event": "الفعالية",
+        "date": "التاريخ والوقت",
+        "location": "الموقع",
+        "course": "المقرر",
+        "attendees": "الحضور",
+        "duration": "المدة"
+      }
+    },
+    "insights": {
+      "title": "التحليلات والرؤى",
+      "subtitle": "مقاييس الأداء التفصيلية وتحليلات مشاركة الطلاب",
+      "backToDashboard": "العودة إلى لوحة التحكم",
+      "selectMetric": "اختر المقياس",
+      "selectRange": "اختر النطاق الزمني",
+      "export": "تصدير البيانات",
+      "metrics": {
+        "coursePerformance": "أداء المقرر",
+        "studentEngagement": "مشاركة الطلاب",
+        "timeSpent": "الوقت المستغرق",
+        "progressTracking": "تتبع التقدم",
+        "current": "الحالي",
+        "average": "المتوسط",
+        "peak": "الذروة",
+        "trend": "الاتجاه"
+      },
+      "ranges": {
+        "last7": "آخر 7 أيام",
+        "lastSemester": "الفصل الدراسي الماضي",
+        "lastYear": "السنة الماضية"
+      },
+      "summary": {
+        "title": "ملخص الرؤى",
+        "coursePerformance": "أداء المقرر حالياً عند {{current}}{{unit}} بمتوسط {{average}}{{unit}}. بلغ الأداء الذروة {{peak}}{{unit}}، مما يظهر اتجاه {{trend}} خلال الفترة المختارة.",
+        "studentEngagement": "مشاركة الطلاب عند {{current}}{{unit}} بمتوسط {{average}}{{unit}}. بلغت مشاركة الذروة {{peak}}{{unit}}، مما يشير إلى مشاركة طلابية {{trend}}.",
+        "timeSpent": "متوسط الوقت المستغرق {{current}}{{unit}} بمتوسط إجمالي {{average}}{{unit}}. أقصى وقت مسجل {{peak}}{{unit}}، مما يظهر استثمار وقت {{trend}}.",
+        "progressTracking": "تتبع التقدم يظهر {{current}}{{unit}} إنجاز بمتوسط {{average}}{{unit}}. أقصى تقدم بلغ {{peak}}{{unit}}، مما يشير إلى تقدم {{trend}}.",
+        "improving": "متزايد",
+        "declining": "متناقص",
+        "minutes": " دقائق"
+      }
     },
     "profile": {
       "completion": "اكتمال الملف الشخصي",
@@ -1684,7 +1850,41 @@
           "save": "حفظ التغييرات",
           "add": "إضافة مادة"
         }
-      }
+      },
+      "sampleMaterials": {
+        "syllabus": "المنهج الدراسي",
+        "studyGuide": "دليل الدراسة",
+        "assignment1": "الواجب الأول",
+        "quiz1": "الاختبار الأول"
+      },
+      "searchPlaceholder": "ابحث في المواد...",
+      "gridView": "عرض الشبكة",
+      "listView": "عرض القائمة",
+      "table": {
+        "material": "المادة",
+        "type": "النوع",
+        "file": "الملف",
+        "uploaded": "تاريخ الرفع",
+        "actions": "الإجراءات"
+      },
+      "actions": {
+        "edit": "تعديل",
+        "delete": "حذف"
+      },
+      "previewFile": "معاينة الملف",
+      "previewTitle": "معاينة الملف",
+      "fileInfo": "معلومات الملف",
+      "fileSize": "حجم الملف",
+      "preview": "المعاينة",
+      "imagePreview": "ستظهر معاينة الصورة هنا. في التطبيق الحقيقي، سترى الصورة الفعلية.",
+      "pdfPreview": "ستظهر معاينة PDF هنا. في التطبيق الحقيقي، سترى محتوى PDF الفعلي.",
+      "filePreview": "ستظهر معاينة الملف هنا. في التطبيق الحقيقي، سترى محتوى الملف الفعلي.",
+      "close": "إغلاق",
+      "download": "تنزيل",
+      "downloadNotAvailable": "وظيفة التنزيل غير متاحة في هذا الإصدار التجريبي.",
+      "downloadNotAvailableTitle": "التنزيل غير متاح",
+      "downloadNotAvailableMessage": "وظيفة التنزيل غير متاحة في هذا الإصدار التجريبي. في التطبيق الحقيقي، ستتمكن من تنزيل ملفات مواد المقرر.",
+      "understand": "أفهم"
     },
     "studentsManagement": {
       "title": "إدارة الطلاب",
@@ -1706,6 +1906,12 @@
         "saveNote": "حفظ الملاحظة",
         "aiInsight": "تحليل ذكي"
       },
+      "messageModal": {
+        "subject": "الرسالة",
+        "placeholder": "اكتب رسالتك هنا...",
+        "cancel": "إلغاء",
+        "send": "إرسال الرسالة"
+      },
       "modal": {
         "progress": "التقدم",
         "progressCompleted": "{{value}}٪ مكتمل",
@@ -1717,9 +1923,20 @@
     "studentMessages": {
       "title": "رسائل الطلاب",
       "new": "رسالة جديدة",
-      "searchLabel": "البحث عن طالب",
-      "searchPlaceholder": "ابحث بالاسم...",
-      "selectLabel": "اختر الطالب",
+      "searchPlaceholder": "ابحث عن الطلاب أو المقررات...",
+      "students": "الطلاب",
+      "selectStudent": "اختر طالباً لبدء المحادثة",
+      "inputPlaceholder": "اكتب رسالتك...",
+      "filters": {
+        "all": "جميع الرسائل",
+        "received": "الواردة",
+        "sent": "المرسلة"
+      },
+      "sort": {
+        "newest": "الأحدث أولاً",
+        "oldest": "الأقدم أولاً"
+      },
+      "yesterday": "أمس",
       "modal": {
         "editTitle": "تعديل الرسالة",
         "newTitle": "رسالة جديدة",
@@ -1779,6 +1996,50 @@
         "copied": "تم النسخ!",
         "assist": "مساعدة بالذكاء الاصطناعي",
         "apply": "تعبئة النموذج"
+      },
+      "submissions": {
+        "title": "التقديمات",
+        "submitted": "تم التقديم",
+        "pending": "في الانتظار",
+        "completion": "معدل الإكمال",
+        "studentSubmissions": "تقديمات الطلاب",
+        "student": "الطالب",
+        "submittedAt": "تم التقديم",
+        "view": "عرض",
+        "grade": "تقييم",
+        "download": "تحميل",
+        "downloadNotAvailable": "التحميل غير متاح",
+        "noSubmissions": "لا توجد تقديمات بعد",
+        "viewSubmission": "عرض التقديم",
+        "studentInfo": "معلومات الطالب",
+        "submissionContent": "محتوى التقديم",
+        "fileName": "اسم الملف",
+        "fileSize": "حجم الملف",
+        "fileType": "نوع الملف",
+        "contentPreview": "هذه معاينة لمحتوى التقديم. في التطبيق الحقيقي، ستتمكن من رؤية الملفات والكود المقدم من الطالب.",
+        "gradeSubmission": "تقييم التقديم",
+        "score": "الدرجة",
+        "feedback": "ملاحظات",
+        "feedbackPlaceholder": "قدم ملاحظات على التقديم...",
+        "cancel": "إلغاء",
+        "saveGrade": "حفظ التقييم",
+        "gradeSavedTitle": "تم حفظ التقييم بنجاح!",
+        "gradeSavedMessage": "تم حفظ الدرجة والملاحظات لهذا الطالب.",
+        "downloadNotAvailableTitle": "التحميل غير متاح",
+        "downloadNotAvailableMessage": "وظيفة التحميل غير متاحة في هذا الإصدار التجريبي. في التطبيق الحقيقي، ستتمكن من تحميل ملفات تقديم الطلاب.",
+        "understand": "أفهم"
+      },
+      "gridView": "شبكة",
+      "listView": "قائمة",
+      "table": {
+        "assignment": "الواجب",
+        "course": "المقرر",
+        "dueDate": "تاريخ الاستحقاق",
+        "submissions": "التقديمات",
+        "type": "النوع",
+        "points": "النقاط",
+        "status": "الحالة",
+        "actions": "الإجراءات"
       }
     },
     "grades": {
@@ -1792,6 +2053,12 @@
         "actions": "الإجراءات"
       },
       "actions": { "editGrade": "تعديل الدرجة", "message": "رسالة" },
+      "messageModal": {
+        "subject": "الرسالة",
+        "placeholder": "اكتب رسالتك هنا...",
+        "cancel": "إلغاء",
+        "send": "إرسال الرسالة"
+      },
       "modal": {
         "assignmentGrades": "درجات الواجبات",
         "assignmentLabel": "واجب {{index}}: {{grade}}",
@@ -1803,6 +2070,27 @@
     },
     "teachingSchedule": {
       "title": "الجدول التدريسي",
+      "searchPlaceholder": "البحث في الفعاليات...",
+      "addEvent": "إضافة فعالية",
+      "filters": {
+        "all": "جميع الفعاليات",
+        "class": "الحصص",
+        "assignment": "الواجبات",
+        "activity": "الأنشطة",
+        "holiday": "العطل",
+        "university": "الجامعة"
+      },
+      "types": {
+        "class": "حصة",
+        "assignment": "واجب",
+        "activity": "نشاط",
+        "holiday": "عطلة",
+        "university": "جامعة"
+      },
+      "listView": {
+        "title": "جميع الفعاليات"
+      },
+      "noEvents": "لا توجد فعاليات",
       "days": { "sun": "الأحد", "mon": "الاثنين", "tue": "الثلاثاء", "wed": "الأربعاء", "thu": "الخميس", "fri": "الجمعة", "sat": "السبت" },
       "sidebar": { "upcoming": "الفعاليات القادمة", "none": "لا توجد فعاليات قادمة." },
       "modal": {
@@ -1847,8 +2135,12 @@
         "messages": { "title": "رسائل الطلاب", "desc": "راجع ورد على أحدث رسائل طلابك." }
       },
       "courses": {
-        "grid": { "title": "مقرراتك", "desc": "تصفّح وأدر جميع مقرراتك هنا." },
-        "details": { "title": "تفاصيل المقرر", "desc": "افتح المقرر لإضافة المواد أو تحديث المحتوى الأسبوعي." }
+        "header": { "title": "إدارة المقررات", "desc": "مرحباً بك في صفحة إدارة المقررات. هنا يمكنك عرض والبحث وإدارة جميع مقرراتك." },
+        "search": { "title": "البحث في المقررات", "desc": "ابحث بسرعة عن مقررات محددة بكتابة اسم المقرر أو الرمز." },
+        "viewToggle": { "title": "خيارات العرض", "desc": "بدّل بين عرض الشبكة (البطاقات) وعرض القائمة (الجدول) لرؤية مقرراتك بتخطيطات مختلفة." },
+        "grid": { "title": "عرض الشبكة", "desc": "تصفّح مقرراتك بتخطيط البطاقات. كل بطاقة تعرض تفاصيل المقرر ووصول سريع للإدارة." },
+        "list": { "title": "عرض القائمة", "desc": "اعرض مقرراتك بتنسيق جدول مفصل مع جميع المعلومات منظمة في أعمدة." },
+        "details": { "title": "تفاصيل المقرر", "desc": "انقر على أي مقرر لفتح الإدارة المفصلة حيث يمكنك إضافة المواد وتعديل المحتوى الأسبوعي وإدارة هيكل المقرر." }
       },
       "students": {
         "table": { "title": "سجل الطلاب", "desc": "اعرض التقدّم والحضور وأدر ملاحظات الطلاب." },

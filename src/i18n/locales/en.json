@@ -1441,15 +1441,61 @@
       "targetAudience": "Target Audience",
       "targetAudienceLabel": "Target Audience",
       "allStudents": "All Students",
-      "fields": { "title": "Title", "message": "Message" },
+      "searchPlaceholder": "Search notifications...",
+      "noNotifications": "No notifications found",
+      "yesterday": "Yesterday",
+      "filters": {
+        "all": "All Types",
+        "schedule": "Schedule",
+        "exam": "Exam",
+        "assignment": "Assignment",
+        "material": "Material",
+        "feedback": "Feedback",
+        "general": "General"
+      },
+      "sort": {
+        "newest": "Newest First",
+        "oldest": "Oldest First"
+      },
+      "priority": {
+        "high": "High",
+        "medium": "Medium",
+        "low": "Low"
+      },
+      "table": {
+        "notification": "Notification",
+        "type": "Type",
+        "priority": "Priority",
+        "audience": "Audience",
+        "date": "Date",
+        "actions": "Actions"
+      },
+      "fields": { 
+        "title": "Title", 
+        "message": "Message",
+        "type": "Type",
+        "priority": "Priority"
+      },
       "actions": { "save": "Save Changes", "post": "Post Notification" }
     },
     "myCourses": {
       "title": "My Courses",
+      "searchPlaceholder": "Search courses...",
+      "gridView": "Grid View",
+      "listView": "List View",
+      "noDescription": "No description available",
       "students": "{{count}} students",
       "weeks": "{{count}} weeks",
       "lastUpdated": "Last updated: {{date}}",
       "viewEdit": "View / Edit",
+      "table": {
+        "course": "Course",
+        "semester": "Semester",
+        "students": "Students",
+        "weeks": "Weeks",
+        "lastUpdated": "Last Updated",
+        "actions": "Actions"
+      },
       "modal": {
         "save": "Save",
         "cancel": "Cancel",
@@ -1476,7 +1522,22 @@
       "charts": {
         "coursePerformance": "Course Performance",
         "studentEngagement": "Student Engagement",
-        "range": { "last7": "Last 7 Classes", "lastSemester": "Last Semester" }
+        "performance": "Performance Trend",
+        "engagement": "Engagement Level",
+        "current": "Current",
+        "average": "Average",
+        "peak": "Peak",
+        "trendingUp": "Trending Up",
+        "trendDescription": "Performance has improved by 12% this period",
+        "engagementTrendDescription": "Student participation increased by 8%",
+        "insights": {
+          "view": "View Insights",
+          "viewDetailed": "View Detailed Insights",
+          "clickForDetails": "Click for detailed analytics",
+          "performance": "Course Performance Insights: Your courses are performing well with a steady upward trend. The current 92% performance indicates strong student outcomes and effective teaching methods.",
+          "engagement": "Student Engagement Insights: Student engagement is showing positive growth, reaching 68% this week. This indicates active participation and interest in your courses."
+        },
+        "range": { "last7": "Last 7 Days", "lastSemester": "Last Semester" }
       },
       "sections": {
         "messages": "Student Messages",
@@ -1485,7 +1546,112 @@
         "noticeBoard": "Notice Board",
         "recentActivity": "Recent Activity"
       },
+      "quickAccess": {
+        "gradebook": "Gradebook",
+        "gradebookDesc": "Manage student grades and assessments",
+        "materials": "Materials",
+        "materialsDesc": "Upload and organize course materials",
+        "attendance": "Attendance",
+        "attendanceDesc": "Track student attendance and participation",
+        "messages": "Messages",
+        "messagesDesc": "Communicate with students",
+        "courses": "Courses",
+        "coursesDesc": "Manage your course content and settings",
+        "schedule": "Schedule",
+        "scheduleDesc": "View and manage your teaching schedule"
+      },
+      "messages": {
+        "viewAll": "View All Messages"
+      },
+      "noticeBoard": {
+        "viewAll": "View All"
+      },
+      "recentActivity": {
+        "viewAll": "View All"
+      },
+      "notifications": {
+        "viewAll": "Notifications"
+      },
+      "events": {
+        "count": "events",
+        "viewAll": "View All Events",
+        "viewCalendar": "View Full Calendar",
+        "goToCalendar": "Go to Calendar",
+        "close": "Close",
+        "location": "Location",
+        "course": "Course",
+        "instructor": "Instructor",
+        "attendees": "attendees",
+        "students": "students",
+        "types": {
+          "lecture": "Lecture",
+          "lab": "Lab",
+          "officeHours": "Office Hours",
+          "other": "Other"
+        }
+      },
       "table": { "title": "Title", "by": "By", "date": "Date", "views": "Views" }
+    },
+    "events": {
+      "title": "All Events",
+      "subtitle": "Manage and view all your upcoming events and activities",
+      "backToDashboard": "Back to Dashboard",
+      "searchPlaceholder": "Search events...",
+      "noResults": "No Events Found",
+      "noResultsDesc": "Try adjusting your search or filter criteria",
+      "attendees": "attendees",
+      "filters": {
+        "all": "All Events",
+        "lectures": "Lectures",
+        "labs": "Labs",
+        "meetings": "Meetings",
+        "officeHours": "Office Hours",
+        "webinars": "Webinars",
+        "other": "Other"
+      },
+      "gridView": "Grid",
+      "listView": "List",
+      "table": {
+        "event": "Event",
+        "date": "Date & Time",
+        "location": "Location",
+        "course": "Course",
+        "attendees": "Attendees",
+        "duration": "Duration"
+      }
+    },
+    "insights": {
+      "title": "Analytics & Insights",
+      "subtitle": "Detailed performance metrics and student engagement analytics",
+      "backToDashboard": "Back to Dashboard",
+      "selectMetric": "Select Metric",
+      "selectRange": "Select Time Range",
+      "export": "Export Data",
+      "metrics": {
+        "coursePerformance": "Course Performance",
+        "studentEngagement": "Student Engagement",
+        "timeSpent": "Time Spent",
+        "progressTracking": "Progress Tracking",
+        "current": "Current",
+        "average": "Average",
+        "peak": "Peak",
+        "trend": "Trend"
+      },
+      "ranges": {
+        "last7": "Last 7 Days",
+        "lastSemester": "Last Semester",
+        "lastYear": "Last Year"
+      },
+      "summary": {
+        "title": "Insights Summary",
+        "coursePerformance": "Course performance is currently at {{current}}{{unit}} with an average of {{average}}{{unit}}. The peak performance reached {{peak}}{{unit}}, showing a {{trend}} trend over the selected period.",
+        "studentEngagement": "Student engagement stands at {{current}}{{unit}} with an average of {{average}}{{unit}}. Peak engagement was {{peak}}{{unit}}, indicating {{trend}} student participation.",
+        "timeSpent": "Average time spent is {{current}}{{unit}} with an overall average of {{average}}{{unit}}. Maximum time recorded was {{peak}}{{unit}}, showing {{trend}} time investment.",
+        "progressTracking": "Progress tracking shows {{current}}{{unit}} completion with an average of {{average}}{{unit}}. Maximum progress reached {{peak}}{{unit}}, indicating {{trend}} advancement.",
+        "improving": "improving",
+        "declining": "declining",
+        "minutes": " minutes"
+      }
     },
     "profile": {
       "completion": "Profile Completion",
@@ -1526,9 +1692,20 @@
     "studentMessages": {
       "title": "Student Messages",
       "new": "New Message",
-      "searchLabel": "Search Student",
-      "searchPlaceholder": "Search by name...",
-      "selectLabel": "Select Student",
+      "searchPlaceholder": "Search students or courses...",
+      "students": "Students",
+      "selectStudent": "Select a student to start messaging",
+      "inputPlaceholder": "Type your message...",
+      "filters": {
+        "all": "All Messages",
+        "received": "Received",
+        "sent": "Sent"
+      },
+      "sort": {
+        "newest": "Newest First",
+        "oldest": "Oldest First"
+      },
+      "yesterday": "Yesterday",
       "modal": {
         "editTitle": "Edit Message",
         "newTitle": "New Message",
@@ -1559,6 +1736,12 @@
         "saveNote": "Save Note",
         "aiInsight": "AI Insight"
       },
+      "messageModal": {
+        "subject": "Message",
+        "placeholder": "Type your message here...",
+        "cancel": "Cancel",
+        "send": "Send Message"
+      },
       "modal": {
         "progress": "Progress",
         "progressCompleted": "{{value}}% completed",
@@ -1571,10 +1754,55 @@
       "title": "Course Materials",
       "add": "Add Material",
       "selectCourse": "Select Course",
+      "searchPlaceholder": "Search materials...",
+      "gridView": "Grid View",
+      "listView": "List View",
+      "table": {
+        "material": "Material",
+        "type": "Type",
+        "file": "File",
+        "uploaded": "Uploaded",
+        "actions": "Actions"
+      },
+      "actions": {
+        "edit": "Edit",
+        "delete": "Delete"
+      },
       "card": {
         "type": "Type",
         "file": "File",
         "uploaded": "Uploaded"
+      },
+      "table": {
+        "material": "Material",
+        "type": "Type",
+        "file": "File",
+        "uploaded": "Uploaded",
+        "actions": "Actions"
+      },
+      "actions": {
+        "edit": "Edit",
+        "delete": "Delete"
+      },
+      "previewFile": "Preview file",
+      "previewTitle": "File Preview",
+      "fileInfo": "File Information",
+      "fileSize": "File Size",
+      "preview": "Preview",
+      "imagePreview": "Image preview would be displayed here. In a real application, you would see the actual image.",
+      "pdfPreview": "PDF preview would be displayed here. In a real application, you would see the actual PDF content.",
+      "filePreview": "File preview would be displayed here. In a real application, you would see the actual file content.",
+      "close": "Close",
+      "download": "Download",
+      "downloadNotAvailable": "Download functionality is not available in this demo version.",
+      "downloadNotAvailableTitle": "Download Not Available",
+      "downloadNotAvailableMessage": "Download functionality is not available in this demo version. In a real application, you would be able to download course material files.",
+      "understand": "I Understand",
+      "sampleMaterials": {
+        "syllabus": "Syllabus",
+        "studyGuide": "Study Guide",
+        "assignment1": "Assignment 1",
+        "quiz1": "Quiz 1"
       },
       "modal": {
         "editTitle": "Edit Material",
@@ -1615,7 +1843,52 @@
         "status": { "active": "Active", "completed": "Completed", "draft": "Draft" },
         "viewSubmissions": "View Submissions"
       },
+      "submissions": {
+        "title": "Submissions",
+        "submitted": "Submitted",
+        "pending": "Pending",
+        "completion": "Completion Rate",
+        "studentSubmissions": "Student Submissions",
+        "student": "Student",
+        "submittedAt": "Submitted",
+        "view": "View",
+        "grade": "Grade",
+        "download": "Download",
+        "noSubmissions": "No submissions yet",
+        "downloadNotAvailable": "Download functionality is not available in this demo version.",
+        "viewSubmission": "View Submission",
+        "gradeSubmission": "Grade Submission",
+        "studentInfo": "Student Information",
+        "submissionContent": "Submission Content",
+        "fileName": "File Name",
+        "fileSize": "File Size",
+        "fileType": "File Type",
+        "contentPreview": "This is a preview of the submission content. In a real application, you would see the actual files and code submitted by the student.",
+        "score": "Score",
+        "feedback": "Feedback",
+        "feedbackPlaceholder": "Provide feedback on the submission...",
+        "cancel": "Cancel",
+        "saveGrade": "Save Grade",
+        "gradeSaved": "Grade saved successfully!",
+        "gradeSavedTitle": "Grade Saved Successfully!",
+        "gradeSavedMessage": "The grade and feedback have been saved for this student.",
+        "downloadNotAvailableTitle": "Download Not Available",
+        "downloadNotAvailableMessage": "Download functionality is not available in this demo version. In a real application, you would be able to download student submission files.",
+        "understand": "I Understand"
+      },
       "menu": { "viewDetails": "View Details", "edit": "Edit", "download": "Download Submissions", "delete": "Delete" },
+      "gridView": "Grid",
+      "listView": "List",
+      "table": {
+        "assignment": "Assignment",
+        "course": "Course",
+        "dueDate": "Due Date",
+        "submissions": "Submissions",
+        "type": "Type",
+        "points": "Points",
+        "status": "Status",
+        "actions": "Actions"
+      },
       "modal": {
         "title": "Create New Assignment",
         "fields": {
@@ -1646,6 +1919,38 @@
         "copied": "Copied!",
         "assist": "AI Assist",
         "apply": "Apply to form"
+      },
+      "submissions": {
+        "title": "Submissions",
+        "submitted": "Submitted",
+        "pending": "Pending",
+        "completion": "Completion Rate",
+        "studentSubmissions": "Student Submissions",
+        "student": "Student",
+        "submittedAt": "Submitted",
+        "view": "View",
+        "grade": "Grade",
+        "download": "Download",
+        "downloadNotAvailable": "Download not available",
+        "noSubmissions": "No submissions yet",
+        "viewSubmission": "View Submission",
+        "studentInfo": "Student Information",
+        "submissionContent": "Submission Content",
+        "fileName": "File Name",
+        "fileSize": "File Size",
+        "fileType": "File Type",
+        "contentPreview": "This is a preview of the submission content. In a real application, you would see the actual files and code submitted by the student.",
+        "gradeSubmission": "Grade Submission",
+        "score": "Score",
+        "feedback": "Feedback",
+        "feedbackPlaceholder": "Provide feedback on the submission...",
+        "cancel": "Cancel",
+        "saveGrade": "Save Grade",
+        "gradeSavedTitle": "Grade Saved Successfully!",
+        "gradeSavedMessage": "The grade and feedback have been saved for this student.",
+        "downloadNotAvailableTitle": "Download Not Available",
+        "downloadNotAvailableMessage": "Download functionality is not available in this demo version. In a real application, you would be able to download student submission files.",
+        "understand": "I Understand"
       }
     },
     "grades": {
@@ -1659,6 +1964,12 @@
         "actions": "Actions"
       },
       "actions": { "editGrade": "Edit Grade", "message": "Message" },
+      "messageModal": {
+        "subject": "Message",
+        "placeholder": "Type your message here...",
+        "cancel": "Cancel",
+        "send": "Send Message"
+      },
       "modal": {
         "assignmentGrades": "Assignment Grades",
         "assignmentLabel": "Assignment {{index}}: {{grade}}",
@@ -1670,6 +1981,27 @@
     },
     "teachingSchedule": {
       "title": "Teaching Schedule",
+      "searchPlaceholder": "Search events...",
+      "addEvent": "Add Event",
+      "filters": {
+        "all": "All Events",
+        "class": "Classes",
+        "assignment": "Assignments",
+        "activity": "Activities",
+        "holiday": "Holidays",
+        "university": "University"
+      },
+      "types": {
+        "class": "Class",
+        "assignment": "Assignment",
+        "activity": "Activity",
+        "holiday": "Holiday",
+        "university": "University"
+      },
+      "listView": {
+        "title": "All Events"
+      },
+      "noEvents": "No events found",
       "days": { "sun": "Sun", "mon": "Mon", "tue": "Tue", "wed": "Wed", "thu": "Thu", "fri": "Fri", "sat": "Sat" },
       "sidebar": { "upcoming": "Upcoming Events", "none": "No upcoming events." },
       "modal": {
@@ -1714,8 +2046,12 @@
         "messages": { "title": "Student Messages", "desc": "Review and respond to the latest messages from your students." }
       },
       "courses": {
-        "grid": { "title": "Your Courses", "desc": "Browse and manage all your courses here." },
-        "details": { "title": "Course Details", "desc": "Open a course to add materials or update weekly content." }
+        "header": { "title": "Course Management", "desc": "Welcome to your course management page. Here you can view, search, and manage all your courses." },
+        "search": { "title": "Search Courses", "desc": "Quickly find specific courses by typing the course name or code." },
+        "viewToggle": { "title": "View Options", "desc": "Switch between grid view (cards) and list view (table) to see your courses in different layouts." },
+        "grid": { "title": "Grid View", "desc": "Browse your courses in a card layout. Each card shows course details and quick access to management." },
+        "list": { "title": "List View", "desc": "View your courses in a detailed table format with all information organized in columns." },
+        "details": { "title": "Course Details", "desc": "Click any course to open detailed management where you can add materials, edit weekly content, and manage course structure." }
       },
       "students": {
         "table": { "title": "Students Roster", "desc": "View progress, attendance, and manage student notes." },
@@ -1735,6 +2071,9 @@
         "prayer": { "title": "Prayer Times (Demo)", "desc": "Demo panel with prayer times; Friday conflicts are highlighted." }
       },
       "materials": {
+        "header": { "title": "Course Materials Management", "desc": "Welcome to your course materials management page. Here you can upload, organize, and manage all your course resources." },
+        "search": { "title": "Search Materials", "desc": "Quickly find specific materials by typing the title, file name, or type." },
+        "viewToggle": { "title": "View Options", "desc": "Switch between grid view (cards) and list view (table) to see your materials in different layouts." },
         "upload": { "title": "Upload Materials", "desc": "Add new PDFs, quizzes, or resources for your course." },
         "list": { "title": "Materials Library", "desc": "Manage uploaded files and edit details." }
       },
