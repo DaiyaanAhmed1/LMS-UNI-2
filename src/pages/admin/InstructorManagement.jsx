@@ -2,7 +2,6 @@ import { useState } from 'react';
 import Sidebar from '../../components/Sidebar';
 import { instructors as initialInstructors, departments } from '../../data/instructors';
 import { Plus, Edit, Trash2, X, Users, BookOpen, BarChart3 } from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend } from 'recharts';
 import { useTranslation } from 'react-i18next';
 
 export default function InstructorManagement() {
@@ -15,7 +14,17 @@ export default function InstructorManagement() {
 
   const handleAdd = (e) => {
     e.preventDefault();
-    const newInstructor = { id: instructors.length + 1, name: form.name, email: form.email, department: form.department, assignedCourses: [], assignedBatches: [], engagement: 0 };
+    const newInstructor = { 
+      id: instructors.length + 1, 
+      name: form.name, 
+      email: form.email, 
+      department: form.department, 
+      courses: [], 
+      assignedBatches: [], 
+      engagement: 0,
+      status: 'Active',
+      joinDate: new Date().toISOString().split('T')[0]
+    };
     setInstructors([...instructors, newInstructor]);
     setShowAddModal(false);
     setForm({ name: '', email: '', department: '' });
@@ -65,22 +74,22 @@ export default function InstructorManagement() {
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">{instructor.name}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">{instructor.email}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">{instructor.department}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-center text_sm text-blue-700 dark:text-blue-400">
+                    <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-blue-700 dark:text-blue-400">
                       <div className="flex flex-col items-center">
                         <BookOpen size={18} className="inline-block mb-1" />
-                        {instructor.assignedCourses.length}
+                        {instructor.courses ? instructor.courses.length : 0}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-green-700 dark:text-green-400">
                       <div className="flex flex-col items-center">
                         <Users size={18} className="inline-block mb-1" />
-                        {instructor.assignedBatches.length}
+                        {instructor.assignedBatches ? instructor.assignedBatches.length : 0}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-center text-sm">
                       <div className="flex items-center justify-center">
                         <BarChart3 size={18} className="inline-block mr-1 text-yellow-600 dark:text-yellow-400" />
-                        <span className="font-semibold text-gray-900 dark:text-gray-100">{instructor.engagement}%</span>
+                        <span className="font-semibold text-gray-900 dark:text-gray-100">{instructor.engagement || 0}%</span>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-3">
@@ -101,8 +110,8 @@ export default function InstructorManagement() {
 
       {/* Add Instructor Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify_center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-lg dark:bg-gray-800">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-lg mx-4">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">{t('admin.instructorManagement.addModal.title', 'Add Instructor')}</h2>
               <button onClick={() => setShowAddModal(false)} className="text-gray-500 hover:text-gray-700"><X size={24} /></button>
@@ -118,7 +127,7 @@ export default function InstructorManagement() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">{t('admin.instructorManagement.addModal.fields.department', 'Department')}</label>
-                <select className="mt-1 block w_full border border-gray-300 rounded-md py-2 px-3 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200" required value={form.department} onChange={e => setForm(f => ({ ...f, department: e.target.value }))}>
+                <select className="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200" required value={form.department} onChange={e => setForm(f => ({ ...f, department: e.target.value }))}>
                   <option value="">{t('admin.instructorManagement.addModal.fields.selectDepartment', 'Select Department')}</option>
                   {departments.map(dep => <option key={dep} value={dep}>{dep}</option>)}
                 </select>
@@ -135,7 +144,7 @@ export default function InstructorManagement() {
       {/* Edit Instructor Modal */}
       {showEditModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-lg dark:bg-gray-800">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-lg mx-4">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">{t('admin.instructorManagement.editModal.title', 'Edit Instructor')}</h2>
               <button onClick={() => setShowEditModal(false)} className="text-gray-500 hover:text-gray-700"><X size={24} /></button>
