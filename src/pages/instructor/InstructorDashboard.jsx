@@ -256,6 +256,19 @@ export default function InstructorDashboard() {
   }, []);
 
   useEffect(() => {
+    // Auto-start tour for new users
+    const key = 'tour:instructor:v1:autostart';
+    const hasSeenTour = localStorage.getItem(key);
+    const tourCompleted = localStorage.getItem('tour:instructor:v1:state');
+    
+    if (!hasSeenTour && tourCompleted !== 'completed') {
+      setTimeout(() => {
+        startInstructorTour();
+        localStorage.setItem(key, 'shown');
+      }, 100);
+    }
+    
+    // Handle tour launches from navigation
     const onLaunch = () => {
       const launch = localStorage.getItem('tour:launch');
       if (launch === 'instructor-full' || launch === 'instructor-resume') {
@@ -287,15 +300,57 @@ export default function InstructorDashboard() {
       {
         target: '#instructor-stat-cards',
         title: t('instructor.tour.dashboard.stats.title', 'Your Teaching Overview'),
-        content: t('instructor.tour.dashboard.stats.desc', 'Quick stats about your courses, students, grading and upcoming classes.'),
+        content: t('instructor.tour.dashboard.stats.desc', 'Quick stats about your courses, students, grading and upcoming classes. Click on any stat to navigate to the relevant page.'),
         placement: 'bottom',
+        disableBeacon: true,
+      },
+      {
+        target: '[data-tour="instructor-charts"]',
+        title: t('instructor.tour.dashboard.charts.title', 'Performance Analytics'),
+        content: t('instructor.tour.dashboard.charts.desc', 'Monitor your course performance and student engagement with interactive charts. Use the dropdowns to switch between time ranges.'),
+        placement: 'top',
         disableBeacon: true,
       },
       {
         target: '[data-tour="instructor-messages"]',
         title: t('instructor.tour.dashboard.messages.title', 'Student Messages'),
-        content: t('instructor.tour.dashboard.messages.desc', 'Review and respond to the latest messages from your students.'),
+        content: t('instructor.tour.dashboard.messages.desc', 'Review and respond to the latest messages from your students. Unread messages are highlighted with a blue indicator.'),
         placement: 'left',
+        disableBeacon: true,
+      },
+      {
+        target: '[data-tour="instructor-quick-access"]',
+        title: t('instructor.tour.dashboard.quickAccess.title', 'Quick Access'),
+        content: t('instructor.tour.dashboard.quickAccess.desc', 'Access frequently used features like Gradebook, Materials, Attendance, Messages, Courses, and Schedule with one click.'),
+        placement: 'top',
+        disableBeacon: true,
+      },
+      {
+        target: '[data-tour="instructor-events"]',
+        title: t('instructor.tour.dashboard.events.title', 'Upcoming Events'),
+        content: t('instructor.tour.dashboard.events.desc', 'View your upcoming classes, office hours, and other events. Click on any event to see detailed information.'),
+        placement: 'right',
+        disableBeacon: true,
+      },
+      {
+        target: '[data-tour="instructor-notice-board"]',
+        title: t('instructor.tour.dashboard.noticeBoard.title', 'Notice Board'),
+        content: t('instructor.tour.dashboard.noticeBoard.desc', 'Stay updated with important announcements and notifications from the academic office and other departments.'),
+        placement: 'left',
+        disableBeacon: true,
+      },
+      {
+        target: '[data-tour="instructor-recent-activity"]',
+        title: t('instructor.tour.dashboard.recentActivity.title', 'Recent Activity'),
+        content: t('instructor.tour.dashboard.recentActivity.desc', 'Track your recent teaching activities including grading, material uploads, and student interactions.'),
+        placement: 'right',
+        disableBeacon: true,
+      },
+      {
+        target: '[data-tour="instructor-insights-button"]',
+        title: t('instructor.tour.dashboard.insights.title', 'Detailed Insights'),
+        content: t('instructor.tour.dashboard.insights.desc', 'Click the chart icons to access detailed analytics and insights about your teaching performance and student engagement.'),
+        placement: 'bottom',
         disableBeacon: true,
       }
     ].filter(s => document.querySelector(s.target));
@@ -454,7 +509,7 @@ export default function InstructorDashboard() {
             </div>
 
             {/* Enhanced Charts Section */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6" data-tour="instructor-charts">
               {/* Course Performance (Enhanced Line Chart) */}
               <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 dark:shadow-gray-900/20 transition-all duration-300 hover:shadow-lg dark:hover:shadow-gray-900/30 border border-gray-100 dark:border-gray-700" dir={isRTL ? 'rtl' : 'ltr'}>
                 <div className="flex justify-between items-center mb-4">
@@ -465,6 +520,7 @@ export default function InstructorDashboard() {
                       onClick={() => navigate('/instructor/insights')}
                       className="relative group p-2 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/40 rounded-lg transition-all duration-200 border border-blue-200 dark:border-blue-800 hover:border-blue-300 dark:hover:border-blue-700"
                       title={t('instructor.dashboard.charts.insights.viewDetailed')}
+                      data-tour="instructor-insights-button"
                     >
                       <BarChart2 size={14} className="text-blue-600 dark:text-blue-400" />
                       <div className="absolute -top-1 -right-1 w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
@@ -783,7 +839,7 @@ export default function InstructorDashboard() {
               </div>
               
               {/* Compact Quick Access */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 flex flex-col dark:shadow-gray-900/20 transition-all duration-200 hover:shadow-lg dark:hover:shadow-gray-900/30" dir={isRTL ? 'rtl' : 'ltr'}>
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 flex flex-col dark:shadow-gray-900/20 transition-all duration-200 hover:shadow-lg dark:hover:shadow-gray-900/30" dir={isRTL ? 'rtl' : 'ltr'} data-tour="instructor-quick-access">
                 <div className="font-semibold text-gray-700 dark:text-gray-100 mb-3 flex items-center gap-2">
                   <ArrowUpRight size={16}/> 
                   {t('instructor.dashboard.sections.quickAccess')}
@@ -820,7 +876,7 @@ export default function InstructorDashboard() {
               </div>
               
               {/* Compact Upcoming Events */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 flex flex-col dark:shadow-gray-900/20 transition-all duration-200 hover:shadow-lg dark:hover:shadow-gray-900/30">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 flex flex-col dark:shadow-gray-900/20 transition-all duration-200 hover:shadow-lg dark:hover:shadow-gray-900/30" data-tour="instructor-events">
                 <div className="flex justify-between items-center mb-3">
                   <div className="flex items-center gap-2">
                     <Calendar size={16} className="text-green-600 dark:text-green-400" />
@@ -889,7 +945,7 @@ export default function InstructorDashboard() {
             </div>
 
             {/* Notice Board */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 dark:shadow-gray-900/20 transition-all duration-200 hover:shadow-lg dark:hover:shadow-gray-900/30" dir={isRTL ? 'rtl' : 'ltr'}>
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 dark:shadow-gray-900/20 transition-all duration-200 hover:shadow-lg dark:hover:shadow-gray-900/30" dir={isRTL ? 'rtl' : 'ltr'} data-tour="instructor-notice-board">
               <div className="font-semibold text-gray-700 dark:text-gray-100 mb-3 flex items-center gap-2">
                 <Bell size={16}/> 
                 {t('instructor.dashboard.sections.noticeBoard')}
@@ -932,7 +988,7 @@ export default function InstructorDashboard() {
             </div>
 
             {/* Recent Activity */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 dark:shadow-gray-900/20 transition-all duration-200 hover:shadow-lg dark:hover:shadow-gray-900/30" dir={isRTL ? 'rtl' : 'ltr'}>
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 dark:shadow-gray-900/20 transition-all duration-200 hover:shadow-lg dark:hover:shadow-gray-900/30" dir={isRTL ? 'rtl' : 'ltr'} data-tour="instructor-recent-activity">
               <div className="font-semibold text-gray-700 dark:text-gray-100 mb-3 flex items-center gap-2">
                 <TrendingUp size={16}/> 
                 {t('instructor.dashboard.sections.recentActivity')}

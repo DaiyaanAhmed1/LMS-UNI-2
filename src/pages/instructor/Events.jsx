@@ -24,6 +24,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useLanguage } from '../../context/LanguageContext.jsx';
 import { useNavigate } from 'react-router-dom';
+import { useTour } from '../../context/TourContext.jsx';
 
 // Extended events data with more variety
 const allEvents = [
@@ -205,6 +206,7 @@ export default function Events() {
   const { t } = useTranslation();
   const { isRTL } = useLanguage();
   const navigate = useNavigate();
+  const { startTour } = useTour();
   
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
@@ -222,6 +224,74 @@ export default function Events() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  // Tour functionality
+  useEffect(() => {
+    // Auto-start tour for new users
+    const key = 'tour:instructor:events:v1:autostart';
+    const hasSeenTour = localStorage.getItem(key);
+    const tourCompleted = localStorage.getItem('tour:instructor:events:v1:state');
+    
+    if (!hasSeenTour && tourCompleted !== 'completed') {
+      setTimeout(() => {
+        startEventsTour();
+        localStorage.setItem(key, 'shown');
+      }, 100);
+    }
+    
+    // Handle tour launches from navigation (coming from dashboard in full tour)
+    const onLaunch = () => {
+      const launch = localStorage.getItem('tour:launch');
+      if (launch === 'instructor-resume') {
+        localStorage.removeItem('tour:launch');
+        setTimeout(() => startEventsTour(), 200);
+      }
+    };
+    window.addEventListener('tour:launch', onLaunch);
+    return () => window.removeEventListener('tour:launch', onLaunch);
+  }, []);
+
+  const startEventsTour = () => {
+    const steps = [
+      { 
+        target: '[data-tour="events-header"]', 
+        title: t('instructor.tour.events.header.title', 'Events Overview'), 
+        content: t('instructor.tour.events.header.desc', 'Welcome to the Events page. Here you can view and manage all your scheduled events, lectures, and activities.'), 
+        placement: 'bottom', 
+        disableBeacon: true 
+      },
+      { 
+        target: '[data-tour="events-search"]', 
+        title: t('instructor.tour.events.search.title', 'Search Events'), 
+        content: t('instructor.tour.events.search.desc', 'Quickly find specific events by typing the event title, course, or description.'), 
+        placement: 'bottom', 
+        disableBeacon: true 
+      },
+      { 
+        target: '[data-tour="events-filter"]', 
+        title: t('instructor.tour.events.filter.title', 'Filter Events'), 
+        content: t('instructor.tour.events.filter.desc', 'Filter events by type: lectures, labs, meetings, office hours, and more.'), 
+        placement: 'bottom', 
+        disableBeacon: true 
+      },
+      { 
+        target: '[data-tour="events-view-toggle"]', 
+        title: t('instructor.tour.events.viewToggle.title', 'View Options'), 
+        content: t('instructor.tour.events.viewToggle.desc', 'Switch between grid view (cards) and list view (table) to see events in different layouts.'), 
+        placement: 'bottom', 
+        disableBeacon: true 
+      },
+      { 
+        target: '[data-tour="events-grid"]', 
+        title: t('instructor.tour.events.grid.title', 'Events Display'), 
+        content: t('instructor.tour.events.grid.desc', 'Each event card shows details like time, location, attendees, and type. Click on events to navigate to related pages.'), 
+        placement: 'top', 
+        disableBeacon: true 
+      }
+    ].filter(s => document.querySelector(s.target));
+    
+    if (steps.length) startTour('instructor:events:v1', steps);
+  };
 
   // Filter events based on search and filter
   const filteredEvents = allEvents.filter(event => {
@@ -265,7 +335,7 @@ export default function Events() {
       <div className="flex-1 overflow-auto">
         <div className="p-6">
           {/* Header */}
-          <div className="mb-6">
+          <div className="mb-6" data-tour="events-header">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-green-50 dark:bg-green-900/20">
@@ -292,7 +362,7 @@ export default function Events() {
           {/* Search, Filter, and View Controls */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6" dir={isRTL ? 'rtl' : 'ltr'}>
             {/* Search */}
-            <div className="relative">
+            <div className="relative" data-tour="events-search">
               <Search size={20} className="absolute top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500" style={{ [isRTL ? 'right' : 'left']: '12px' }} />
               <input
                 type="text"
@@ -304,7 +374,7 @@ export default function Events() {
             </div>
 
             {/* Filter Dropdown */}
-            <div className="relative dropdown-container">
+            <div className="relative dropdown-container" data-tour="events-filter">
               <button
                 onClick={() => setShowFilterDropdown(!showFilterDropdown)}
                 className="w-full flex items-center justify-between p-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
@@ -341,7 +411,7 @@ export default function Events() {
             </div>
 
             {/* View Toggle */}
-            <div className="flex items-center gap-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg p-1">
+            <div className="flex items-center gap-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg p-1" data-tour="events-view-toggle">
               <button
                 onClick={() => setViewMode('grid')}
                 className={`flex items-center gap-2 px-3 py-2 rounded-md transition-colors ${
@@ -370,7 +440,7 @@ export default function Events() {
           {/* Events Display */}
           {viewMode === 'grid' ? (
             /* Grid View */
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" data-tour="events-grid">
               {filteredEvents.map((event) => {
                 const EventIcon = getEventIcon(event.type);
                 const colorClasses = getEventColor(event.type);

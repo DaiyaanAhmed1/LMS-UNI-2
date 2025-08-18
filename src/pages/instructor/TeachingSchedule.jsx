@@ -151,6 +151,19 @@ export default function TeachingSchedule() {
 	const [searchTerm, setSearchTerm] = useState('');
 
 	useEffect(() => {
+		// Auto-start tour for new users
+		const key = 'tour:instructor:calendar:v1:autostart';
+		const hasSeenTour = localStorage.getItem(key);
+		const tourCompleted = localStorage.getItem('tour:instructor:calendar:v1:state');
+		
+		if (!hasSeenTour && tourCompleted !== 'completed') {
+			setTimeout(() => {
+				startCalendarTour();
+				localStorage.setItem(key, 'shown');
+			}, 100);
+		}
+		
+		// Handle tour launches from navigation
 		const onLaunch = () => {
 			const launch = localStorage.getItem('tour:launch');
 			if (launch === 'instructor-resume') {
@@ -164,10 +177,16 @@ export default function TeachingSchedule() {
 
 	const startCalendarTour = () => {
 		const steps = [
+			{ target: '[data-tour="instructor-calendar-header"]', title: t('instructor.tour.calendar.header.title', 'Teaching Schedule'), content: t('instructor.tour.calendar.header.desc', 'Welcome to your teaching schedule page. Manage your classes, assignments, and events in one comprehensive calendar view.'), placement: 'bottom', disableBeacon: true },
+			{ target: '[data-tour="instructor-calendar-view-toggle"]', title: t('instructor.tour.calendar.viewToggle.title', 'View Options'), content: t('instructor.tour.calendar.viewToggle.desc', 'Switch between calendar view and list view to see your events in different layouts.'), placement: 'bottom', disableBeacon: true },
+			{ target: '[data-tour="instructor-calendar-hijri-toggle"]', title: t('instructor.tour.calendar.hijri.title', 'Hijri/Gregorian'), content: t('instructor.tour.calendar.hijri.desc', 'Toggle between Hijri and Gregorian date systems for your convenience.'), placement: 'left', disableBeacon: true },
+			{ target: '[data-tour="instructor-calendar-search"]', title: t('instructor.tour.calendar.search.title', 'Search Events'), content: t('instructor.tour.calendar.search.desc', 'Quickly find specific events by typing the title or description.'), placement: 'bottom', disableBeacon: true },
+			{ target: '[data-tour="instructor-calendar-filter"]', title: t('instructor.tour.calendar.filter.title', 'Filter Events'), content: t('instructor.tour.calendar.filter.desc', 'Filter events by type: classes, assignments, activities, holidays, or university events.'), placement: 'bottom', disableBeacon: true },
+			{ target: '[data-tour="instructor-calendar-add-event"]', title: t('instructor.tour.calendar.addEvent.title', 'Add New Event'), content: t('instructor.tour.calendar.addEvent.desc', 'Create new events, classes, or assignments. Click this button to add events to your schedule.'), placement: 'bottom', disableBeacon: true },
 			{ target: '[data-tour="instructor-calendar-nav"]', title: t('instructor.tour.calendar.nav.title', 'Navigate Months'), content: t('instructor.tour.calendar.nav.desc', 'Move between months and switch date systems.'), placement: 'bottom', disableBeacon: true },
-			{ target: '[data-tour="instructor-calendar-grid"]', title: t('instructor.tour.calendar.grid.title', 'Calendar Grid'), content: t('instructor.tour.calendar.grid.desc', 'Click a day to add an event; colored pills show events.'), placement: 'top', disableBeacon: true },
-			{ target: '[data-tour="instructor-calendar-hijri-toggle"]', title: t('instructor.tour.calendar.hijri.title', 'Hijri/Gregorian'), content: t('instructor.tour.calendar.hijri.desc', 'Toggle between Hijri and Gregorian views.'), placement: 'left', disableBeacon: true },
-			{ target: '[data-tour="instructor-calendar-prayer-panel"]', title: t('instructor.tour.calendar.prayer.title', 'Prayer Times (Demo)'), content: t('instructor.tour.calendar.prayer.desc', 'Demo panel with prayer times; Friday conflicts are highlighted.'), placement: 'left', disableBeacon: true }
+			{ target: '[data-tour="instructor-calendar-grid"]', title: t('instructor.tour.calendar.grid.title', 'Calendar Grid'), content: t('instructor.tour.calendar.grid.desc', 'Click a day to add an event; colored pills show events. Friday conflicts with prayer times are highlighted.'), placement: 'top', disableBeacon: true },
+			{ target: '[data-tour="instructor-calendar-upcoming"]', title: t('instructor.tour.calendar.upcoming.title', 'Upcoming Events'), content: t('instructor.tour.calendar.upcoming.desc', 'Quick overview of your next 5 upcoming events. Click on any event to view or edit details.'), placement: 'left', disableBeacon: true },
+			{ target: '[data-tour="instructor-calendar-prayer-panel"]', title: t('instructor.tour.calendar.prayer.title', 'Prayer Times (Demo)'), content: t('instructor.tour.calendar.prayer.desc', 'Demo panel with prayer times; Friday conflicts are highlighted to help you avoid scheduling conflicts.'), placement: 'left', disableBeacon: true }
 		].filter(s => document.querySelector(s.target));
 		if (steps.length) startTour('instructor:calendar:v1', steps);
 	};
@@ -276,14 +295,14 @@ export default function TeachingSchedule() {
 			<div className="flex-1 flex flex-col overflow-hidden">
 				{/* Header */}
 				<div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-6 flex-shrink-0">
-					<div className="flex justify-between items-center mb-4">
+					<div className="flex justify-between items-center mb-4" data-tour="instructor-calendar-header">
 						<div className="flex items-center gap-3">
 							<Calendar className="w-8 h-8 text-blue-600 dark:text-blue-400" />
 							<h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">{t('instructor.teachingSchedule.title')}</h1>
 						</div>
 						<div className="flex items-center gap-4">
 							{/* View Toggle */}
-							<div className="flex items-center gap-2">
+							<div className="flex items-center gap-2" data-tour="instructor-calendar-view-toggle">
 								<button
 									onClick={() => setViewMode('calendar')}
 									className={`p-2 rounded-lg transition-colors ${viewMode === 'calendar' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'}`}
@@ -308,7 +327,7 @@ export default function TeachingSchedule() {
 					
 					{/* Search and Filters */}
 					<div className="grid grid-cols-1 md:grid-cols-4 gap-4" dir={isRTL ? 'rtl' : 'ltr'}>
-						<div className="relative">
+						<div className="relative" data-tour="instructor-calendar-search">
 							<Search className={`absolute ${isRTL ? 'right-3' : 'left-3'} top-1/2 transform -translate-y-1/2 text-gray-400`} size={18} />
 							<input 
 								type="text" 
@@ -322,6 +341,7 @@ export default function TeachingSchedule() {
 							className={`border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 dark:bg-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent ${isRTL ? 'text-right' : 'text-left'}`}
 							value={filterType}
 							onChange={e => setFilterType(e.target.value)}
+							data-tour="instructor-calendar-filter"
 						>
 							<option value="all">{t('instructor.teachingSchedule.filters.all', 'All Events')}</option>
 							<option value="class">{t('instructor.teachingSchedule.filters.class', 'Classes')}</option>
@@ -333,6 +353,7 @@ export default function TeachingSchedule() {
 						<button 
 							onClick={() => openAddEvent(`${year}-${String(month + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`)}
 							className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+							data-tour="instructor-calendar-add-event"
 						>
 							<Plus size={18} />
 							{t('instructor.teachingSchedule.addEvent', 'Add Event')}
@@ -459,7 +480,7 @@ export default function TeachingSchedule() {
 		
 		{/* Sidebar */}
 		<div className="w-full lg:w-80 flex-shrink-0 overflow-auto">
-			<div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6 mb-6">
+			<div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6 mb-6" data-tour="instructor-calendar-upcoming">
 				<div className="font-semibold text-gray-700 dark:text-gray-200 mb-4 flex items-center gap-2">
 					<Calendar size={18}/> 
 					{t('instructor.teachingSchedule.sidebar.upcoming')}

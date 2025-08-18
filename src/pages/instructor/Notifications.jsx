@@ -36,6 +36,19 @@ export default function Notifications() {
   const [viewMode, setViewMode] = useState('grid');
 
   useEffect(() => {
+    // Auto-start tour for new users
+    const key = 'tour:instructor:notifications:v1:autostart';
+    const hasSeenTour = localStorage.getItem(key);
+    const tourCompleted = localStorage.getItem('tour:instructor:notifications:v1:state');
+    
+    if (!hasSeenTour && tourCompleted !== 'completed') {
+      setTimeout(() => {
+        startNotificationsTour();
+        localStorage.setItem(key, 'shown');
+      }, 100);
+    }
+    
+    // Handle tour launches from navigation
     const onLaunch = () => {
       const launch = localStorage.getItem('tour:launch');
       if (launch === 'instructor-resume') {
@@ -49,8 +62,14 @@ export default function Notifications() {
 
   const startNotificationsTour = () => {
     const steps = [
-      { target: '[data-tour="instructor-notifications-filter"]', title: t('instructor.tour.notifications.filter.title', 'Target Audience'), content: t('instructor.tour.notifications.filter.desc', 'Choose recipients for your announcements.'), placement: 'bottom', disableBeacon: true },
-      { target: '[data-tour="instructor-notifications-list"]', title: t('instructor.tour.notifications.list.title', 'Announcements List'), content: t('instructor.tour.notifications.list.desc', 'Create, edit, and manage announcements.'), placement: 'top', disableBeacon: true }
+      { target: '[data-tour="instructor-notifications-header"]', title: t('instructor.tour.notifications.header.title', 'Notifications Management'), content: t('instructor.tour.notifications.header.desc', 'Welcome to your notifications management page. Create and manage announcements for your students with different priorities and target audiences.'), placement: 'bottom', disableBeacon: true },
+      { target: '[data-tour="instructor-notifications-new"]', title: t('instructor.tour.notifications.new.title', 'Create New Notification'), content: t('instructor.tour.notifications.new.desc', 'Click this button to create a new announcement or notification for your students.'), placement: 'bottom', disableBeacon: true },
+      { target: '[data-tour="instructor-notifications-search"]', title: t('instructor.tour.notifications.search.title', 'Search Notifications'), content: t('instructor.tour.notifications.search.desc', 'Quickly find specific notifications by typing the title or message content.'), placement: 'bottom', disableBeacon: true },
+      { target: '[data-tour="instructor-notifications-filter"]', title: t('instructor.tour.notifications.filter.title', 'Filter by Type'), content: t('instructor.tour.notifications.filter.desc', 'Filter notifications by type: schedule, exam, assignment, material, feedback, or general announcements.'), placement: 'bottom', disableBeacon: true },
+      { target: '[data-tour="instructor-notifications-sort"]', title: t('instructor.tour.notifications.sort.title', 'Sort Notifications'), content: t('instructor.tour.notifications.sort.desc', 'Sort notifications by newest or oldest first to organize your announcements chronologically.'), placement: 'bottom', disableBeacon: true },
+      { target: '[data-tour="instructor-notifications-view-toggle"]', title: t('instructor.tour.notifications.viewToggle.title', 'View Options'), content: t('instructor.tour.notifications.viewToggle.desc', 'Switch between grid view (cards) and list view (table) to see your notifications in different layouts.'), placement: 'bottom', disableBeacon: true },
+      { target: '[data-tour="instructor-notifications-list"]', title: t('instructor.tour.notifications.list.title', 'Notifications List'), content: t('instructor.tour.notifications.list.desc', 'View all your notifications with priority indicators, timestamps, and target audience information. Click on any notification to edit or delete it.'), placement: 'top', disableBeacon: true },
+      { target: '[data-tour="instructor-notifications-actions"]', title: t('instructor.tour.notifications.actions.title', 'Notification Actions'), content: t('instructor.tour.notifications.actions.desc', 'Edit or delete notifications using the action buttons. Each notification shows its type, priority level, and target audience.'), placement: 'left', disableBeacon: true }
     ].filter(s => document.querySelector(s.target));
     if (steps.length) startTour('instructor:notifications:v1', steps);
   };
@@ -147,19 +166,19 @@ export default function Notifications() {
       <div className="flex-1 flex flex-col">
         {/* Header */}
         <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-6">
-          <div className="flex justify-between items-center mb-4">
+          <div className="flex justify-between items-center mb-4" data-tour="instructor-notifications-header">
             <div className="flex items-center gap-3">
               <Bell className="w-8 h-8 text-blue-600 dark:text-blue-400" />
               <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">{t('instructor.notifications.title')}</h1>
             </div>
-            <button onClick={openAddNotification} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 transition-colors">
+            <button onClick={openAddNotification} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 transition-colors" data-tour="instructor-notifications-new">
               <Plus size={18} /> {t('instructor.notifications.new')}
             </button>
           </div>
           
           {/* Search and Filters */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="relative">
+            <div className="relative" data-tour="instructor-notifications-search">
               <Search className={`absolute ${isRTL ? 'right-3' : 'left-3'} top-1/2 transform -translate-y-1/2 text-gray-400`} size={18} />
               <input 
                 type="text" 
@@ -173,6 +192,7 @@ export default function Notifications() {
               className="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 dark:bg-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               value={filterType}
               onChange={e => setFilterType(e.target.value)}
+              data-tour="instructor-notifications-filter"
             >
               <option value="all">{t('instructor.notifications.filters.all', 'All Types')}</option>
               <option value="schedule">{t('instructor.notifications.filters.schedule', 'Schedule')}</option>
@@ -185,11 +205,12 @@ export default function Notifications() {
             <button 
               onClick={() => setSortOrder(sortOrder === 'newest' ? 'oldest' : 'newest')}
               className="flex items-center justify-center gap-2 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-900 dark:text-gray-100 transition-colors"
+              data-tour="instructor-notifications-sort"
             >
               {sortOrder === 'newest' ? <SortDesc size={16} /> : <SortAsc size={16} />}
               {t(`instructor.notifications.sort.${sortOrder}`, sortOrder === 'newest' ? 'Newest First' : 'Oldest First')}
             </button>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2" data-tour="instructor-notifications-view-toggle">
               <button
                 onClick={() => setViewMode('grid')}
                 className={`p-2 rounded-lg transition-colors ${viewMode === 'grid' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'}`}
@@ -233,7 +254,7 @@ export default function Notifications() {
                             </span>
                           </div>
                         </div>
-                        <div className="flex gap-1">
+                        <div className="flex gap-1" data-tour="instructor-notifications-actions">
                           <button onClick={() => openEditNotification(notification)} className="p-1 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                             <Edit size={16} />
                           </button>

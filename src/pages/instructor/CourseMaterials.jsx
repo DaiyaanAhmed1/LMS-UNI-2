@@ -33,6 +33,19 @@ export default function CourseMaterials() {
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
+    // Auto-start tour for new users
+    const key = 'tour:instructor:materials:v1:autostart';
+    const hasSeenTour = localStorage.getItem(key);
+    const tourCompleted = localStorage.getItem('tour:instructor:materials:v1:state');
+    
+    if (!hasSeenTour && tourCompleted !== 'completed') {
+      setTimeout(() => {
+        startMaterialsTour();
+        localStorage.setItem(key, 'shown');
+      }, 100);
+    }
+    
+    // Handle tour launches from navigation
     const onLaunch = () => {
       const launch = localStorage.getItem('tour:launch');
       if (launch === 'instructor-resume') {

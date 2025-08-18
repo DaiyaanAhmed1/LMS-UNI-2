@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Sidebar from '../../components/Sidebar';
 import { Send, Trash2, Plus, MessageSquare, User, Search, Clock, Reply, MoreVertical, Filter, SortAsc, SortDesc } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -38,8 +38,22 @@ export default function StudentMessages() {
   const [sortOrder, setSortOrder] = useState('newest');
   const [filterType, setFilterType] = useState('all');
   const [newMessage, setNewMessage] = useState('');
+  const messagesEndRef = useRef(null);
 
   useEffect(() => {
+    // Auto-start tour for new users
+    const key = 'tour:instructor:messages:v1:autostart';
+    const hasSeenTour = localStorage.getItem(key);
+    const tourCompleted = localStorage.getItem('tour:instructor:messages:v1:state');
+    
+    if (!hasSeenTour && tourCompleted !== 'completed') {
+      setTimeout(() => {
+        startMessagesTour();
+        localStorage.setItem(key, 'shown');
+      }, 100);
+    }
+    
+    // Handle tour launches from navigation
     const onLaunch = () => {
       const launch = localStorage.getItem('tour:launch');
       if (launch === 'instructor-resume') {
@@ -53,8 +67,15 @@ export default function StudentMessages() {
 
   const startMessagesTour = () => {
     const steps = [
-      { target: '[data-tour="instructor-messages-list"]', title: t('instructor.tour.messages.list.title', 'Conversations'), content: t('instructor.tour.messages.list.desc', 'Search, select, and review student conversations.'), placement: 'top', disableBeacon: true },
-      { target: '[data-tour="instructor-messages-compose"]', title: t('instructor.tour.messages.compose.title', 'Compose'), content: t('instructor.tour.messages.compose.desc', 'Create or edit a message to students.'), placement: 'left', disableBeacon: true }
+      { target: '[data-tour="instructor-messages-header"]', title: t('instructor.tour.messages.header.title', 'Student Messages'), content: t('instructor.tour.messages.header.desc', 'Welcome to your student messaging center. Communicate directly with individual students or groups through a modern chat interface.'), placement: 'bottom', disableBeacon: true },
+      { target: '[data-tour="instructor-messages-new"]', title: t('instructor.tour.messages.new.title', 'New Message'), content: t('instructor.tour.messages.new.desc', 'Click this button to compose a new message to selected students.'), placement: 'bottom', disableBeacon: true },
+      { target: '[data-tour="instructor-messages-search"]', title: t('instructor.tour.messages.search.title', 'Search Students'), content: t('instructor.tour.messages.search.desc', 'Quickly find specific students by typing their name or course name.'), placement: 'bottom', disableBeacon: true },
+      { target: '[data-tour="instructor-messages-filter"]', title: t('instructor.tour.messages.filter.title', 'Filter Messages'), content: t('instructor.tour.messages.filter.desc', 'Filter messages by type: all messages, received messages, or sent messages.'), placement: 'bottom', disableBeacon: true },
+      { target: '[data-tour="instructor-messages-sort"]', title: t('instructor.tour.messages.sort.title', 'Sort Students'), content: t('instructor.tour.messages.sort.desc', 'Sort the students list by their last message time. Chat messages are always displayed chronologically.'), placement: 'bottom', disableBeacon: true },
+      { target: '[data-tour="instructor-messages-students-list"]', title: t('instructor.tour.messages.studentsList.title', 'Students List'), content: t('instructor.tour.messages.studentsList.desc', 'Browse all your students with unread message indicators. Click on any student to start or continue a conversation.'), placement: 'right', disableBeacon: true },
+      { target: '[data-tour="instructor-messages-chat-header"]', title: t('instructor.tour.messages.chatHeader.title', 'Chat Header'), content: t('instructor.tour.messages.chatHeader.desc', 'View the selected student\'s information and course details in the chat header.'), placement: 'bottom', disableBeacon: true },
+      { target: '[data-tour="instructor-messages-chat-area"]', title: t('instructor.tour.messages.chatArea.title', 'Message History'), content: t('instructor.tour.messages.chatArea.desc', 'View the complete conversation history with the selected student. Messages are color-coded: blue for sent, white for received.'), placement: 'top', disableBeacon: true },
+      { target: '[data-tour="instructor-messages-input"]', title: t('instructor.tour.messages.input.title', 'Message Input'), content: t('instructor.tour.messages.input.desc', 'Type your message here and press Enter or click Send to communicate with the selected student.'), placement: 'top', disableBeacon: true }
     ].filter(s => document.querySelector(s.target));
     if (steps.length) startTour('instructor:messages:v1', steps);
   };
@@ -93,14 +114,20 @@ export default function StudentMessages() {
     student.course.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // Sort students by last message time
+  const sortedStudents = [...filteredStudents].sort((a, b) => {
+    if (sortOrder === 'newest') {
+      return new Date(b.lastMessage) - new Date(a.lastMessage);
+    } else {
+      return new Date(a.lastMessage) - new Date(b.lastMessage);
+    }
+  });
+
   const selectedStudentData = dummyStudents.find(s => s.id === selectedStudent);
   const studentMessages = messages.filter(m => m.studentId === selectedStudent);
+  // Always sort messages chronologically (oldest first) for proper chat flow
   const sortedMessages = [...studentMessages].sort((a, b) => {
-    if (sortOrder === 'newest') {
-      return new Date(b.timestamp) - new Date(a.timestamp);
-    } else {
-      return new Date(a.timestamp) - new Date(b.timestamp);
-    }
+    return new Date(a.timestamp) - new Date(b.timestamp);
   });
 
   const filteredMessages = sortedMessages.filter(message => {
@@ -123,6 +150,15 @@ export default function StudentMessages() {
     setNewMessage('');
   };
 
+  // Auto-scroll to bottom when new messages are added
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [filteredMessages]);
+
   const formatTime = (timestamp) => {
     const date = new Date(timestamp);
     const now = new Date();
@@ -143,19 +179,19 @@ export default function StudentMessages() {
       <div className="flex-1 flex flex-col">
         {/* Header */}
         <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-6">
-          <div className="flex justify-between items-center mb-4">
+          <div className="flex justify-between items-center mb-4" data-tour="instructor-messages-header">
             <div className="flex items-center gap-3">
               <MessageSquare className="w-8 h-8 text-blue-600 dark:text-blue-400" />
               <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">{t('instructor.studentMessages.title')}</h1>
             </div>
-            <button onClick={openAddMessage} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 transition-colors" data-tour="instructor-messages-compose">
+            <button onClick={openAddMessage} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 transition-colors" data-tour="instructor-messages-new">
               <Plus size={18} /> {t('instructor.studentMessages.new')}
             </button>
           </div>
           
           {/* Search and Filters */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="relative">
+            <div className="relative" data-tour="instructor-messages-search">
               <Search className={`absolute ${isRTL ? 'right-3' : 'left-3'} top-1/2 transform -translate-y-1/2 text-gray-400`} size={18} />
               <input 
                 type="text" 
@@ -169,6 +205,7 @@ export default function StudentMessages() {
               className="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 dark:bg-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               value={filterType}
               onChange={e => setFilterType(e.target.value)}
+              data-tour="instructor-messages-filter"
             >
               <option value="all">{t('instructor.studentMessages.filters.all', 'All Messages')}</option>
               <option value="received">{t('instructor.studentMessages.filters.received', 'Received')}</option>
@@ -177,6 +214,8 @@ export default function StudentMessages() {
             <button 
               onClick={() => setSortOrder(sortOrder === 'newest' ? 'oldest' : 'newest')}
               className="flex items-center justify-center gap-2 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-900 dark:text-gray-100 transition-colors"
+              data-tour="instructor-messages-sort"
+              title={t('instructor.studentMessages.sortStudents', 'Sort students by last message time')}
             >
               {sortOrder === 'newest' ? <SortDesc size={16} /> : <SortAsc size={16} />}
               {t(`instructor.studentMessages.sort.${sortOrder}`, sortOrder === 'newest' ? 'Newest First' : 'Oldest First')}
@@ -186,11 +225,11 @@ export default function StudentMessages() {
 
         <div className="flex-1 flex">
           {/* Students List */}
-          <div className="w-80 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 overflow-y-auto" data-tour="instructor-messages-list">
+          <div className="w-80 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 overflow-y-auto" data-tour="instructor-messages-students-list">
             <div className="p-4">
               <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">{t('instructor.studentMessages.students', 'Students')}</h2>
               <div className="space-y-2">
-                {filteredStudents.map(student => (
+                {sortedStudents.map(student => (
                   <div
                     key={student.id}
                     onClick={() => setSelectedStudent(student.id)}
@@ -228,7 +267,7 @@ export default function StudentMessages() {
             {selectedStudentData ? (
               <>
                 {/* Chat Header */}
-                <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4">
+                <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4" data-tour="instructor-messages-chat-header">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center text-blue-600 dark:text-blue-400 font-semibold">
                       {selectedStudentData.avatar}
@@ -241,7 +280,7 @@ export default function StudentMessages() {
                 </div>
 
                 {/* Messages */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                <div className="flex-1 overflow-y-auto p-4 space-y-4" data-tour="instructor-messages-chat-area">
                   {filteredMessages.map(message => (
                     <div
                       key={message.id}
@@ -263,10 +302,11 @@ export default function StudentMessages() {
                       </div>
                     </div>
                   ))}
+                  <div ref={messagesEndRef} />
                 </div>
 
                 {/* Message Input */}
-                <div className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4">
+                <div className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4" data-tour="instructor-messages-input">
                   <div className="flex gap-2">
                     <input
                       type="text"

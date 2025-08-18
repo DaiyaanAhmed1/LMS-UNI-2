@@ -1705,6 +1705,7 @@
         "newest": "Newest First",
         "oldest": "Oldest First"
       },
+      "sortStudents": "Sort students by last message time",
       "yesterday": "Yesterday",
       "modal": {
         "editTitle": "Edit Message",
@@ -2042,8 +2043,14 @@
     "tour": {
       "sidebar": { "title": "Navigation", "desc": "Use the sidebar to navigate between instructor features." },
       "dashboard": {
-        "stats": { "title": "Your Teaching Overview", "desc": "Quick stats about your courses, students, grading and upcoming classes." },
-        "messages": { "title": "Student Messages", "desc": "Review and respond to the latest messages from your students." }
+        "stats": { "title": "Your Teaching Overview", "desc": "Quick stats about your courses, students, grading and upcoming classes. Click on any stat to navigate to the relevant page." },
+        "charts": { "title": "Performance Analytics", "desc": "Monitor your course performance and student engagement with interactive charts. Use the dropdowns to switch between time ranges." },
+        "messages": { "title": "Student Messages", "desc": "Review and respond to the latest messages from your students. Unread messages are highlighted with a blue indicator." },
+        "quickAccess": { "title": "Quick Access", "desc": "Access frequently used features like Gradebook, Materials, Attendance, Messages, Courses, and Schedule with one click." },
+        "events": { "title": "Upcoming Events", "desc": "View your upcoming classes, office hours, and other events. Click on any event to see detailed information." },
+        "noticeBoard": { "title": "Notice Board", "desc": "Stay updated with important announcements and notifications from the academic office and other departments." },
+        "recentActivity": { "title": "Recent Activity", "desc": "Track your recent teaching activities including grading, material uploads, and student interactions." },
+        "insights": { "title": "Detailed Insights", "desc": "Click the chart icons to access detailed analytics and insights about your teaching performance and student engagement." }
       },
       "courses": {
         "header": { "title": "Course Management", "desc": "Welcome to your course management page. Here you can view, search, and manage all your courses." },
@@ -2062,13 +2069,23 @@
         "list": { "title": "Assignments List", "desc": "View due dates, submissions, points and actions." }
       },
       "grades": {
-        "table": { "title": "Grades Overview", "desc": "Review and edit final grades and feedback." }
+        "header": { "title": "Grades Management", "desc": "Welcome to your grades management page. Here you can review, edit, and manage student grades across all your courses." },
+        "courseSelector": { "title": "Course Selection", "desc": "Select the course you want to manage grades for. Each course shows different students and their assignment scores." },
+        "table": { "title": "Grades Overview", "desc": "Review and edit final grades and feedback. Each row shows a student with their assignment scores and final grade." },
+        "actions": { "title": "Student Actions", "desc": "Edit grades and send messages to individual students. The edit button opens a detailed grade management modal." },
+        "message": { "title": "Student Communication", "desc": "Send direct messages to students about their grades, feedback, or any other academic matters." }
       },
       "calendar": {
+        "header": { "title": "Teaching Schedule", "desc": "Welcome to your teaching schedule page. Manage your classes, assignments, and events in one comprehensive calendar view." },
+        "viewToggle": { "title": "View Options", "desc": "Switch between calendar view and list view to see your events in different layouts." },
         "nav": { "title": "Navigate Months", "desc": "Move between months and switch date systems." },
-        "grid": { "title": "Calendar Grid", "desc": "Click a day to add an event; colored pills show events." },
-        "hijri": { "title": "Hijri/Gregorian", "desc": "Toggle between Hijri and Gregorian views." },
-        "prayer": { "title": "Prayer Times (Demo)", "desc": "Demo panel with prayer times; Friday conflicts are highlighted." }
+        "grid": { "title": "Calendar Grid", "desc": "Click a day to add an event; colored pills show events. Friday conflicts with prayer times are highlighted." },
+        "hijri": { "title": "Hijri/Gregorian", "desc": "Toggle between Hijri and Gregorian date systems for your convenience." },
+        "search": { "title": "Search Events", "desc": "Quickly find specific events by typing the title or description." },
+        "filter": { "title": "Filter Events", "desc": "Filter events by type: classes, assignments, activities, holidays, or university events." },
+        "addEvent": { "title": "Add New Event", "desc": "Create new events, classes, or assignments. Click this button to add events to your schedule." },
+        "upcoming": { "title": "Upcoming Events", "desc": "Quick overview of your next 5 upcoming events. Click on any event to view or edit details." },
+        "prayer": { "title": "Prayer Times (Demo)", "desc": "Demo panel with prayer times; Friday conflicts are highlighted to help you avoid scheduling conflicts." }
       },
       "materials": {
         "header": { "title": "Course Materials Management", "desc": "Welcome to your course materials management page. Here you can upload, organize, and manage all your course resources." },
@@ -2077,13 +2094,54 @@
         "upload": { "title": "Upload Materials", "desc": "Add new PDFs, quizzes, or resources for your course." },
         "list": { "title": "Materials Library", "desc": "Manage uploaded files and edit details." }
       },
-      "messages": {
-        "list": { "title": "Conversations", "desc": "Search, select, and review student conversations." },
-        "compose": { "title": "Compose", "desc": "Create or edit a message to students." }
-      },
+              "messages": {
+          "header": { "title": "Student Messages", "desc": "Welcome to your student messaging center. Communicate directly with individual students or groups through a modern chat interface." },
+          "new": { "title": "New Message", "desc": "Click this button to compose a new message to selected students." },
+          "search": { "title": "Search Students", "desc": "Quickly find specific students by typing their name or course name." },
+          "filter": { "title": "Filter Messages", "desc": "Filter messages by type: all messages, received messages, or sent messages." },
+          "sort": { "title": "Sort Messages", "desc": "Sort messages by newest or oldest first to organize your conversations chronologically." },
+          "studentsList": { "title": "Students List", "desc": "Browse all your students with unread message indicators. Click on any student to start or continue a conversation." },
+          "chatHeader": { "title": "Chat Header", "desc": "View the selected student's information and course details in the chat header." },
+          "chatArea": { "title": "Message History", "desc": "View the complete conversation history with the selected student. Messages are color-coded: blue for sent, white for received." },
+          "input": { "title": "Message Input", "desc": "Type your message here and press Enter or click Send to communicate with the selected student." }
+        },
+        "events": {
+          "header": { "title": "Events Overview", "desc": "Welcome to the Events page. Here you can view and manage all your scheduled events, lectures, and activities." },
+          "search": { "title": "Search Events", "desc": "Quickly find specific events by typing the event title, course, or description." },
+          "filter": { "title": "Filter Events", "desc": "Filter events by type: lectures, labs, meetings, office hours, and more." },
+          "viewToggle": { "title": "View Options", "desc": "Switch between grid view (cards) and list view (table) to see events in different layouts." },
+          "grid": { "title": "Events Display", "desc": "Each event card shows details like time, location, attendees, and type. Click on events to navigate to related pages." }
+        },
+        "insights": {
+          "header": { "title": "Analytics Insights", "desc": "Welcome to the Insights page. Here you can analyze your teaching performance, student engagement, and course metrics." },
+          "metricSelector": { "title": "Select Metrics", "desc": "Choose which metric to analyze: course performance, student engagement, time spent, or progress tracking." },
+          "timeRange": { "title": "Time Range", "desc": "Select the time period for your analysis: last 7 days, last semester, or last year." },
+          "chart": { "title": "Data Visualization", "desc": "View your selected metrics in an interactive chart. Hover over data points to see detailed values." },
+          "metrics": { "title": "Key Metrics", "desc": "Review important statistics like average, maximum, minimum values, and trend analysis for your selected metric." }
+        },
+        "grades": {
+          "header": { "title": "Grades Management", "desc": "Welcome to your grades management page. Here you can review, edit, and manage student grades across all your courses." },
+          "courseSelector": { "title": "Course Selection", "desc": "Select the course you want to manage grades for. Each course shows different students and their assignment scores." },
+          "table": { "title": "Grades Overview", "desc": "Review and edit final grades and feedback. Each row shows a student with their assignment scores and final grade." },
+          "edit": { "title": "Edit Grades", "desc": "Click the edit button to modify student grades and add feedback. This opens a detailed grade management modal." },
+          "message": { "title": "Student Communication", "desc": "Click the message button to send direct messages to students about their grades, feedback, or any other academic matters." }
+        },
+        "materials": {
+          "header": { "title": "Course Materials Management", "desc": "Welcome to your course materials management page. Here you can upload, organize, and manage all your course resources." },
+          "search": { "title": "Search Materials", "desc": "Quickly find specific materials by typing the title, file name, or type." },
+          "viewToggle": { "title": "View Options", "desc": "Switch between grid view (cards) and list view (table) to see your materials in different layouts." },
+          "upload": { "title": "Upload Materials", "desc": "Add new PDFs, quizzes, or resources for your course." },
+          "list": { "title": "Materials Library", "desc": "Manage uploaded files and edit details." }
+        },
       "notifications": {
-        "filter": { "title": "Target Audience", "desc": "Choose recipients for your announcements." },
-        "list": { "title": "Announcements List", "desc": "Create, edit, and manage announcements." }
+        "header": { "title": "Notifications Management", "desc": "Welcome to your notifications management page. Create and manage announcements for your students with different priorities and target audiences." },
+        "new": { "title": "Create New Notification", "desc": "Click this button to create a new announcement or notification for your students." },
+        "search": { "title": "Search Notifications", "desc": "Quickly find specific notifications by typing the title or message content." },
+        "filter": { "title": "Filter by Type", "desc": "Filter notifications by type: schedule, exam, assignment, material, feedback, or general announcements." },
+        "sort": { "title": "Sort Notifications", "desc": "Sort notifications by newest or oldest first to organize your announcements chronologically." },
+        "viewToggle": { "title": "View Options", "desc": "Switch between grid view (cards) and list view (table) to see your notifications in different layouts." },
+        "list": { "title": "Notifications List", "desc": "View all your notifications with priority indicators, timestamps, and target audience information. Click on any notification to edit or delete it." },
+        "actions": { "title": "Notification Actions", "desc": "Edit or delete notifications using the action buttons. Each notification shows its type, priority level, and target audience." }
       },
       "profile": {
         "actions": { "title": "Profile & Actions", "desc": "Update details, change password, and access quick links." }

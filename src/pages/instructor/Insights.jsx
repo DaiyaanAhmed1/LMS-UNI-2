@@ -17,6 +17,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useLanguage } from '../../context/LanguageContext.jsx';
 import { useNavigate } from 'react-router-dom';
+import { useTour } from '../../context/TourContext.jsx';
 
 // Enhanced data for insights
 const insightsData = {
@@ -59,6 +60,7 @@ export default function Insights() {
   const { t } = useTranslation();
   const { isRTL } = useLanguage();
   const navigate = useNavigate();
+  const { startTour } = useTour();
   
   const [selectedMetric, setSelectedMetric] = useState('coursePerformance');
   const [selectedRange, setSelectedRange] = useState('last7');
@@ -77,6 +79,74 @@ export default function Insights() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  // Tour functionality
+  useEffect(() => {
+    // Auto-start tour for new users
+    const key = 'tour:instructor:insights:v1:autostart';
+    const hasSeenTour = localStorage.getItem(key);
+    const tourCompleted = localStorage.getItem('tour:instructor:insights:v1:state');
+    
+    if (!hasSeenTour && tourCompleted !== 'completed') {
+      setTimeout(() => {
+        startInsightsTour();
+        localStorage.setItem(key, 'shown');
+      }, 100);
+    }
+    
+    // Handle tour launches from navigation (coming from dashboard in full tour)
+    const onLaunch = () => {
+      const launch = localStorage.getItem('tour:launch');
+      if (launch === 'instructor-resume') {
+        localStorage.removeItem('tour:launch');
+        setTimeout(() => startInsightsTour(), 200);
+      }
+    };
+    window.addEventListener('tour:launch', onLaunch);
+    return () => window.removeEventListener('tour:launch', onLaunch);
+  }, []);
+
+  const startInsightsTour = () => {
+    const steps = [
+      { 
+        target: '[data-tour="insights-header"]', 
+        title: t('instructor.tour.insights.header.title', 'Analytics Insights'), 
+        content: t('instructor.tour.insights.header.desc', 'Welcome to the Insights page. Here you can analyze your teaching performance, student engagement, and course metrics.'), 
+        placement: 'bottom', 
+        disableBeacon: true 
+      },
+      { 
+        target: '[data-tour="insights-metric-selector"]', 
+        title: t('instructor.tour.insights.metricSelector.title', 'Select Metrics'), 
+        content: t('instructor.tour.insights.metricSelector.desc', 'Choose which metric to analyze: course performance, student engagement, time spent, or progress tracking.'), 
+        placement: 'bottom', 
+        disableBeacon: true 
+      },
+      { 
+        target: '[data-tour="insights-time-range"]', 
+        title: t('instructor.tour.insights.timeRange.title', 'Time Range'), 
+        content: t('instructor.tour.insights.timeRange.desc', 'Select the time period for your analysis: last 7 days, last semester, or last year.'), 
+        placement: 'bottom', 
+        disableBeacon: true 
+      },
+      { 
+        target: '[data-tour="insights-chart"]', 
+        title: t('instructor.tour.insights.chart.title', 'Data Visualization'), 
+        content: t('instructor.tour.insights.chart.desc', 'View your selected metrics in an interactive chart. Hover over data points to see detailed values.'), 
+        placement: 'top', 
+        disableBeacon: true 
+      },
+      { 
+        target: '[data-tour="insights-metrics"]', 
+        title: t('instructor.tour.insights.metrics.title', 'Key Metrics'), 
+        content: t('instructor.tour.insights.metrics.desc', 'Review important statistics like average, maximum, minimum values, and trend analysis for your selected metric.'), 
+        placement: 'top', 
+        disableBeacon: true 
+      }
+    ].filter(s => document.querySelector(s.target));
+    
+    if (steps.length) startTour('instructor:insights:v1', steps);
+  };
 
   const currentData = insightsData[selectedMetric][selectedRange];
 
@@ -141,7 +211,7 @@ export default function Insights() {
       <div className="flex-1 overflow-auto">
         <div className="p-6">
           {/* Header */}
-          <div className="mb-6">
+          <div className="mb-6" data-tour="insights-header">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className={`p-2 rounded-lg ${getBgColorClass(selectedMetricData?.color)}`}>
@@ -168,7 +238,7 @@ export default function Insights() {
           {/* Controls */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             {/* Metric Selector */}
-            <div className="relative dropdown-container">
+            <div className="relative dropdown-container" data-tour="insights-metric-selector">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 {t('instructor.insights.selectMetric')}
               </label>
@@ -208,7 +278,7 @@ export default function Insights() {
             </div>
 
             {/* Time Range Selector */}
-            <div className="relative dropdown-container">
+            <div className="relative dropdown-container" data-tour="insights-time-range">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 {t('instructor.insights.selectRange')}
               </label>
@@ -245,7 +315,7 @@ export default function Insights() {
           </div>
 
           {/* Metrics Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6" data-tour="insights-metrics">
             <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
               <div className="flex items-center justify-between">
                 <div>
@@ -304,7 +374,7 @@ export default function Insights() {
           </div>
 
           {/* Chart */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm" data-tour="insights-chart">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                 {t(selectedMetricData?.labelKey)} - {t(`instructor.insights.ranges.${selectedRange}`)}
