@@ -62,7 +62,7 @@ import TourLauncher from './components/TourLauncher.jsx';
 import './i18n/index.js';
 import { LanguageProvider } from './context/LanguageContext.jsx';
 
-const RouterComponent = process.env.NODE_ENV === 'production' ? HashRouter : BrowserRouter;
+const RouterComponent = BrowserRouter;
 
 function AccessibilityBarWrapper() {
   const { showBar } = useAccessibility();
