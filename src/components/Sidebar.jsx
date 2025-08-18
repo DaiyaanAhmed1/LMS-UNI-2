@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { 
   LayoutDashboard, 
   Users2, 
@@ -28,6 +28,8 @@ import React from 'react';
 import { useTheme } from '../context/ThemeContext';
 import LanguageSwitcher from './LanguageSwitcher';
 import { useTranslation } from 'react-i18next';
+import { useLanguage } from '../context/LanguageContext';
+import logo from '../assets/marln-logo.png';
 
 const adminMenuItems = [
   { id: 'dashboard', labelKey: 'sidebar.menu.admin.dashboard', icon: LayoutDashboard, path: '/admin/dashboard' },
@@ -72,13 +74,39 @@ const studentMenuItems = [
 
 export default function Sidebar({ role: propRole }) {
   const { t } = useTranslation();
+  const { isRTL } = useLanguage();
   const { role: authRole, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
+  const sidebarRef = useRef(null);
 
   // Use the role from props if provided, otherwise use the role from auth context
   const role = propRole || authRole;
+
+  // Auto-scroll to active menu item only when navigating to a new page
+  const [lastPath, setLastPath] = useState(location.pathname);
+  
+  useEffect(() => {
+    // Only scroll if we're actually navigating to a different page
+    if (location.pathname !== lastPath) {
+      setLastPath(location.pathname);
+      
+      // Small delay to ensure the DOM has updated
+      setTimeout(() => {
+        if (sidebarRef.current) {
+          const activeButton = sidebarRef.current.querySelector('[aria-current="page"]');
+          if (activeButton) {
+            activeButton.scrollIntoView({ 
+              behavior: 'smooth', 
+              block: 'center',
+              inline: 'nearest'
+            });
+          }
+        }
+      }, 100);
+    }
+  }, [location.pathname, lastPath]);
 
   const menuItems = role === 'admin' ? adminMenuItems : 
                    role === 'instructor' ? instructorMenuItems :
@@ -139,7 +167,12 @@ export default function Sidebar({ role: propRole }) {
     <div id="sidebar-nav" className="w-64 h-screen bg-[#11296F] dark:bg-gray-900 text-white dark:text-gray-100 flex flex-col" data-tour="sidebar">
       {/* Logo */}
       <div className="p-4 border-b border-[#0a1f4d] dark:border-gray-800">
-        <h1 className="text-xl font-bold">{t('sidebar.brand')}</h1>
+        <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
+          <div className="w-8 h-8 bg-gray-100/80 rounded-lg flex items-center justify-center backdrop-blur-sm border border-gray-200/50 shadow-sm">
+            <img src={logo} alt="MarLn" className="w-6 h-6" />
+          </div>
+          <h1 className="text-xl font-bold">{t('sidebar.brand')}</h1>
+        </div>
       </div>
 
       {/* User Info */}
@@ -160,11 +193,18 @@ export default function Sidebar({ role: propRole }) {
       </button>
 
       {/* Menu Items */}
-      <div className="flex-1 overflow-y-auto py-4">
+      <div ref={sidebarRef} className="flex-1 overflow-y-auto py-4">
         {(role === 'student' ? studentMenuItems : role === 'instructor' ? instructorMenuItems : adminMenuItems).map(item => (
           <button
             key={item.id}
-            onClick={() => navigate(item.path)}
+            onClick={() => {
+              // Only scroll to top if navigating to a different page
+              if (location.pathname !== item.path) {
+                navigate(item.path);
+                // Scroll to top when navigating to a new page
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }
+            }}
             className={`w-full px-4 py-3 flex items-center space-x-3 hover:bg-[#0a1f4d] dark:hover:bg-gray-800 transition-colors ${location.pathname === item.path ? 'bg-[#0a1f4d] dark:bg-gray-800' : ''}`}
             data-tour={`sidebar-link-${item.id}`}
             aria-current={location.pathname === item.path ? 'page' : undefined}
