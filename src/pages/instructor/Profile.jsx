@@ -17,7 +17,7 @@ const mockProfile = {
   nationality: 'USA',
   linkedin: 'https://linkedin.com/in/emilycarter',
   github: 'https://github.com/emilycarter',
-  lastLogin: '2024-06-10 09:45',
+      lastLogin: '2025-06-10 09:45',
   profilePic: '',
   stats: { courses: 5, billsPaid: 3, activity: 92, completion: 95 }
 };

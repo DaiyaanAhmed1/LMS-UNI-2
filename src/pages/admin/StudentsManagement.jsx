@@ -19,8 +19,8 @@ const mockResults = {
   ],
   progress: [
     { semester: 'Fall 2023', gpa: 3.7 },
-    { semester: 'Spring 2024', gpa: 3.8 },
-    { semester: 'Fall 2024', gpa: 3.9 }
+    { semester: 'Spring 2025', gpa: 3.8 },
+    { semester: 'Fall 2025', gpa: 3.9 }
   ]
 };
 

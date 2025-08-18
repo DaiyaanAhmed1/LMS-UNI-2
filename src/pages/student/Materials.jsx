@@ -29,7 +29,7 @@ const materials = [
     type: 'lecture-notes',
     format: 'pdf',
     size: '2.4 MB',
-    uploadedAt: '2024-03-15T10:30:00',
+    uploadedAt: '2025-03-15T10:30:00',
     description: 'Comprehensive notes covering basic programming concepts, variables, and control structures.',
     downloads: 145,
     instructor: 'Dr. Sarah Johnson'
@@ -42,7 +42,7 @@ const materials = [
     type: 'lecture-notes',
     format: 'pdf',
     size: '3.1 MB',
-    uploadedAt: '2024-03-14T14:20:00',
+    uploadedAt: '2025-03-14T14:20:00',
     description: 'Detailed overview of fundamental data structures including arrays, linked lists, and trees.',
     downloads: 98,
     instructor: 'Prof. Michael Chen'
@@ -55,7 +55,7 @@ const materials = [
     type: 'project',
     format: 'zip',
     size: '5.7 MB',
-    uploadedAt: '2024-03-13T09:15:00',
+    uploadedAt: '2025-03-13T09:15:00',
     description: 'Starter template for the final web development project with basic structure and dependencies.',
     downloads: 76,
     instructor: 'Dr. Emily Brown'
@@ -68,7 +68,7 @@ const materials = [
     type: 'lecture-notes',
     format: 'pdf',
     size: '1.8 MB',
-    uploadedAt: '2024-03-12T16:45:00',
+    uploadedAt: '2025-03-12T16:45:00',
     description: 'Common database design patterns and best practices for efficient data modeling.',
     downloads: 112,
     instructor: 'Dr. James Wilson'
@@ -81,7 +81,7 @@ const materials = [
     type: 'assignment',
     format: 'zip',
     size: '4.2 MB',
-    uploadedAt: '2024-03-11T11:20:00',
+    uploadedAt: '2025-03-11T11:20:00',
     description: 'Sample solutions and explanations for the programming assignments.',
     downloads: 89,
     instructor: 'Dr. Sarah Johnson'

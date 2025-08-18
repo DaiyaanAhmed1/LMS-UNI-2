@@ -37,7 +37,7 @@ function formatDate(date) {
   return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 }
 
-// Minimal Hijri converter (approx, demo only)
+// Minimal Hijri converter (approx, demo only) - Fixed to year 1447
 function gregorianToHijri(date) {
   const GREGORIAN_EPOCH = 1721425.5;
   const ISLAMIC_EPOCH = 1948439.5;
@@ -57,7 +57,7 @@ function gregorianToHijri(date) {
   const k = r - floor(354.36667 * j);
   const m = floor((k - 1) / 29.5) + 1;
   const d = k - floor(29.5 * (m - 1));
-  return { y, m, d };
+  return { y: 1447, m, d }; // Force year to 1447
 }
 
 const hijriMonthNames = ['Muharram','Safar','Rabiʿ I','Rabiʿ II','Jumada I','Jumada II','Rajab','Shaʿban','Ramadan','Shawwal','Dhu al‑Qaʿdah','Dhu al‑Hijjah'];
@@ -249,7 +249,17 @@ export default function Schedule() {
                   </div>
                   <div>
                     <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('student.schedule.todayTitle')}</h2>
-                    <p className="text-blue-600 dark:text-blue-400 text-sm font-medium">{formatDate(new Date())}</p>
+                    <div className="text-blue-600 dark:text-blue-400 text-sm font-medium">
+                      {formatDate(new Date())}
+                      {useHijri && (
+                        <span className="ml-2 text-gray-500 dark:text-gray-400">
+                          ({(() => {
+                            const h = gregorianToHijri(new Date());
+                            return `${h.d} ${hijriMonthNames[h.m-1]} 1447`;
+                          })()})
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
                 
@@ -439,7 +449,7 @@ export default function Schedule() {
                         {(() => { 
                           const d = getDateForSelectedDay(currentDate, selectedDay); 
                           const h = gregorianToHijri(d); 
-                          return `${h.d} ${hijriMonthNames[h.m-1]} ${h.y}`; 
+                          return `${h.d} ${hijriMonthNames[h.m-1]} 1447`; 
                         })()}
                       </p>
                     )}
@@ -517,7 +527,7 @@ export default function Schedule() {
                     </div>
                     <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
                       {useHijri 
-                        ? `${hijriMonthNames[gregorianToHijri(currentDate).m - 1]} ${gregorianToHijri(currentDate).y}` 
+                        ? `${hijriMonthNames[gregorianToHijri(currentDate).m - 1]} 1447` 
                         : currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
                       }
                     </h2>

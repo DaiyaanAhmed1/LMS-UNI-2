@@ -11,9 +11,9 @@ const dummyStudents = [
 ];
 
 const dummyNotifications = [
-  { id: 1, title: 'Schedule Change', message: 'The class schedule has been updated for next week.', timestamp: '2024-06-01T10:00:00', targetAudience: 'all' },
-  { id: 2, title: 'Upcoming Test', message: 'There will be a test on Friday. Please prepare accordingly.', timestamp: '2024-06-02T11:00:00', targetAudience: 'all' },
-  { id: 3, title: 'Special Message', message: 'Good luck to everyone on their assignments!', timestamp: '2024-06-03T12:00:00', targetAudience: 'all' },
+  { id: 1, title: 'Schedule Change', message: 'The class schedule has been updated for next week.', timestamp: '2025-06-01T10:00:00', targetAudience: 'all' },
+  { id: 2, title: 'Upcoming Test', message: 'There will be a test on Friday. Please prepare accordingly.', timestamp: '2025-06-02T11:00:00', targetAudience: 'all' },
+  { id: 3, title: 'Special Message', message: 'Good luck to everyone on their assignments!', timestamp: '2025-06-03T12:00:00', targetAudience: 'all' },
 ];
 
 export default function Notifications() {

@@ -16,7 +16,7 @@ const mockProfile = {
   nationality: 'USA',
   linkedin: 'https://linkedin.com/in/alexjohnson',
   github: 'https://github.com/alexjohnson',
-  lastLogin: '2024-06-10 14:23',
+      lastLogin: '2025-06-10 14:23',
   profilePic: '',
   stats: { courses: 12, billsPaid: 8, activity: 87, completion: 80 }
 };

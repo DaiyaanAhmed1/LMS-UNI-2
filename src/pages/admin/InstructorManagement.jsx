@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Sidebar from '../../components/Sidebar';
-import { instructors as initialInstructors, departments, batches } from '../../data/instructors';
+import { instructors as initialInstructors, departments } from '../../data/instructors';
 import { Plus, Edit, Trash2, X, Users, BookOpen, BarChart3 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend } from 'recharts';
 import { useTranslation } from 'react-i18next';

@@ -5,13 +5,13 @@ import { useTranslation } from 'react-i18next';
 import { useTour } from '../../context/TourContext.jsx';
 
 const dummyCourses = [
-  { id: 1, code: 'CS101', name: 'Intro to Computer Science', semester: 'Fall 2024', students: 45, weeks: [ { title: 'Week 1: Introduction', content: [ { type: 'pdf', name: 'Syllabus.pdf', url: '#', id: 1 }, { type: 'video', name: 'Welcome.mp4', url: '#', id: 2 } ] }, { title: 'Week 2: Programming Basics', content: [ { type: 'pdf', name: 'Lecture1.pdf', url: '#', id: 3 } ] } ], cover: '', lastUpdated: '2024-06-10' },
-  { id: 2, code: 'ML305', name: 'Machine Learning', semester: 'Spring 2025', students: 38, weeks: [ { title: 'Week 1: ML Overview', content: [ { type: 'pdf', name: 'ML_Intro.pdf', url: '#', id: 4 } ] } ], cover: '', lastUpdated: '2024-06-08' },
-  { id: 3, code: 'DS220', name: 'Data Structures', semester: 'Fall 2024', students: 52, weeks: [ { title: 'Week 1: Arrays & Lists', content: [ { type: 'pdf', name: 'Arrays.pdf', url: '#', id: 5 } ] }, { title: 'Week 2: Trees', content: [] } ], cover: '', lastUpdated: '2024-06-09' },
-  { id: 4, code: 'AI410', name: 'Artificial Intelligence', semester: 'Spring 2025', students: 29, weeks: [ { title: 'Week 1: AI Basics', content: [ { type: 'video', name: 'AI_Intro.mp4', url: '#', id: 6 } ] } ], cover: '', lastUpdated: '2024-06-07' },
-  { id: 5, code: 'WD150', name: 'Web Development', semester: 'Fall 2024', students: 41, weeks: [ { title: 'Week 1: HTML & CSS', content: [ { type: 'pdf', name: 'HTML_Basics.pdf', url: '#', id: 7 } ] }, { title: 'Week 2: JavaScript', content: [] } ], cover: '', lastUpdated: '2024-06-06' },
-  { id: 6, code: 'DB330', name: 'Database Systems', semester: 'Spring 2025', students: 36, weeks: [ { title: 'Week 1: Relational DBs', content: [ { type: 'pdf', name: 'RelationalDBs.pdf', url: '#', id: 8 } ] } ], cover: '', lastUpdated: '2024-06-05' },
-  { id: 7, code: 'SE210', name: 'Software Engineering', semester: 'Fall 2024', students: 33, weeks: [ { title: 'Week 1: SDLC', content: [ { type: 'pdf', name: 'SDLC.pdf', url: '#', id: 9 } ] } ], cover: '', lastUpdated: '2024-06-04' },
+  { id: 1, code: 'CS101', name: 'Intro to Computer Science', semester: 'Fall 2025', students: 45, weeks: [ { title: 'Week 1: Introduction', content: [ { type: 'pdf', name: 'Syllabus.pdf', url: '#', id: 1 }, { type: 'video', name: 'Welcome.mp4', url: '#', id: 2 } ] }, { title: 'Week 2: Programming Basics', content: [ { type: 'pdf', name: 'Lecture1.pdf', url: '#', id: 3 } ] } ], cover: '', lastUpdated: '2025-06-10' },
+  { id: 2, code: 'ML305', name: 'Machine Learning', semester: 'Spring 2025', students: 38, weeks: [ { title: 'Week 1: ML Overview', content: [ { type: 'pdf', name: 'ML_Intro.pdf', url: '#', id: 4 } ] } ], cover: '', lastUpdated: '2025-06-08' },
+  { id: 3, code: 'DS220', name: 'Data Structures', semester: 'Fall 2025', students: 52, weeks: [ { title: 'Week 1: Arrays & Lists', content: [ { type: 'pdf', name: 'Arrays.pdf', url: '#', id: 5 } ] }, { title: 'Week 2: Trees', content: [] } ], cover: '', lastUpdated: '2025-06-09' },
+  { id: 4, code: 'AI410', name: 'Artificial Intelligence', semester: 'Spring 2025', students: 29, weeks: [ { title: 'Week 1: AI Basics', content: [ { type: 'video', name: 'AI_Intro.mp4', url: '#', id: 6 } ] } ], cover: '', lastUpdated: '2025-06-07' },
+  { id: 5, code: 'WD150', name: 'Web Development', semester: 'Fall 2025', students: 41, weeks: [ { title: 'Week 1: HTML & CSS', content: [ { type: 'pdf', name: 'HTML_Basics.pdf', url: '#', id: 7 } ] }, { title: 'Week 2: JavaScript', content: [] } ], cover: '', lastUpdated: '2025-06-06' },
+  { id: 6, code: 'DB330', name: 'Database Systems', semester: 'Spring 2025', students: 36, weeks: [ { title: 'Week 1: Relational DBs', content: [ { type: 'pdf', name: 'RelationalDBs.pdf', url: '#', id: 8 } ] } ], cover: '', lastUpdated: '2025-06-05' },
+  { id: 7, code: 'SE210', name: 'Software Engineering', semester: 'Fall 2025', students: 33, weeks: [ { title: 'Week 1: SDLC', content: [ { type: 'pdf', name: 'SDLC.pdf', url: '#', id: 9 } ] } ], cover: '', lastUpdated: '2025-06-04' },
 ];
 
 const fileIcons = { pdf: FileText, video: Video };

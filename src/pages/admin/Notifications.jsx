@@ -10,7 +10,7 @@ const initialQueries = [
     sender: 'student1@university.edu',
     role: 'student',
     message: 'When will the exam schedule be released?',
-    date: '2024-06-01',
+    date: '2025-06-01',
     status: 'open',
     reply: ''
   },
@@ -19,7 +19,7 @@ const initialQueries = [
     sender: 'instructor1@university.edu',
     role: 'instructor',
     message: 'Can I get access to last year\'s syllabus?',
-    date: '2024-06-02',
+    date: '2025-06-02',
     status: 'open',
     reply: ''
   }

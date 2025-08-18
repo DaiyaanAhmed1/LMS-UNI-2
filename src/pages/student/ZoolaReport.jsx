@@ -111,8 +111,8 @@ const ZoolaReport = () => {
 		courseId: courseId,
 		courseTitle: course?.title || t('student.courses.title', 'Unknown Course'),
 		generatedDate: new Date().toISOString(),
-		academicPeriod: 'Fall 2024',
-		studentId: 'STU2024001',
+		academicPeriod: 'Fall 2025',
+		studentId: 'STU2025001',
 		studentName: 'John Doe',
 		overallScore: 87.5,
 		classRank: 12,
@@ -131,8 +131,8 @@ const ZoolaReport = () => {
 			assignmentsTotal: 10,
 			quizzesTaken: 12,
 			quizzesTotal: 15,
-			attendanceRate: 94,
-			lastActivity: '2024-03-19T14:30:00',
+						attendanceRate: 94,
+			lastActivity: '2025-03-19T14:30:00',
 			averageResponseTime: 2.3,
 			engagementScore: 88
 		},
@@ -163,55 +163,55 @@ const ZoolaReport = () => {
 			const courseTitle = course?.title || t('student.courses.title', 'Unknown Course');
 			if (courseTitle.toLowerCase().includes('cyber') || courseTitle.toLowerCase().includes('security')) {
 				return [
-					{ id: 1, activityName: 'Network Security Fundamentals - Firewall Configuration', timeSpent: '01:30:00', category: 'Practical Labs', date: '2024-10-21' },
-					{ id: 2, activityName: 'Cryptography Basics - Encryption Algorithms', timeSpent: '02:15:30', category: 'Theory Sessions', date: '2024-10-20' },
-					{ id: 3, activityName: 'Penetration Testing - Vulnerability Assessment', timeSpent: '00:00:00', category: 'Practical Labs', date: '2024-10-19' },
-					{ id: 4, activityName: 'Incident Response - Security Breach Simulation', timeSpent: '01:45:20', category: 'Case Studies', date: '2024-10-18' },
-					{ id: 5, activityName: 'Digital Forensics - Evidence Collection', timeSpent: '00:00:00', category: 'Practical Labs', date: '2024-10-17' },
-					{ id: 6, activityName: 'Security Policies - Compliance Framework', timeSpent: '00:55:15', category: 'Policy Review', date: '2024-10-16' },
-					{ id: 7, activityName: 'Threat Intelligence - Malware Analysis', timeSpent: '00:00:00', category: 'Research', date: '2024-10-15' },
-					{ id: 8, activityName: 'Cloud Security - AWS Security Best Practices', timeSpent: '01:20:45', category: 'Cloud Labs', date: '2024-10-14' },
-					{ id: 9, activityName: 'Social Engineering - Phishing Awareness', timeSpent: '00:40:30', category: 'Awareness Training', date: '2024-10-13' },
-					{ id: 10, activityName: 'Security Architecture - Defense in Depth', timeSpent: '00:00:00', category: 'Design Review', date: '2024-10-12' }
+					{ id: 1, activityName: 'Network Security Fundamentals - Firewall Configuration', timeSpent: '01:30:00', category: 'Practical Labs', date: '2025-10-21' },
+					{ id: 2, activityName: 'Cryptography Basics - Encryption Algorithms', timeSpent: '02:15:30', category: 'Theory Sessions', date: '2025-10-20' },
+					{ id: 3, activityName: 'Penetration Testing - Vulnerability Assessment', timeSpent: '00:00:00', category: 'Practical Labs', date: '2025-10-19' },
+					{ id: 4, activityName: 'Incident Response - Security Breach Simulation', timeSpent: '01:45:20', category: 'Case Studies', date: '2025-10-18' },
+					{ id: 5, activityName: 'Digital Forensics - Evidence Collection', timeSpent: '00:00:00', category: 'Practical Labs', date: '2025-10-17' },
+					{ id: 6, activityName: 'Security Policies - Compliance Framework', timeSpent: '00:55:15', category: 'Policy Review', date: '2025-10-16' },
+					{ id: 7, activityName: 'Threat Intelligence - Malware Analysis', timeSpent: '00:00:00', category: 'Research', date: '2025-10-15' },
+					{ id: 8, activityName: 'Cloud Security - AWS Security Best Practices', timeSpent: '01:20:45', category: 'Cloud Labs', date: '2025-10-14' },
+					{ id: 9, activityName: 'Social Engineering - Phishing Awareness', timeSpent: '00:40:30', category: 'Awareness Training', date: '2025-10-13' },
+					{ id: 10, activityName: 'Security Architecture - Defense in Depth', timeSpent: '00:00:00', category: 'Design Review', date: '2025-10-12' }
 				];
 			} else if (courseTitle.toLowerCase().includes('legal') || courseTitle.toLowerCase().includes('research')) {
 				return [
-					{ id: 1, activityName: 'Legal Research Methodology - Case Law Analysis', timeSpent: '02:30:00', category: 'Research Methods', date: '2024-10-21' },
-					{ id: 2, activityName: 'Statutory Interpretation - Legislative History', timeSpent: '01:45:15', category: 'Statute Review', date: '2024-10-20' },
-					{ id: 3, activityName: 'Secondary Sources - Law Review Articles', timeSpent: '00:00:00', category: 'Literature Review', date: '2024-10-19' },
-					{ id: 4, activityName: 'Database Research - Westlaw & LexisNexis', timeSpent: '01:20:30', category: 'Database Training', date: '2024-10-18' },
-					{ id: 5, activityName: 'Citation Methods - Bluebook Formatting', timeSpent: '00:00:00', category: 'Citation Practice', date: '2024-10-17' },
-					{ id: 6, activityName: 'Research Memo Writing - Legal Analysis', timeSpent: '02:15:45', category: 'Writing Practice', date: '2024-10-16' },
-					{ id: 7, activityName: 'Comparative Law Research - International Sources', timeSpent: '00:00:00', category: 'International Law', date: '2024-10-15' },
-					{ id: 8, activityName: 'Administrative Law Research - Agency Decisions', timeSpent: '01:10:20', category: 'Administrative Law', date: '2024-10-14' },
-					{ id: 9, activityName: 'Fact Investigation - Evidence Gathering', timeSpent: '00:55:30', category: 'Investigation', date: '2024-10-13' },
-					{ id: 10, activityName: 'Research Ethics - Professional Responsibility', timeSpent: '00:00:00', category: 'Ethics Training', date: '2024-10-12' }
+					{ id: 1, activityName: 'Legal Research Methodology - Case Law Analysis', timeSpent: '02:30:00', category: 'Research Methods', date: '2025-10-21' },
+					{ id: 2, activityName: 'Statutory Interpretation - Legislative History', timeSpent: '01:45:15', category: 'Statute Review', date: '2025-10-20' },
+					{ id: 3, activityName: 'Secondary Sources - Law Review Articles', timeSpent: '00:00:00', category: 'Literature Review', date: '2025-10-19' },
+					{ id: 4, activityName: 'Database Research - Westlaw & LexisNexis', timeSpent: '01:20:30', category: 'Database Training', date: '2025-10-18' },
+					{ id: 5, activityName: 'Citation Methods - Bluebook Formatting', timeSpent: '00:00:00', category: 'Citation Practice', date: '2025-10-17' },
+					{ id: 6, activityName: 'Research Memo Writing - Legal Analysis', timeSpent: '02:15:45', category: 'Writing Practice', date: '2025-10-16' },
+					{ id: 7, activityName: 'Comparative Law Research - International Sources', timeSpent: '00:00:00', category: 'International Law', date: '2025-10-15' },
+					{ id: 8, activityName: 'Administrative Law Research - Agency Decisions', timeSpent: '01:10:20', category: 'Administrative Law', date: '2025-10-14' },
+					{ id: 9, activityName: 'Fact Investigation - Evidence Gathering', timeSpent: '00:55:30', category: 'Investigation', date: '2025-10-13' },
+					{ id: 10, activityName: 'Research Ethics - Professional Responsibility', timeSpent: '00:00:00', category: 'Ethics Training', date: '2025-10-12' }
 				];
 			} else if (courseTitle.toLowerCase().includes('contract')) {
 				return [
-					{ id: 1, activityName: 'Contract Formation - Offer and Acceptance', timeSpent: '02:15:30', category: 'Contract Theory', date: '2024-10-21' },
-					{ id: 2, activityName: 'Consideration - Bargained-for Exchange', timeSpent: '01:40:15', category: 'Contract Elements', date: '2024-10-20' },
-					{ id: 3, activityName: 'Contractual Capacity - Minors and Mental Incapacity', timeSpent: '00:00:00', category: 'Capacity Issues', date: '2024-10-19' },
-					{ id: 4, activityName: 'Statute of Frauds - Writing Requirements', timeSpent: '01:25:45', category: 'Form Requirements', date: '2024-10-18' },
-					{ id: 5, activityName: 'Parol Evidence Rule - Integration Clauses', timeSpent: '00:00:00', category: 'Evidence Rules', date: '2024-10-17' },
-					{ id: 6, activityName: 'Breach of Contract - Material vs Minor Breach', timeSpent: '01:55:20', category: 'Breach Analysis', date: '2024-10-16' },
-					{ id: 7, activityName: 'Remedies - Damages and Specific Performance', timeSpent: '00:00:00', category: 'Remedies', date: '2024-10-15' },
-					{ id: 8, activityName: 'Third Party Rights - Assignment and Delegation', timeSpent: '01:30:10', category: 'Third Parties', date: '2024-10-14' },
-					{ id: 9, activityName: 'Contract Interpretation - Plain Meaning Rule', timeSpent: '00:45:30', category: 'Interpretation', date: '2024-10-13' },
-					{ id: 10, activityName: 'Unconscionability - Procedural and Substantive', timeSpent: '00:00:00', category: 'Defenses', date: '2024-10-12' }
+					{ id: 1, activityName: 'Contract Formation - Offer and Acceptance', timeSpent: '02:15:30', category: 'Contract Theory', date: '2025-10-21' },
+					{ id: 2, activityName: 'Consideration - Bargained-for Exchange', timeSpent: '01:40:15', category: 'Contract Elements', date: '2025-10-20' },
+					{ id: 3, activityName: 'Contractual Capacity - Minors and Mental Incapacity', timeSpent: '00:00:00', category: 'Capacity Issues', date: '2025-10-19' },
+					{ id: 4, activityName: 'Statute of Frauds - Writing Requirements', timeSpent: '01:25:45', category: 'Form Requirements', date: '2025-10-18' },
+					{ id: 5, activityName: 'Parol Evidence Rule - Integration Clauses', timeSpent: '00:00:00', category: 'Evidence Rules', date: '2025-10-17' },
+					{ id: 6, activityName: 'Breach of Contract - Material vs Minor Breach', timeSpent: '01:55:20', category: 'Breach Analysis', date: '2025-10-16' },
+					{ id: 7, activityName: 'Remedies - Damages and Specific Performance', timeSpent: '00:00:00', category: 'Remedies', date: '2025-10-15' },
+					{ id: 8, activityName: 'Third Party Rights - Assignment and Delegation', timeSpent: '01:30:10', category: 'Third Parties', date: '2025-10-14' },
+					{ id: 9, activityName: 'Contract Interpretation - Plain Meaning Rule', timeSpent: '00:45:30', category: 'Interpretation', date: '2025-10-13' },
+					{ id: 10, activityName: 'Unconscionability - Procedural and Substantive', timeSpent: '00:00:00', category: 'Defenses', date: '2025-10-12' }
 				];
 			}
 			return [
-				{ id: 1, activityName: 'Course Introduction and Syllabus Review', timeSpent: '00:45:00', category: 'Orientation', date: '2024-10-21' },
-				{ id: 2, activityName: 'Core Concepts and Fundamental Principles', timeSpent: '01:30:15', category: 'Theory', date: '2024-10-20' },
-				{ id: 3, activityName: 'Practical Applications and Case Studies', timeSpent: '00:00:00', category: 'Practical Work', date: '2024-10-19' },
-				{ id: 4, activityName: 'Group Discussions and Peer Learning', timeSpent: '01:15:30', category: 'Collaboration', date: '2024-10-18' },
-				{ id: 5, activityName: 'Assignment Preparation and Research', timeSpent: '00:00:00', category: 'Independent Study', date: '2024-10-17' },
-				{ id: 6, activityName: 'Assessment and Feedback Review', timeSpent: '00:55:45', category: 'Assessment', date: '2024-10-16' },
-				{ id: 7, activityName: 'Supplementary Materials and Resources', timeSpent: '00:00:00', category: 'Additional Resources', date: '2024-10-15' },
-				{ id: 8, activityName: 'Course Reflection and Learning Journal', timeSpent: '00:40:20', category: 'Reflection', date: '2024-10-14' },
-				{ id: 9, activityName: 'Final Project Planning and Development', timeSpent: '00:00:00', category: 'Project Work', date: '2024-10-13' },
-				{ id: 10, activityName: 'Course Summary and Knowledge Integration', timeSpent: '01:10:15', category: 'Integration', date: '2024-10-12' }
+				{ id: 1, activityName: 'Course Introduction and Syllabus Review', timeSpent: '00:45:00', category: 'Orientation', date: '2025-10-21' },
+				{ id: 2, activityName: 'Core Concepts and Fundamental Principles', timeSpent: '01:30:15', category: 'Theory', date: '2025-10-20' },
+				{ id: 3, activityName: 'Practical Applications and Case Studies', timeSpent: '00:00:00', category: 'Practical Work', date: '2025-10-19' },
+				{ id: 4, activityName: 'Group Discussions and Peer Learning', timeSpent: '01:15:30', category: 'Collaboration', date: '2025-10-18' },
+				{ id: 5, activityName: 'Assignment Preparation and Research', timeSpent: '00:00:00', category: 'Independent Study', date: '2025-10-17' },
+				{ id: 6, activityName: 'Assessment and Feedback Review', timeSpent: '00:55:45', category: 'Assessment', date: '2025-10-16' },
+				{ id: 7, activityName: 'Supplementary Materials and Resources', timeSpent: '00:00:00', category: 'Additional Resources', date: '2025-10-15' },
+				{ id: 8, activityName: 'Course Reflection and Learning Journal', timeSpent: '00:40:20', category: 'Reflection', date: '2025-10-14' },
+				{ id: 9, activityName: 'Final Project Planning and Development', timeSpent: '00:00:00', category: 'Project Work', date: '2025-10-13' },
+				{ id: 10, activityName: 'Course Summary and Knowledge Integration', timeSpent: '01:10:15', category: 'Integration', date: '2025-10-12' }
 			];
 		})()
 	});

@@ -5,7 +5,7 @@ import { Plus, Trash2, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useLanguage } from '../../context/LanguageContext';
 
-// Minimal Hijri conversion (demo)
+// Minimal Hijri conversion (demo) - Fixed to year 1447
 function gregorianToHijri(date) {
 	function floor(n) { return Math.floor(n); }
 	function jdFromDate(d) {
@@ -23,7 +23,7 @@ function gregorianToHijri(date) {
 	const k = r - floor(354.36667 * j);
 	const m = floor((k - 1) / 29.5) + 1;
 	const d = k - floor(29.5 * (m - 1));
-	return { y, m, d };
+	return { y: 1447, m, d }; // Force year to 1447
 }
 const hijriMonthNames = ['Muharram','Safar','Rabiʿ I','Rabiʿ II','Jumada I','Jumada II','Rajab','Shaʿban','Ramadan','Shawwal','Dhu al‑Qaʿdah','Dhu al‑Hijjah'];
 
@@ -104,7 +104,7 @@ export default function AcademicCalendar() {
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">{ev.title}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
                       <div className="text-blue-700 dark:text-blue-400">{ev.date}</div>
-                      {useHijri && (() => { const d=new Date(ev.date); if (isNaN(d)) return null; const h = gregorianToHijri(d); return <div className="text-[11px] text-gray-500">{h.d} {hijriMonthNames[h.m-1]} {h.y}</div>; })()}
+                      {useHijri && (() => { const d=new Date(ev.date); if (isNaN(d)) return null; const h = gregorianToHijri(d); return <div className="text-[11px] text-gray-500">{h.d} {hijriMonthNames[h.m-1]} 1447</div>; })()}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm capitalize">
                       <span className={
@@ -146,7 +146,7 @@ export default function AcademicCalendar() {
                 {form.date && (() => { const d = new Date(form.date); const isFriday = d.getDay()===5; const h = useHijri ? gregorianToHijri(d) : null; return (
                   <div className="mt-1 text-xs text-gray-500 flex items-center gap-2">
                     {isFriday && <span className="text-green-700">{t('student.schedule.fridayHint')}</span>}
-                    {useHijri && <span>{h.d} {hijriMonthNames[h.m-1]} {h.y}</span>}
+                    {useHijri && <span>{h.d} {hijriMonthNames[h.m-1]} 1447</span>}
                   </div>
                 ); })()}
               </div>

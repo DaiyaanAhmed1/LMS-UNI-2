@@ -25,14 +25,14 @@ const recentActivity = [
 ];
 
 const announcements = [
-  { title: 'Summer Semester Registration', desc: 'Registration for summer semester is now open.', date: 'Jun 10, 2024', by: 'Registrar', views: 1200 },
-  { title: 'New Library Resources', desc: 'Explore new e-books and journals in the library.', date: 'Jun 8, 2024', by: 'Library', views: 725 },
-  { title: 'Faculty Meeting', desc: 'Monthly faculty meeting this Friday at 2 PM.', date: 'Jun 5, 2024', by: 'Dean Office', views: 98 },
+  { title: 'Summer Semester Registration', desc: 'Registration for summer semester is now open.', date: 'Jun 10, 2025', by: 'Registrar', views: 1200 },
+  { title: 'New Library Resources', desc: 'Explore new e-books and journals in the library.', date: 'Jun 8, 2025', by: 'Library', views: 725 },
+  { title: 'Faculty Meeting', desc: 'Monthly faculty meeting this Friday at 2 PM.', date: 'Jun 5, 2025', by: 'Dean Office', views: 98 },
 ];
 
 const pendingApprovals = [
-  { type: 'Course', name: 'Machine Learning 101', submittedBy: 'Dr. Emily Carter', date: 'Jun 9, 2024' },
-  { type: 'Instructor', name: 'Dr. John Doe', submittedBy: 'HR', date: 'Jun 8, 2024' },
+  { type: 'Course', name: 'Machine Learning 101', submittedBy: 'Dr. Emily Carter', date: 'Jun 9, 2025' },
+  { type: 'Instructor', name: 'Dr. John Doe', submittedBy: 'HR', date: 'Jun 8, 2025' },
 ];
 
 const enrollmentTrends = [1200, 1250, 1300, 1350, 1400, 1450, 1500];
@@ -78,8 +78,8 @@ const quickLinks = [
 ];
 
 const systemAnnouncements = [
-  { msg: 'System maintenance scheduled for June 22, 12:00 AM - 2:00 AM.', date: 'Jun 12, 2024' },
-  { msg: 'New feature: Bulk user import now available!', date: 'Jun 10, 2024' },
+  { msg: 'System maintenance scheduled for June 22, 12:00 AM - 2:00 AM.', date: 'Jun 12, 2025' },
+  { msg: 'New feature: Bulk user import now available!', date: 'Jun 10, 2025' },
 ];
 
 const recentLogins = [

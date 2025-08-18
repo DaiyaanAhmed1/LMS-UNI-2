@@ -29,7 +29,7 @@ const courses = [
       { name: 'Final Project', grade: 80, maxPoints: 100, weight: 50 },
     ],
     trend: 'up',
-    semester: 'Spring 2024',
+    semester: 'Spring 2025',
   },
   {
     id: 2,
@@ -43,7 +43,7 @@ const courses = [
       { name: 'Final Exam', grade: 90, maxPoints: 100, weight: 50 },
     ],
     trend: 'up',
-    semester: 'Spring 2024',
+    semester: 'Spring 2025',
   },
   {
     id: 3,
@@ -57,7 +57,7 @@ const courses = [
       { name: 'Final Project', grade: 75, maxPoints: 100, weight: 50 },
     ],
     trend: 'down',
-    semester: 'Spring 2024',
+    semester: 'Spring 2025',
   },
 ];
 
@@ -213,7 +213,7 @@ function Grades() {
                 id="grades-semester-filter"
               >
                 <option value="all">{t('student.grades.semesters.all')}</option>
-                <option value="Spring 2024">{t('student.grades.semesters.spring2024')}</option>
+                <option value="Spring 2025">{t('student.grades.semesters.spring2025')}</option>
                 <option value="Fall 2023">{t('student.grades.semesters.fall2023')}</option>
               </select>
               <button className="flex items-center justify-center gap-2 px-4 py-2 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700">

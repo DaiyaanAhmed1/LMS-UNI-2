@@ -85,6 +85,8 @@ function Notifications() {
   const [viewMode, setViewMode] = useState('list'); // 'list' or 'card'
   const [selectedNotification, setSelectedNotification] = useState(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [showActionPopup, setShowActionPopup] = useState(false);
+  const [actionMessage, setActionMessage] = useState('');
   const { startTour } = useTour();
 
   const filteredNotifications = notifications.filter(notification => {
@@ -137,27 +139,36 @@ function Notifications() {
   };
 
   const handleTakeAction = (notification) => {
-    // Simple hardcoded actions based on notification type
+    // Generate action message based on notification type
+    let message = '';
     switch (notification.type) {
       case 'assignment':
-        alert(`Opening assignment: ${notification.title}\nCourse: ${notification.course}\nDue: ${notification.time}`);
+        message = `Opening assignment: ${notification.title}\nCourse: ${notification.course}\nDue: ${notification.time}`;
         break;
       case 'grade':
-        alert(`Viewing grade for: ${notification.title}\nCourse: ${notification.course}\nTime: ${notification.time}`);
+        message = `Viewing grade for: ${notification.title}\nCourse: ${notification.course}\nTime: ${notification.time}`;
         break;
       case 'announcement':
-        alert(`Reading announcement: ${notification.title}\nCourse: ${notification.course}\nTime: ${notification.time}`);
+        message = `Reading announcement: ${notification.title}\nCourse: ${notification.course}\nTime: ${notification.time}`;
         break;
       case 'material':
-        alert(`Accessing course material: ${notification.title}\nCourse: ${notification.course}\nTime: ${notification.time}`);
+        message = `Accessing course material: ${notification.title}\nCourse: ${notification.course}\nTime: ${notification.time}`;
         break;
       case 'exam':
-        alert(`Viewing exam details: ${notification.title}\nCourse: ${notification.course}\nTime: ${notification.time}`);
+        message = `Viewing exam details: ${notification.title}\nCourse: ${notification.course}\nTime: ${notification.time}`;
         break;
       default:
-        alert(`Taking action on: ${notification.title}\nCourse: ${notification.course}\nTime: ${notification.time}`);
+        message = `Taking action on: ${notification.title}\nCourse: ${notification.course}\nTime: ${notification.time}`;
     }
+    
+    setActionMessage(message);
+    setShowActionPopup(true);
     closeDetailsModal();
+  };
+
+  const closeActionPopup = () => {
+    setShowActionPopup(false);
+    setActionMessage('');
   };
 
   const startNotificationsTour = () => {
@@ -498,6 +509,30 @@ function Notifications() {
                   </button>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Action Popup */}
+      {showActionPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={closeActionPopup}></div>
+          <div className="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">Action Required</h3>
+              <button onClick={closeActionPopup} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                <X className="w-6 h-6 text-gray-500 dark:text-gray-400" />
+              </button>
+            </div>
+            <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap break-words">{actionMessage}</p>
+            <div className="flex justify-end mt-6">
+              <button
+                onClick={closeActionPopup}
+                className="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg transition-colors"
+              >
+                {t('common.close')}
+              </button>
             </div>
           </div>
         </div>

@@ -1,23 +1,23 @@
 export const documents = [
   {
     id: 1,
-    title: '2024 Academic Calendar',
-    filename: 'academic-calendar-2024.pdf',
-    category: 'Calendar',
+    title: '2025 Academic Calendar',
+    filename: 'academic-calendar-2025.pdf',
+    type: 'calendar',
+    size: '2.5 MB',
+    uploadDate: '2025-06-01',
     uploadedBy: 'Admin',
-    uploadDate: '2024-06-01',
-    url: '',
-    description: 'Official academic calendar for 2024.'
+    description: 'Official academic calendar for 2025.'
   },
   {
     id: 2,
-    title: 'University Syllabus Template',
-    filename: 'syllabus-template.docx',
-    category: 'Syllabus',
+    title: 'Student Handbook',
+    filename: 'student-handbook.pdf',
+    type: 'handbook',
+    size: '1.8 MB',
+    uploadDate: '2025-06-02',
     uploadedBy: 'Admin',
-    uploadDate: '2024-06-02',
-    url: '',
-    description: 'Template for course syllabi.'
+    description: 'Comprehensive guide for students.'
   }
 ];
 

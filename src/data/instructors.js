@@ -1,38 +1,44 @@
 export const instructors = [
   {
     id: 1,
-    name: 'Dr. Alice Verma',
-    email: 'alice.verma@uni.com',
+    name: 'Dr. Sarah Johnson',
+    email: 'sarah.johnson@university.edu',
     department: 'Mechanical Engineering',
-    assignedCourses: [
-      { course: 'Thermodynamics', program: 'B.Tech Mechanical Engineering', start: '2024-01-01', end: '2024-05-31' },
-      { course: 'Fluid Mechanics', program: 'B.Tech Mechanical Engineering', start: '2024-01-01', end: '2024-05-31' }
+    specialization: 'Thermodynamics, Fluid Mechanics',
+    courses: [
+      { course: 'Thermodynamics', program: 'B.Tech Mechanical Engineering', start: '2025-01-01', end: '2025-05-31' },
+      { course: 'Fluid Mechanics', program: 'B.Tech Mechanical Engineering', start: '2025-01-01', end: '2025-05-31' }
     ],
-    assignedBatches: ['ME2024A', 'ME2024B'],
-    engagement: 85 // percent
+    assignedBatches: ['ME2025A', 'ME2025B'],
+    status: 'Active',
+    joinDate: '2020-08-15'
   },
   {
     id: 2,
-    name: 'Prof. Rajesh Kumar',
-    email: 'rajesh.kumar@uni.com',
-    department: 'Computer Applications',
-    assignedCourses: [
-      { course: 'Data Structures', program: 'B.Tech Computer Applications', start: '2024-01-01', end: '2024-05-31' },
-      { course: 'Algorithms', program: 'B.Tech Computer Applications', start: '2024-01-01', end: '2024-05-31' }
+    name: 'Prof. Michael Chen',
+    email: 'michael.chen@university.edu',
+    department: 'Computer Science',
+    specialization: 'Data Structures, Algorithms',
+    courses: [
+      { course: 'Data Structures', program: 'B.Tech Computer Applications', start: '2025-01-01', end: '2025-05-31' },
+      { course: 'Algorithms', program: 'B.Tech Computer Applications', start: '2025-01-01', end: '2025-05-31' }
     ],
-    assignedBatches: ['CA2024A'],
-    engagement: 92
+    assignedBatches: ['CA2025A'],
+    status: 'Active',
+    joinDate: '2018-03-10'
   },
   {
     id: 3,
-    name: 'Dr. Sunita Sharma',
-    email: 'sunita.sharma@uni.com',
+    name: 'Dr. Emily Brown',
+    email: 'emily.brown@university.edu',
     department: 'Agriculture',
-    assignedCourses: [
-      { course: 'Soil Science', program: 'B.Agri', start: '2024-01-01', end: '2024-05-31' }
+    specialization: 'Soil Science, Crop Management',
+    courses: [
+      { course: 'Soil Science', program: 'B.Agri', start: '2025-01-01', end: '2025-05-31' }
     ],
-    assignedBatches: ['AG2024A'],
-    engagement: 78
+    assignedBatches: ['AG2025A'],
+    status: 'Active',
+    joinDate: '2019-01-20'
   }
 ];
 
@@ -49,6 +55,6 @@ export const departments = [
   'Medicine'
 ];
 
-export const batches = [
-  'ME2024A', 'ME2024B', 'CA2024A', 'AG2024A', 'TECH2024A', 'BA2024A', 'LAW2024A', 'ART2024A', 'PSY2024A', 'MED2024A'
+export const allBatches = [
+  'ME2025A', 'ME2025B', 'CA2025A', 'AG2025A', 'TECH2025A', 'BA2025A', 'LAW2025A', 'ART2025A', 'PSY2025A', 'MED2025A'
 ]; 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Sidebar from '../../components/Sidebar';
 import { 
   Search,
@@ -100,7 +100,13 @@ function Messages() {
   const [showAttachments, setShowAttachments] = useState(false);
   const [chatMessages, setChatMessages] = useState(initialMessages);
   const [isReplying, setIsReplying] = useState(false);
+  const [showMoreMenu, setShowMoreMenu] = useState(false);
+  const [isCallActive, setIsCallActive] = useState(false);
+  const [isVideoActive, setIsVideoActive] = useState(false);
+  const [showActionPopup, setShowActionPopup] = useState(false);
+  const [actionMessage, setActionMessage] = useState('');
   const { startTour } = useTour();
+  const moreMenuRef = useRef(null);
 
   const filteredConversations = conversations.filter(conversation =>
     conversation.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -135,6 +141,83 @@ function Messages() {
         setIsReplying(false);
       }, 1000);
     }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
+
+  const handleCall = () => {
+    if (selectedConversation) {
+      setIsCallActive(true);
+      // Simulate call functionality
+      setActionMessage(`Calling ${selectedConversation.name}...`);
+      setShowActionPopup(true);
+      // In a real app, this would integrate with a calling service
+      setTimeout(() => {
+        setIsCallActive(false);
+        setShowActionPopup(false);
+        setActionMessage('');
+      }, 3000);
+    }
+  };
+
+  const handleVideoCall = () => {
+    if (selectedConversation) {
+      setIsVideoActive(true);
+      // Simulate video call functionality
+      setActionMessage(`Starting video call with ${selectedConversation.name}...`);
+      setShowActionPopup(true);
+      // In a real app, this would integrate with a video calling service
+      setTimeout(() => {
+        setIsVideoActive(false);
+        setShowActionPopup(false);
+        setActionMessage('');
+      }, 3000);
+    }
+  };
+
+  const handleMoreMenu = () => {
+    setShowMoreMenu(!showMoreMenu);
+  };
+
+  const handleMoreMenuAction = (action) => {
+    setShowMoreMenu(false);
+    let message = '';
+    switch (action) {
+      case 'block':
+        message = `Blocked ${selectedConversation.name}`;
+        break;
+      case 'report':
+        message = `Reported ${selectedConversation.name}`;
+        break;
+      case 'clear':
+        if (selectedConversation) {
+          setChatMessages(prev => ({
+            ...prev,
+            [selectedConversation.id]: []
+          }));
+          message = 'Chat cleared successfully';
+        }
+        break;
+      case 'export':
+        message = 'Exporting conversation...';
+        break;
+      default:
+        break;
+    }
+    if (message) {
+      setActionMessage(message);
+      setShowActionPopup(true);
+    }
+  };
+
+  const closeActionPopup = () => {
+    setShowActionPopup(false);
+    setActionMessage('');
   };
 
   // Generate a demo reply based on the conversation
@@ -232,13 +315,30 @@ function Messages() {
     return () => window.removeEventListener('tour:launch', onLaunch);
   }, []);
 
+  // Handle clicking outside more menu
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (moreMenuRef.current && !moreMenuRef.current.contains(event.target)) {
+        setShowMoreMenu(false);
+      }
+    };
+
+    if (showMoreMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showMoreMenu]);
+
   return (
-    <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
+    <div className="flex h-screen bg-gray-100 dark:bg-gray-900 overflow-hidden">
       <Sidebar role="student" />
-      <div className="flex-1 flex">
+      <div className="flex-1 flex min-h-0">
         {/* Conversations List */}
-        <div className="w-80 bg-white dark:bg-gray-800 border-r dark:border-gray-700">
-          <div className="p-4 border-b dark:border-gray-700">
+        <div className="w-80 bg-white dark:bg-gray-800 border-r dark:border-gray-700 flex flex-col">
+          <div className="p-4 border-b dark:border-gray-700 flex-shrink-0">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500" size={20} />
               <input
@@ -252,7 +352,7 @@ function Messages() {
             </div>
           </div>
 
-          <div className="overflow-y-auto h-[calc(100vh-4rem)]" data-tour="conversations-list">
+          <div className="flex-1 overflow-y-auto" data-tour="conversations-list">
             {filteredConversations.map(conversation => (
               <button
                 key={conversation.id}
@@ -296,11 +396,11 @@ function Messages() {
         </div>
 
         {/* Chat Area */}
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col min-h-0">
           {selectedConversation ? (
             <>
               {/* Chat Header */}
-              <div className="p-4 border-b dark:border-gray-700 bg-white dark:bg-gray-800 flex items-center justify-between">
+              <div className="p-4 border-b dark:border-gray-700 bg-white dark:bg-gray-800 flex items-center justify-between flex-shrink-0">
                 <div className="flex items-center gap-3">
                   <div className="relative">
                     <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-semibold">
@@ -316,20 +416,74 @@ function Messages() {
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full">
-                    <Phone size={20} className="text-gray-600 dark:text-gray-400" />
+                  <button 
+                    onClick={handleCall}
+                    disabled={isCallActive}
+                    className={`p-2 rounded-full transition-colors ${
+                      isCallActive 
+                        ? 'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400' 
+                        : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400'
+                    }`}
+                    title={isCallActive ? 'End Call' : 'Call'}
+                  >
+                    <Phone size={20} />
                   </button>
-                  <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full">
-                    <Video size={20} className="text-gray-600 dark:text-gray-400" />
+                  <button 
+                    onClick={handleVideoCall}
+                    disabled={isVideoActive}
+                    className={`p-2 rounded-full transition-colors ${
+                      isVideoActive 
+                        ? 'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400' 
+                        : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400'
+                    }`}
+                    title={isVideoActive ? 'End Video Call' : 'Video Call'}
+                  >
+                    <Video size={20} />
                   </button>
-                  <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full">
-                    <MoreVertical size={20} className="text-gray-600 dark:text-gray-400" />
-                  </button>
+                  <div className="relative">
+                    <button 
+                      onClick={handleMoreMenu}
+                      className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full text-gray-600 dark:text-gray-400"
+                      title="More options"
+                    >
+                      <MoreVertical size={20} />
+                    </button>
+                    
+                    {/* More Menu Dropdown */}
+                    {showMoreMenu && (
+                      <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border dark:border-gray-700 py-2 z-20" ref={moreMenuRef}>
+                        <button
+                          onClick={() => handleMoreMenuAction('block')}
+                          className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        >
+                          Block User
+                        </button>
+                        <button
+                          onClick={() => handleMoreMenuAction('report')}
+                          className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        >
+                          Report User
+                        </button>
+                        <button
+                          onClick={() => handleMoreMenuAction('clear')}
+                          className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        >
+                          Clear Chat
+                        </button>
+                        <button
+                          onClick={() => handleMoreMenuAction('export')}
+                          className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        >
+                          Export Chat
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
 
               {/* Messages */}
-              <div className="flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-gray-900">
+              <div className="flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-gray-900 min-h-0">
                 <div className="max-w-3xl mx-auto space-y-4">
                   {chatMessages[selectedConversation.id]?.map(message => (
                     <div
@@ -364,7 +518,7 @@ function Messages() {
               </div>
 
               {/* Message Input */}
-              <div className="p-4 bg-white dark:bg-gray-800 border-t dark:border-gray-700">
+              <div className="p-4 bg-white dark:bg-gray-800 border-t dark:border-gray-700 flex-shrink-0 relative">
                 <div className="max-w-3xl mx-auto">
                   <div className="relative">
                     <button
@@ -379,6 +533,7 @@ function Messages() {
                       placeholder={t('student.messages.inputPlaceholder')}
                       value={newMessage}
                       onChange={(e) => setNewMessage(e.target.value)}
+                      onKeyPress={handleKeyPress}
                       className="w-full pl-10 pr-24 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700 text-gray-900 dark:text-gray-100"
                       id="message-input"
                     />
@@ -399,7 +554,7 @@ function Messages() {
 
                   {/* Attachments Menu */}
                   {showAttachments && (
-                    <div className="absolute bottom-full left-0 mb-2 bg-white dark:bg-gray-800 rounded-lg shadow-lg border dark:border-gray-700 p-2">
+                    <div className="absolute bottom-full left-0 mb-2 bg-white dark:bg-gray-800 rounded-lg shadow-lg border dark:border-gray-700 p-2 z-10">
                       <div className="grid grid-cols-4 gap-2">
                         <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg flex flex-col items-center gap-1">
                           <ImageIcon size={20} className="text-blue-600 dark:text-blue-400" />
@@ -428,6 +583,30 @@ function Messages() {
           )}
         </div>
       </div>
+
+      {/* Action Popup */}
+      {showActionPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={closeActionPopup}></div>
+          <div className="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">Action Status</h3>
+              <button onClick={closeActionPopup} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                <X className="w-6 h-6 text-gray-500 dark:text-gray-400" />
+              </button>
+            </div>
+            <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap break-words">{actionMessage}</p>
+            <div className="flex justify-end mt-6">
+              <button
+                onClick={closeActionPopup}
+                className="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg transition-colors"
+              >
+                {t('common.close')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

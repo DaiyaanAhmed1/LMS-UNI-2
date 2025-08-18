@@ -62,6 +62,11 @@ import { LanguageProvider } from './context/LanguageContext.jsx';
 
 const RouterComponent = process.env.NODE_ENV === 'production' ? HashRouter : BrowserRouter;
 
+function AccessibilityBarWrapper() {
+  const { showBar } = useAccessibility();
+  return showBar ? <AccessibilityBar /> : null;
+}
+
 function GlobalAccessibilityStyles() {
   const { fontSize, fontFamily, colorTheme } = useAccessibility();
   React.useEffect(() => {
@@ -157,11 +162,6 @@ function App() {
       </LanguageProvider>
     </AccessibilityProvider>
   );
-}
-
-function AccessibilityBarWrapper() {
-  const { showBar } = useAccessibility();
-  return showBar ? <AccessibilityBar /> : null;
 }
 
 export default App;

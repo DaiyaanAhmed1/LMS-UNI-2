@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useLanguage } from '../../context/LanguageContext';
 import { useTour } from '../../context/TourContext.jsx';
 
-// Minimal Hijri conversion (demo)
+// Minimal Hijri conversion (demo) - Fixed to year 1447
 function gregorianToHijri(date) {
 	function floor(n) { return Math.floor(n); }
 	function jdFromDate(d) {
@@ -23,7 +23,7 @@ function gregorianToHijri(date) {
 	const k = r - floor(354.36667 * j);
 	const m = floor((k - 1) / 29.5) + 1;
 	const d = k - floor(29.5 * (m - 1));
-	return { y, m, d };
+	return { y: 1447, m, d }; // Force year to 1447
 }
 const hijriMonthNames = ['Muharram','Safar','Rabiʿ I','Rabiʿ II','Jumada I','Jumada II','Rajab','Shaʿban','Ramadan','Shawwal','Dhu al‑Qaʿdah','Dhu al‑Hijjah'];
 const ksaFixedHolidays = [ { gMonth: 2, gDay: 22 }, { gMonth: 9, gDay: 23 } ];
@@ -170,7 +170,7 @@ export default function TeachingSchedule() {
 	};
 
 	const monthDays = getMonthDays(year, month);
-	const monthStr = useHijri ? `${hijriMonthNames[gregorianToHijri(new Date(year, month, 1)).m - 1]} ${gregorianToHijri(new Date(year, month, 1)).y}` : new Date(year, month).toLocaleString('default', { month: 'long' });
+	const monthStr = useHijri ? `${hijriMonthNames[gregorianToHijri(new Date(year, month, 1)).m - 1]} 1447` : new Date(year, month).toLocaleString('default', { month: 'long' });
 
 	const goToPrevMonth = () => {
 		if (month === 0) {

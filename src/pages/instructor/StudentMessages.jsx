@@ -11,9 +11,9 @@ const dummyStudents = [
 ];
 
 const dummyMessages = [
-  { id: 1, studentId: 1, message: 'Hello, I have a question about the assignment.', timestamp: '2024-06-01T10:00:00' },
-  { id: 2, studentId: 2, message: 'Can you clarify the due date for the quiz?', timestamp: '2024-06-02T11:00:00' },
-  { id: 3, studentId: 3, message: 'Thank you for the help!', timestamp: '2024-06-03T12:00:00' },
+  { id: 1, studentId: 1, message: 'Hello, I have a question about the assignment.', timestamp: '2025-06-01T10:00:00' },
+  { id: 2, studentId: 2, message: 'Can you clarify the due date for the quiz?', timestamp: '2025-06-02T11:00:00' },
+  { id: 3, studentId: 3, message: 'Thank you for the help!', timestamp: '2025-06-03T12:00:00' },
 ];
 
 export default function StudentMessages() {

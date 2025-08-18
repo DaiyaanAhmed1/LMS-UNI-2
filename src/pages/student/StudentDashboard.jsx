@@ -58,7 +58,7 @@ const upcomingAssignments = [
   {
     course: 'Mathematics 101',
     title: 'Linear Algebra Assignment',
-    dueDate: '2024-03-20',
+    dueDate: '2025-03-20',
     daysLeft: 3,
     status: 'pending',
     priority: 'high'
@@ -66,7 +66,7 @@ const upcomingAssignments = [
   {
     course: 'Physics 201',
     title: 'Lab Report: Wave Motion',
-    dueDate: '2024-03-22',
+    dueDate: '2025-03-22',
     daysLeft: 5,
     status: 'in-progress',
     priority: 'medium'
@@ -74,7 +74,7 @@ const upcomingAssignments = [
   {
     course: 'Chemistry 101',
     title: 'Chemical Reactions Quiz',
-    dueDate: '2024-03-25',
+    dueDate: '2025-03-25',
     daysLeft: 8,
     status: 'not-started',
     priority: 'low'
@@ -128,14 +128,14 @@ const upcomingDeadlines = [
     type: 'Assignment',
     course: 'Mathematics 101',
     title: 'Linear Algebra Quiz',
-    deadline: '2024-03-22',
+    deadline: '2025-03-22',
     priority: 'high'
   },
   {
     type: 'Project',
     course: 'Computer Science',
     title: 'Database Design',
-    deadline: '2024-03-25',
+    deadline: '2025-03-25',
     priority: 'medium'
   }
 ];

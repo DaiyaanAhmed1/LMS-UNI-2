@@ -18,7 +18,7 @@ const mockProfile = {
   nationality: 'USA',
   linkedin: 'https://linkedin.com/in/johnsmith',
   github: 'https://github.com/johnsmith',
-  lastLogin: '2024-06-10 14:23',
+      lastLogin: '2025-06-10 14:23',
   profilePic: '',
   stats: { courses: 5, assignments: 3, activity: 87, completion: 80 }
 };

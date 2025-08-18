@@ -1028,8 +1028,8 @@
           "progressTimeline": "Academic Progress Timeline",
           "timeline": {
             "sem1": { "title": "Semester 1", "desc": "Completed 15 credit hours with 3.2 GPA", "time": "Fall 2023" },
-            "sem2": { "title": "Semester 2", "desc": "Completed 18 credit hours with 3.5 GPA", "time": "Spring 2024" },
-            "current": { "title": "Current Semester", "desc": "In progress with 12 credit hours", "time": "Fall 2024" },
+            "sem2": { "title": "Semester 2", "desc": "Completed 18 credit hours with 3.5 GPA", "time": "Spring 2025" },
+            "current": { "title": "Current Semester", "desc": "In progress with 12 credit hours", "time": "Fall 2025" },
             "future": { "title": "Future Semesters", "desc": "Remaining 45 credit hours to complete degree", "time": "2025-2026" }
           },
           "progressInsightsTitle": "Progress Insights",
@@ -1139,7 +1139,7 @@
       },
       "semesters": {
         "all": "All Semesters",
-        "spring2024": "Spring 2024",
+        "spring2025": "Spring 2025",
         "fall2023": "Fall 2023"
       },
       "overview": {
@@ -1267,7 +1267,7 @@
         "hijri": "Hijri"
       },
       "holidayKSA": "KSA Holiday",
-      "fridayHint": "Friday (Jumu’ah)"
+      "fridayHint": "Friday (Jumu'ah)"
     },
     "messages": {
       "searchPlaceholder": "Search conversations...",
@@ -1650,8 +1650,8 @@
         "actions": { "save": "Save Changes", "add": "Add Event", "delete": "Delete" }
       },
       "jumuahWarning": {
-        "title": "Heads-up: Friday (Jumu’ah)",
-        "desc": "The selected time overlaps the Jumu’ah window ({{start}}–{{end}}). Consider choosing another time."
+        "title": "Heads-up: Friday (Jumu'ah)",
+        "desc": "The selected time overlaps the Jumu'ah window ({{start}}–{{end}}). Consider choosing another time."
       },
       "prayer": {
         "title": "Prayer Times (Demo)",
@@ -2217,8 +2217,8 @@
           }
         },
         "legal": {
-          "title": "Legal Alignment: Saudi Arabia’s PDPL & Shariah Principles",
-          "intro": "Marln LMS aligns with international and local data protection standards. Below is a mapping of Saudi Arabia’s Personal Data Protection Law (PDPL) principles to corresponding Shariah concepts, ensuring both legal and cultural compliance.",
+          "title": "Legal Alignment: Saudi Arabia's PDPL & Shariah Principles",
+          "intro": "Marln LMS aligns with international and local data protection standards. Below is a mapping of Saudi Arabia's Personal Data Protection Law (PDPL) principles to corresponding Shariah concepts, ensuring both legal and cultural compliance.",
           "table": {
             "headers": { "pdplPrinciple": "PDPL Principle", "shariah": "Shariah Alignment" },
             "rows": {
@@ -2229,7 +2229,7 @@
               "security": { "pdpl": "Security and confidentiality", "shariah": "Darar and Amanah" }
             }
           },
-          "note": "Note: The PDPL (2021, amended 2023) is Saudi Arabia’s primary data protection law. Its principles are designed to be compatible with Shariah, ensuring both legal and ethical data stewardship in Marln LMS."
+          "note": "Note: The PDPL (2021, amended 2023) is Saudi Arabia's primary data protection law. Its principles are designed to be compatible with Shariah, ensuring both legal and ethical data stewardship in Marln LMS."
         }
       }
     }

@@ -11,10 +11,10 @@ const dummyCourses = [
 ];
 
 const dummyMaterials = [
-  { id: 1, title: 'Syllabus', type: 'syllabus', file: 'syllabus.pdf', uploadDate: '2024-06-01', courseId: 1 },
-  { id: 2, title: 'Study Guide', type: 'study', file: 'study_guide.pdf', uploadDate: '2024-06-02', courseId: 1 },
-  { id: 3, title: 'Assignment 1', type: 'assignment', file: 'assignment1.pdf', uploadDate: '2024-06-03', courseId: 2 },
-  { id: 4, title: 'Quiz 1', type: 'quiz', file: 'quiz1.pdf', uploadDate: '2024-06-04', courseId: 3 },
+  { id: 1, title: 'Syllabus', type: 'syllabus', file: 'syllabus.pdf', uploadDate: '2025-06-01', courseId: 1 },
+  { id: 2, title: 'Study Guide', type: 'study', file: 'study_guide.pdf', uploadDate: '2025-06-02', courseId: 1 },
+  { id: 3, title: 'Assignment 1', type: 'assignment', file: 'assignment1.pdf', uploadDate: '2025-06-03', courseId: 2 },
+  { id: 4, title: 'Quiz 1', type: 'quiz', file: 'quiz1.pdf', uploadDate: '2025-06-04', courseId: 3 },
 ];
 
 export default function CourseMaterials() {

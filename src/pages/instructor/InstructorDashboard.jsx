@@ -25,9 +25,9 @@ const activities = [
 ];
 
 const noticeBoard = [
-  { title: 'Midterm Exam Schedule', desc: 'Midterms will be held next week. Check the calendar.', date: 'Oct 10, 2024', by: 'Academic Office', views: 210 },
-  { title: 'Faculty Meeting', desc: 'Monthly faculty meeting this Friday at 2 PM.', date: 'Oct 8, 2024', by: 'Dean Office', views: 98 },
-  { title: 'Course Material Update', desc: 'New resources added to the library.', date: 'Oct 5, 2024', by: 'Library', views: 120 },
+  { title: 'Midterm Exam Schedule', desc: 'Midterms will be held next week. Check the calendar.', date: 'Oct 10, 2025', by: 'Academic Office', views: 210 },
+  { title: 'Faculty Meeting', desc: 'Monthly faculty meeting this Friday at 2 PM.', date: 'Oct 8, 2025', by: 'Dean Office', views: 98 },
+  { title: 'Course Material Update', desc: 'New resources added to the library.', date: 'Oct 5, 2025', by: 'Library', views: 120 },
 ];
 
 const coursePerformance = [60, 75, 80, 90, 85, 88, 92];
