@@ -1,0 +1,11 @@
+{
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "buildCommand": "cd marln-university-site && npm install && npm run build",
+  "outputDirectory": "marln-university-site/dist",
+  "installCommand": "cd marln-university-site && npm install"
+} 
