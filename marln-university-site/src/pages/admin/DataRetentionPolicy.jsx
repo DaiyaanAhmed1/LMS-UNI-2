@@ -1,13 +1,25 @@
 import React from 'react';
-import { ShieldCheck, Info, FileText, CheckCircle } from 'lucide-react';
+import { ShieldCheck, Info, FileText, CheckCircle, ChevronLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 export default function DataRetentionPolicy() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
       <div className="flex-1 overflow-auto p-8">
         <div className="max-w-4xl mx-auto">
+          {/* Back Button */}
+          <div className="mb-6">
+            <button
+              onClick={() => navigate('/admin/dashboard')}
+              className="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors duration-200"
+            >
+              <ChevronLeft className="w-5 h-5" />
+              <span className="text-sm font-medium">Back to Dashboard</span>
+            </button>
+          </div>
           {/* Compliance Checklist */}
           <div className="bg-green-50 dark:bg-green-900 rounded-xl p-5 mb-8 border-l-4 border-green-400 dark:border-green-600">
             <div className="flex items-center gap-2 mb-2">
