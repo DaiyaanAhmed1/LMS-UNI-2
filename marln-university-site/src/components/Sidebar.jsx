@@ -20,7 +20,8 @@ import {
   Sun,
   Moon,
   Bot,
-  HelpCircle
+  HelpCircle,
+  Lock
 } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -56,7 +57,6 @@ const instructorMenuItems = [
   { id: 'materials', labelKey: 'sidebar.menu.instructor.materials', icon: FileText, path: '/instructor/materials' },
   { id: 'messages', labelKey: 'sidebar.menu.instructor.messages', icon: MessageSquare, path: '/instructor/messages' },
   { id: 'notifications', labelKey: 'sidebar.menu.instructor.notifications', icon: Bell, path: '/instructor/notifications' },
-  { id: 'sage-ai', labelKey: 'sidebar.menu.instructor.sage-ai', icon: Bot, path: '/instructor/sage-ai' },
 ];
 
 const studentMenuItems = [
@@ -69,7 +69,6 @@ const studentMenuItems = [
   { id: 'messages', labelKey: 'sidebar.menu.student.messages', icon: MessageSquare, path: '/student/messages' },
   { id: 'notifications', labelKey: 'sidebar.menu.student.notifications', icon: Bell, path: '/student/notifications' },
   { id: 'ecollab', labelKey: 'sidebar.menu.student.ecollab', icon: BookMarked, path: '/student/ecollab' },
-  { id: 'sage-ai', labelKey: 'sidebar.menu.student.sage-ai', icon: Bot, path: '/student/sage-ai' },
 ];
 
 export default function Sidebar({ role: propRole }) {
@@ -214,6 +213,37 @@ export default function Sidebar({ role: propRole }) {
           </button>
         ))}
       </div>
+
+      {/* Sage AI Button */}
+      <button
+        onClick={() => {
+          if (role === 'admin') {
+            // Admin role - button is locked/disabled
+            return;
+          }
+          const sageAIPath = role === 'instructor' ? '/instructor/sage-ai' : '/student/sage-ai';
+          if (location.pathname !== sageAIPath) {
+            navigate(sageAIPath);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        }}
+        className={`w-full px-4 py-3 flex items-center space-x-3 transition-colors border-t border-[#0a1f4d] dark:border-gray-800 ${
+          role === 'admin' 
+            ? 'opacity-50 cursor-not-allowed' 
+            : 'hover:bg-[#0a1f4d] dark:hover:bg-gray-800'
+        } ${
+          (role === 'instructor' && location.pathname === '/instructor/sage-ai') || 
+          (role === 'student' && location.pathname === '/student/sage-ai') 
+            ? 'bg-[#0a1f4d] dark:bg-gray-800' 
+            : ''
+        }`}
+        aria-current={(role === 'instructor' && location.pathname === '/instructor/sage-ai') || (role === 'student' && location.pathname === '/student/sage-ai') ? 'page' : undefined}
+        disabled={role === 'admin'}
+        title={role === 'admin' ? t('sidebar.sageAI.proFeature', 'Pro Feature - Coming Soon') : undefined}
+      >
+        {role === 'admin' ? <Lock size={20} /> : <Bot size={20} />}
+        <span>{t(`sidebar.menu.${role}.sage-ai`)}</span>
+      </button>
 
       {/* Language Switcher */}
       <div className="border-t border-[#0a1f4d] dark:border-gray-800">
