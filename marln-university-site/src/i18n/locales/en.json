@@ -2781,7 +2781,8 @@
         "notifications": "Notifications/Queries",
         "reports": "Reports & Analytics",
         "users": "User Management",
-        "settings": "System Settings"
+        "settings": "System Settings",
+        "sage-ai": "Sage AI Pro"
       },
       "instructor": {
         "dashboard": "Dashboard",
@@ -2809,6 +2810,9 @@
       }
     },
     "theme": { "dark": "Dark Theme", "light": "Light Theme", "toggleAria": "Toggle Dark/Light Theme" },
-    "logout": "Logout"
+    "logout": "Logout",
+    "sageAI": {
+      "proFeature": "Pro Feature - Coming Soon"
+    }
   }
 } 
