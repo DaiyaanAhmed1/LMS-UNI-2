@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import Sidebar from '../../components/Sidebar';
+import { useTranslation } from 'react-i18next';
+import { useTour } from '../../context/TourContext.jsx';
 import { 
   BookOpen, 
   Clock, 
@@ -18,223 +20,437 @@ import {
   Lightbulb,
   Clock3,
   CalendarDays,
-  ChevronRight
+  ChevronRight,
+  Activity,
+  Flag,
+  Info
 } from 'lucide-react';
 
-// Dummy study plan data for different courses
-const studyPlans = {
-  'Cyber Security': {
-    title: 'Cyber Security Study Plan',
-    description: 'Comprehensive study plan covering cybersecurity fundamentals, threats, and defense mechanisms.',
-    duration: '16 weeks',
-    totalHours: '120 hours',
-    difficulty: 'Intermediate',
-    prerequisites: ['Basic Computer Science', 'Networking Fundamentals'],
-    objectives: [
+// Function to get localized study plan data
+const getLocalizedStudyPlan = (t, courseTitle) => {
+  // Static data that doesn't need localization
+  const staticData = {
+    'Cyber Security': {
+      duration: '16 weeks',
+      totalHours: '120 hours',
+      difficulty: 'Intermediate',
+      weeklyPlan: [
+        { week: 1, estimatedHours: 8, status: 'completed' },
+        { week: 2, estimatedHours: 10, status: 'completed' },
+        { week: 3, estimatedHours: 12, status: 'in-progress' },
+        { week: 4, estimatedHours: 10, status: 'not-started' },
+        { week: 5, estimatedHours: 8, status: 'not-started' }
+      ],
+      milestones: [
+        { week: 4, weight: '30%' },
+        { week: 8, weight: '20%' },
+        { week: 12, weight: '25%' },
+        { week: 16, weight: '25%' }
+      ]
+    },
+    'Advanced Python': {
+      duration: '12 weeks',
+      totalHours: '96 hours',
+      difficulty: 'Advanced',
+      weeklyPlan: [
+        { week: 1, estimatedHours: 8, status: 'completed' },
+        { week: 2, estimatedHours: 10, status: 'completed' },
+        { week: 3, estimatedHours: 12, status: 'in-progress' },
+        { week: 4, estimatedHours: 10, status: 'not-started' }
+      ],
+      milestones: [
+        { week: 3, weight: '25%' },
+        { week: 6, weight: '30%' },
+        { week: 9, weight: '25%' },
+        { week: 12, weight: '20%' }
+      ]
+    },
+    'Web Development': {
+      duration: '14 weeks',
+      totalHours: '112 hours',
+      difficulty: 'Intermediate',
+      weeklyPlan: [
+        { week: 1, estimatedHours: 8, status: 'completed' },
+        { week: 2, estimatedHours: 10, status: 'completed' },
+        { week: 3, estimatedHours: 12, status: 'in-progress' },
+        { week: 4, estimatedHours: 10, status: 'not-started' }
+      ],
+      milestones: [
+        { week: 4, weight: '30%' },
+        { week: 8, weight: '25%' },
+        { week: 11, weight: '25%' },
+        { week: 14, weight: '20%' }
+      ]
+    }
+  };
+
+  const staticInfo = staticData[courseTitle] || staticData['Cyber Security'];
+  
+  // Try to read fully localized course content first
+  const courseKey = courseTitle === 'Cyber Security' ? 'cyberSecurity' :
+                   courseTitle === 'Advanced Python' ? 'advancedPython' :
+                   courseTitle === 'Web Development' ? 'webDevelopment' : 'cyberSecurity';
+  const localizedData = t(`student.courses.modal.studyPlan.courses.${courseKey}`, { returnObjects: true });
+  if (localizedData && typeof localizedData === 'object' && localizedData.title) {
+    const weeklyContent = localizedData.weeks || {};
+    return {
+      title: localizedData.title,
+      description: localizedData.description,
+      duration: staticInfo.duration,
+      totalHours: staticInfo.totalHours,
+      difficulty: staticInfo.difficulty,
+      prerequisites: localizedData.prerequisites || [],
+      objectives: localizedData.objectives || [],
+      weeklyPlan: staticInfo.weeklyPlan.map((week) => {
+        const weekKey = `week${week.week}`;
+        const weekData = weeklyContent[weekKey] || {};
+        return {
+          ...week,
+          title: weekData.title || '',
+          topics: weekData.topics || [],
+          activities: weekData.activities || [],
+          deliverables: weekData.deliverables || []
+        };
+      }),
+      resources: (localizedData.resources || []).map(resource => ({
+        ...resource,
+        available: true
+      })),
+      milestones: staticInfo.milestones.map((milestone, index) => ({
+        ...milestone,
+        title: (localizedData.milestones && localizedData.milestones[index] && localizedData.milestones[index].title) || '',
+        type: (localizedData.milestones && localizedData.milestones[index] && localizedData.milestones[index].type) || ''
+      }))
+    };
+  }
+  
+  // Get localized content based on course
+  let title, description, objectives, prerequisites, weeklyContent, resources, milestones;
+  
+  if (courseTitle === 'Cyber Security') {
+    title = 'Cyber Security Study Plan';
+    description = 'Comprehensive study plan covering cybersecurity fundamentals, threats, and defense mechanisms.';
+    objectives = [
       'Understand cybersecurity principles and best practices',
       'Learn about common cyber threats and attack vectors',
       'Master security tools and defense mechanisms',
       'Develop incident response and recovery skills'
-    ],
-    weeklyPlan: [
-      {
-        week: 1,
+    ];
+    prerequisites = ['Basic Computer Science', 'Networking Fundamentals'];
+    weeklyContent = {
+      week1: {
         title: 'Introduction to Cybersecurity',
         topics: ['Cybersecurity fundamentals', 'Threat landscape overview', 'Security principles'],
         activities: ['Read Chapter 1-2', 'Complete Quiz 1', 'Join discussion forum'],
-        estimatedHours: 8,
-        deliverables: ['Quiz submission', 'Discussion participation'],
-        status: 'completed'
+        deliverables: ['Quiz submission', 'Discussion participation']
       },
-      {
-        week: 2,
+      week2: {
         title: 'Network Security Basics',
         topics: ['Network protocols', 'Firewall configuration', 'VPN setup'],
         activities: ['Lab exercises', 'Hands-on practice', 'Group project planning'],
-        estimatedHours: 10,
-        deliverables: ['Lab report', 'Project outline'],
-        status: 'completed'
+        deliverables: ['Lab report', 'Project outline']
       },
-      {
-        week: 3,
+      week3: {
         title: 'Cryptography Fundamentals',
         topics: ['Encryption algorithms', 'Hash functions', 'Digital signatures'],
         activities: ['Cryptography exercises', 'Code implementation', 'Security analysis'],
-        estimatedHours: 12,
-        deliverables: ['Code submission', 'Security report'],
-        status: 'in-progress'
+        deliverables: ['Code submission', 'Security report']
       },
-      {
-        week: 4,
+      week4: {
         title: 'Web Application Security',
         topics: ['OWASP Top 10', 'SQL injection', 'XSS prevention'],
         activities: ['Vulnerability assessment', 'Penetration testing', 'Security audit'],
-        estimatedHours: 10,
-        deliverables: ['Vulnerability report', 'Security recommendations'],
-        status: 'not-started'
+        deliverables: ['Vulnerability report', 'Security recommendations']
       },
-      {
-        week: 5,
+      week5: {
         title: 'Incident Response',
         topics: ['Incident detection', 'Response procedures', 'Recovery planning'],
         activities: ['Case studies', 'Simulation exercises', 'Documentation'],
-        estimatedHours: 8,
-        deliverables: ['Incident response plan', 'Case study analysis'],
-        status: 'not-started'
+        deliverables: ['Incident response plan', 'Case study analysis']
       }
-    ],
-    resources: [
+    };
+    resources = [
       { type: 'Textbook', name: 'Cybersecurity Essentials', author: 'Dr. Sarah Johnson', available: true },
       { type: 'Online Course', name: 'Cybersecurity Fundamentals', platform: 'Coursera', available: true },
       { type: 'Lab Environment', name: 'Virtual Security Lab', platform: 'VMware', available: true },
       { type: 'Tools', name: 'Wireshark, Metasploit, Nmap', platform: 'Open Source', available: true }
-    ],
-    milestones: [
-      { week: 4, title: 'Midterm Assessment', type: 'Exam', weight: '30%' },
-      { week: 8, title: 'Project Phase 1', type: 'Project', weight: '20%' },
-      { week: 12, title: 'Security Audit', type: 'Practical', weight: '25%' },
-      { week: 16, title: 'Final Project', type: 'Project', weight: '25%' }
-    ]
-  },
-  'Advanced Python': {
-    title: 'Advanced Python Study Plan',
-    description: 'Master advanced Python concepts, best practices, and real-world applications.',
-    duration: '12 weeks',
-    totalHours: '96 hours',
-    difficulty: 'Advanced',
-    prerequisites: ['Python Basics', 'Object-Oriented Programming'],
-    objectives: [
+    ];
+    milestones = [
+      { title: 'Midterm Assessment', type: 'Exam' },
+      { title: 'Project Phase 1', type: 'Project' },
+      { title: 'Security Audit', type: 'Practical' },
+      { title: 'Final Project', type: 'Project' }
+    ];
+  } else if (courseTitle === 'Advanced Python') {
+    title = 'Advanced Python Study Plan';
+    description = 'Master advanced Python concepts, best practices, and real-world applications.';
+    objectives = [
       'Master advanced Python features and syntax',
       'Learn design patterns and best practices',
       'Develop real-world applications',
       'Understand performance optimization'
-    ],
-    weeklyPlan: [
-      {
-        week: 1,
+    ];
+    prerequisites = ['Python Basics', 'Object-Oriented Programming'];
+    weeklyContent = {
+      week1: {
         title: 'Advanced Python Features',
         topics: ['Decorators', 'Generators', 'Context managers'],
         activities: ['Code examples', 'Practice exercises', 'Mini projects'],
-        estimatedHours: 8,
-        deliverables: ['Code submission', 'Feature demonstration'],
-        status: 'completed'
+        deliverables: ['Code submission', 'Feature demonstration']
       },
-      {
-        week: 2,
+      week2: {
         title: 'Design Patterns',
         topics: ['Creational patterns', 'Structural patterns', 'Behavioral patterns'],
         activities: ['Pattern implementation', 'Case studies', 'Design exercises'],
-        estimatedHours: 10,
-        deliverables: ['Pattern examples', 'Design document'],
-        status: 'completed'
+        deliverables: ['Pattern examples', 'Design document']
       },
-      {
-        week: 3,
+      week3: {
         title: 'Performance Optimization',
         topics: ['Profiling', 'Memory management', 'Algorithm optimization'],
         activities: ['Performance testing', 'Optimization exercises', 'Benchmarking'],
-        estimatedHours: 12,
-        deliverables: ['Performance report', 'Optimized code'],
-        status: 'in-progress'
+        deliverables: ['Performance report', 'Optimized code']
       },
-      {
-        week: 4,
+      week4: {
         title: 'Testing and Debugging',
         topics: ['Unit testing', 'Integration testing', 'Debugging techniques'],
         activities: ['Test writing', 'Debugging practice', 'Test coverage'],
-        estimatedHours: 10,
-        deliverables: ['Test suite', 'Debugging report'],
-        status: 'not-started'
+        deliverables: ['Test suite', 'Debugging report']
       }
-    ],
-    resources: [
+    };
+    resources = [
       { type: 'Textbook', name: 'Python Cookbook', author: 'Prof. Michael Chen', available: true },
       { type: 'Online Course', name: 'Advanced Python Programming', platform: 'edX', available: true },
       { type: 'Development Environment', name: 'PyCharm Professional', platform: 'JetBrains', available: true },
       { type: 'Libraries', name: 'NumPy, Pandas, Django', platform: 'Python Package Index', available: true }
-    ],
-    milestones: [
-      { week: 3, title: 'Feature Assessment', type: 'Code Review', weight: '25%' },
-      { week: 6, title: 'Design Pattern Project', type: 'Project', weight: '30%' },
-      { week: 9, title: 'Performance Challenge', type: 'Practical', weight: '25%' },
-      { week: 12, title: 'Final Application', type: 'Project', weight: '20%' }
-    ]
-  },
-  'Web Development': {
-    title: 'Web Development Study Plan',
-    description: 'Learn modern web development technologies and best practices.',
-    duration: '14 weeks',
-    totalHours: '112 hours',
-    difficulty: 'Intermediate',
-    prerequisites: ['HTML/CSS Basics', 'JavaScript Fundamentals'],
-    objectives: [
+    ];
+    milestones = [
+      { title: 'Feature Assessment', type: 'Code Review' },
+      { title: 'Design Pattern Project', type: 'Project' },
+      { title: 'Performance Challenge', type: 'Practical' },
+      { title: 'Final Application', type: 'Project' }
+    ];
+  } else if (courseTitle === 'Web Development') {
+    title = 'Web Development Study Plan';
+    description = 'Learn modern web development technologies and best practices.';
+    objectives = [
       'Master modern web technologies',
       'Learn responsive design principles',
       'Understand web security best practices',
       'Build full-stack web applications'
-    ],
-    weeklyPlan: [
-      {
-        week: 1,
+    ];
+    prerequisites = ['HTML/CSS Basics', 'JavaScript Fundamentals'];
+    weeklyContent = {
+      week1: {
         title: 'Modern HTML & CSS',
         topics: ['Semantic HTML', 'CSS Grid', 'Flexbox', 'CSS Variables'],
         activities: ['Layout exercises', 'Responsive design', 'CSS animations'],
-        estimatedHours: 8,
-        deliverables: ['Portfolio page', 'CSS showcase'],
-        status: 'completed'
+        deliverables: ['Portfolio page', 'CSS showcase']
       },
-      {
-        week: 2,
+      week2: {
         title: 'JavaScript ES6+',
         topics: ['Arrow functions', 'Destructuring', 'Modules', 'Async/await'],
         activities: ['Code challenges', 'Mini applications', 'ES6 features'],
-        estimatedHours: 10,
-        deliverables: ['JavaScript project', 'Feature demonstration'],
-        status: 'completed'
+        deliverables: ['JavaScript project', 'Feature demonstration']
       },
-      {
-        week: 3,
+      week3: {
         title: 'Frontend Frameworks',
         topics: ['React basics', 'Component lifecycle', 'State management'],
         activities: ['React tutorials', 'Component building', 'State exercises'],
-        estimatedHours: 12,
-        deliverables: ['React app', 'Component library'],
-        status: 'in-progress'
+        deliverables: ['React app', 'Component library']
       },
-      {
-        week: 4,
+      week4: {
         title: 'Backend Development',
         topics: ['Node.js', 'Express.js', 'API design', 'Database integration'],
         activities: ['Server setup', 'API development', 'Database queries'],
-        estimatedHours: 10,
-        deliverables: ['Backend API', 'Database schema'],
-        status: 'not-started'
+        deliverables: ['Backend API', 'Database schema']
       }
-    ],
-    resources: [
+    };
+    resources = [
       { type: 'Textbook', name: 'Web Development Guide', author: 'Dr. Emily Brown', available: true },
       { type: 'Online Course', name: 'Full Stack Web Development', platform: 'Udemy', available: true },
       { type: 'Development Tools', name: 'VS Code, Chrome DevTools', platform: 'Various', available: true },
       { type: 'Frameworks', name: 'React, Node.js, Express', platform: 'Open Source', available: true }
-    ],
-    milestones: [
-      { week: 4, title: 'Frontend Assessment', type: 'Project', weight: '30%' },
-      { week: 8, title: 'Backend Integration', type: 'Project', weight: '25%' },
-      { week: 11, title: 'Full Stack App', type: 'Project', weight: '25%' },
-      { week: 14, title: 'Final Portfolio', type: 'Project', weight: '20%' }
-    ]
+    ];
+    milestones = [
+      { title: 'Frontend Assessment', type: 'Project' },
+      { title: 'Backend Integration', type: 'Project' },
+      { title: 'Full Stack App', type: 'Project' },
+      { title: 'Final Portfolio', type: 'Project' }
+    ];
+  } else {
+    // Fallback to Cyber Security
+    title = 'Cyber Security Study Plan';
+    description = 'Comprehensive study plan covering cybersecurity fundamentals, threats, and defense mechanisms.';
+    objectives = [
+      'Understand cybersecurity principles and best practices',
+      'Learn about common cyber threats and attack vectors',
+      'Master security tools and defense mechanisms',
+      'Develop incident response and recovery skills'
+    ];
+    prerequisites = ['Basic Computer Science', 'Networking Fundamentals'];
+    weeklyContent = {
+      week1: {
+        title: 'Introduction to Cybersecurity',
+        topics: ['Cybersecurity fundamentals', 'Threat landscape overview', 'Security principles'],
+        activities: ['Read Chapter 1-2', 'Complete Quiz 1', 'Join discussion forum'],
+        deliverables: ['Quiz submission', 'Discussion participation']
+      },
+      week2: {
+        title: 'Network Security Basics',
+        topics: ['Network protocols', 'Firewall configuration', 'VPN setup'],
+        activities: ['Lab exercises', 'Hands-on practice', 'Group project planning'],
+        deliverables: ['Lab report', 'Project outline']
+      },
+      week3: {
+        title: 'Cryptography Fundamentals',
+        topics: ['Encryption algorithms', 'Hash functions', 'Digital signatures'],
+        activities: ['Cryptography exercises', 'Code implementation', 'Security analysis'],
+        deliverables: ['Code submission', 'Security report']
+      },
+      week4: {
+        title: 'Web Application Security',
+        topics: ['OWASP Top 10', 'SQL injection', 'XSS prevention'],
+        activities: ['Vulnerability assessment', 'Penetration testing', 'Security audit'],
+        deliverables: ['Vulnerability report', 'Security recommendations']
+      },
+      week5: {
+        title: 'Incident Response',
+        topics: ['Incident detection', 'Response procedures', 'Recovery planning'],
+        activities: ['Case studies', 'Simulation exercises', 'Documentation'],
+        deliverables: ['Incident response plan', 'Case study analysis']
+      }
+    };
+    resources = [
+      { type: 'Textbook', name: 'Cybersecurity Essentials', author: 'Dr. Sarah Johnson', available: true },
+      { type: 'Online Course', name: 'Cybersecurity Fundamentals', platform: 'Coursera', available: true },
+      { type: 'Lab Environment', name: 'Virtual Security Lab', platform: 'VMware', available: true },
+      { type: 'Tools', name: 'Wireshark, Metasploit, Nmap', platform: 'Open Source', available: true }
+    ];
+    milestones = [
+      { title: 'Midterm Assessment', type: 'Exam' },
+      { title: 'Project Phase 1', type: 'Project' },
+      { title: 'Security Audit', type: 'Practical' },
+      { title: 'Final Project', type: 'Project' }
+    ];
   }
+  
+  // Combine localized and static data
+  return {
+    title: title,
+    description: description,
+    duration: staticInfo.duration,
+    totalHours: staticInfo.totalHours,
+    difficulty: staticInfo.difficulty,
+    prerequisites: prerequisites,
+    objectives: objectives,
+    weeklyPlan: staticInfo.weeklyPlan.map((week, index) => {
+      const weekKey = `week${week.week}`;
+      const weekData = weeklyContent[weekKey];
+      return {
+        ...week,
+        title: weekData.title,
+        topics: weekData.topics,
+        activities: weekData.activities,
+        deliverables: weekData.deliverables
+      };
+    }),
+    resources: resources,
+    milestones: staticInfo.milestones.map((milestone, index) => ({
+      ...milestone,
+      title: milestones[index].title,
+      type: milestones[index].type
+    }))
+  };
 };
 
 function StudyPlan() {
+  const { t, i18n } = useTranslation();
   const { courseId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const [selectedWeek, setSelectedWeek] = useState(null);
+  const { startTour } = useTour();
+  const isRTL = i18n.dir() === 'rtl';
+  const pr = (ltr, rtl) => (isRTL ? rtl : ltr);
   
   // Get course from location state or find by ID
-  const course = location.state?.course || { title: 'Unknown Course' };
-  const studyPlan = studyPlans[course.title] || studyPlans['Cyber Security'];
+  const course = location.state?.course || { title: t('student.courses.modal.studyPlan.unknownCourse') };
+  const studyPlan = getLocalizedStudyPlan(t, course.title);
+
+  const startStudyPlanTour = () => {
+    const steps = [
+      {
+        target: '[data-tour="study-plan-header"]',
+        title: t('student.tour.studyPlan.header.title', 'Study Plan Overview'),
+        content: t('student.tour.studyPlan.header.desc', 'Here you can see the course title, duration, total hours, and difficulty level for your study plan.'),
+        placement: pr('bottom', 'bottom'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="course-overview"]',
+        title: t('student.tour.studyPlan.overview.title', 'Course Overview'),
+        content: t('student.tour.studyPlan.overview.desc', 'This section shows the course description, learning objectives, and prerequisites you need to complete.'),
+        placement: pr('top', 'top'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="weekly-plan"]',
+        title: t('student.tour.studyPlan.weekly.title', 'Weekly Study Plan'),
+        content: t('student.tour.studyPlan.weekly.desc', 'Click on any week to expand and see detailed topics, activities, and deliverables. Track your progress with status indicators.'),
+        placement: pr('top', 'top'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="progress-summary"]',
+        title: t('student.tour.studyPlan.progress.title', 'Progress Summary'),
+        content: t('student.tour.studyPlan.progress.desc', 'Monitor your weekly progress at a glance with completion status for each week.'),
+        placement: pr('left', 'right'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="resources"]',
+        title: t('student.tour.studyPlan.resources.title', 'Learning Resources'),
+        content: t('student.tour.studyPlan.resources.desc', 'Access all the textbooks, online courses, tools, and materials you need for this course.'),
+        placement: pr('left', 'right'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="milestones"]',
+        title: t('student.tour.studyPlan.milestones.title', 'Key Milestones'),
+        content: t('student.tour.studyPlan.milestones.desc', 'Important deadlines and major assessments with their weights and schedules.'),
+        placement: pr('left', 'right'),
+        disableBeacon: true
+      }
+    ].filter(s => document.querySelector(s.target));
+    
+         if (steps.length) startTour('student:study-plan:v1', steps);
+   };
+
+   useEffect(() => {
+     // Auto-start tour for new users
+     const key = 'tour:student:study-plan:v1:autostart';
+     const hasSeenTour = localStorage.getItem(key);
+     const tourCompleted = localStorage.getItem('tour:student:study-plan:v1:state');
+     
+     if (!hasSeenTour && tourCompleted !== 'completed') {
+       setTimeout(() => {
+         startStudyPlanTour();
+         localStorage.setItem(key, 'shown');
+       }, 600);
+     }
+     
+     // Handle tour launches from navigation (sidebar "Start Tour" button)
+     const onLaunch = () => {
+       const launch = localStorage.getItem('tour:launch');
+       if (launch === 'student-full' || launch === 'student-resume') {
+         localStorage.removeItem('tour:launch');
+         setTimeout(() => startStudyPlanTour(), 200);
+       }
+     };
+     
+     window.addEventListener('tour:launch', onLaunch);
+     return () => window.removeEventListener('tour:launch', onLaunch);
+   }, []);
 
   const getStatusIcon = (status) => {
     switch (status) {
@@ -268,26 +484,35 @@ function StudyPlan() {
       <div className="flex-1 overflow-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Header */}
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center justify-between mb-8" data-tour="study-plan-header">
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => navigate(-1)}
                 className="p-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                aria-label={t('student.courses.modal.studyPlan.backButton')}
               >
                 <ArrowLeft className="h-5 w-5" />
               </button>
               <div>
                 <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">{studyPlan.title}</h1>
-                <p className="text-gray-600 dark:text-gray-400">{course.title} • {studyPlan.duration}</p>
+                <p className="text-gray-600 dark:text-gray-400">{t('student.courses.modal.studyPlan.courseDuration', { course: course.title, duration: studyPlan.duration })}</p>
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <div className="text-right">
-                <div className="text-sm text-gray-500 dark:text-gray-400">Total Hours</div>
+              <button
+                onClick={startStudyPlanTour}
+                className="p-2 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
+                aria-label={t('student.tour.startTour', 'Start guided tour')}
+                title={t('student.tour.startTour', 'Start guided tour')}
+              >
+                <Info className="h-4 w-4" />
+              </button>
+              <div className={`text-right ${isRTL ? 'text-left' : ''}`}>
+                <div className="text-sm text-gray-500 dark:text-gray-400">{t('student.courses.modal.studyPlan.totalHours')}</div>
                 <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{studyPlan.totalHours}</div>
               </div>
-              <div className="text-right">
-                <div className="text-sm text-gray-500 dark:text-gray-400">Difficulty</div>
+              <div className={`text-right ${isRTL ? 'text-left' : ''}`}>
+                <div className="text-sm text-gray-500 dark:text-gray-400">{t('student.courses.modal.studyPlan.difficulty')}</div>
                 <div className="text-lg font-semibold text-gray-900 dark:text-gray-100">{studyPlan.difficulty}</div>
               </div>
             </div>
@@ -297,31 +522,31 @@ function StudyPlan() {
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-6">
               {/* Course Overview */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6" data-tour="course-overview">
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
-                  <BookOpen className="h-5 w-5 mr-2 text-blue-500" />
-                  Course Overview
+                  <BookOpen className={`h-5 w-5 ${isRTL ? 'ml-2' : 'mr-2'} text-blue-500`} />
+                  {t('student.courses.modal.studyPlan.courseOverview')}
                 </h2>
                 <p className="text-gray-600 dark:text-gray-300 mb-4">{studyPlan.description}</p>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <h3 className="font-medium text-gray-900 dark:text-gray-100 mb-2">Learning Objectives</h3>
+                    <h3 className="font-medium text-gray-900 dark:text-gray-100 mb-2">{t('student.courses.modal.studyPlan.learningObjectives')}</h3>
                     <ul className="space-y-1">
                       {studyPlan.objectives.map((objective, index) => (
                         <li key={index} className="flex items-start text-sm text-gray-600 dark:text-gray-300">
-                          <Target className="h-4 w-4 mr-2 mt-0.5 text-green-500 flex-shrink-0" />
+                          <Target className={`h-4 w-4 ${isRTL ? 'ml-2' : 'mr-2'} mt-0.5 text-green-500 flex-shrink-0`} />
                           {objective}
                         </li>
                       ))}
                     </ul>
                   </div>
                   <div>
-                    <h3 className="font-medium text-gray-900 dark:text-gray-100 mb-2">Prerequisites</h3>
+                    <h3 className="font-medium text-gray-900 dark:text-gray-100 mb-2">{t('student.courses.modal.studyPlan.prerequisites')}</h3>
                     <ul className="space-y-1">
                       {studyPlan.prerequisites.map((prereq, index) => (
                         <li key={index} className="flex items-start text-sm text-gray-600 dark:text-gray-300">
-                          <CheckCircle className="h-4 w-4 mr-2 mt-0.5 text-blue-500 flex-shrink-0" />
+                          <CheckCircle className={`h-4 w-4 ${isRTL ? 'ml-2' : 'mr-2'} mt-0.5 text-blue-500 flex-shrink-0`} />
                           {prereq}
                         </li>
                       ))}
@@ -331,10 +556,10 @@ function StudyPlan() {
               </div>
 
               {/* Weekly Plan */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6" data-tour="weekly-plan">
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
-                  <CalendarDays className="h-5 w-5 mr-2 text-purple-500" />
-                  Weekly Study Plan
+                  <CalendarDays className={`h-5 w-5 ${isRTL ? 'ml-2' : 'mr-2'} text-purple-500`} />
+                  {t('student.courses.modal.studyPlan.weeklyStudyPlan')}
                 </h2>
                 <div className="space-y-4">
                   {studyPlan.weeklyPlan.map((week) => (
@@ -352,15 +577,19 @@ function StudyPlan() {
                           {getStatusIcon(week.status)}
                           <div>
                             <h3 className="font-medium text-gray-900 dark:text-gray-100">
-                              Week {week.week}: {week.title}
+                              {t('student.courses.modal.studyPlan.week', { num: week.week })}: {week.title}
                             </h3>
                             <div className="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400">
                               <span className="flex items-center">
-                                <Clock3 className="h-4 w-4 mr-1" />
-                                {week.estimatedHours}h
+                                <Clock3 className={`h-4 w-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
+                                <div className="text-xs text-gray-500 dark:text-gray-400">
+                                  {t('student.courses.modal.studyPlan.estimatedHours', { hours: week.estimatedHours })}
+                                </div>
                               </span>
                               <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(week.status)}`}>
-                                {week.status.replace('-', ' ')}
+                                {week.status === 'completed' ? t('student.courses.modal.studyPlan.status.completed') :
+                                 week.status === 'in-progress' ? t('student.courses.modal.studyPlan.status.inProgress') :
+                                 t('student.courses.modal.studyPlan.status.notStarted')}
                               </span>
                             </div>
                           </div>
@@ -373,7 +602,7 @@ function StudyPlan() {
                       {selectedWeek === week.week && (
                         <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 space-y-3">
                           <div>
-                            <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2">Topics Covered</h4>
+                            <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2">{t('student.courses.modal.studyPlan.topicsCovered')}</h4>
                             <div className="flex flex-wrap gap-2">
                               {week.topics.map((topic, index) => (
                                 <span key={index} className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm">
@@ -384,11 +613,11 @@ function StudyPlan() {
                           </div>
                           
                           <div>
-                            <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2">Activities</h4>
+                            <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2">{t('student.courses.modal.studyPlan.activities')}</h4>
                             <ul className="space-y-1">
                               {week.activities.map((activity, index) => (
                                 <li key={index} className="flex items-start text-sm text-gray-600 dark:text-gray-300">
-                                  <Lightbulb className="h-4 w-4 mr-2 mt-0.5 text-yellow-500 flex-shrink-0" />
+                                  <Lightbulb className={`h-4 w-4 ${isRTL ? 'ml-2' : 'mr-2'} mt-0.5 text-yellow-500 flex-shrink-0`} />
                                   {activity}
                                 </li>
                               ))}
@@ -396,11 +625,11 @@ function StudyPlan() {
                           </div>
                           
                           <div>
-                            <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2">Deliverables</h4>
+                            <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2">{t('student.courses.modal.studyPlan.deliverables')}</h4>
                             <ul className="space-y-1">
                               {week.deliverables.map((deliverable, index) => (
                                 <li key={index} className="flex items-start text-sm text-gray-600 dark:text-gray-300">
-                                  <FileText className="h-4 w-4 mr-2 mt-0.5 text-blue-500 flex-shrink-0" />
+                                  <FileText className={`h-4 w-4 ${isRTL ? 'ml-2' : 'mr-2'} mt-0.5 text-blue-500 flex-shrink-0`} />
                                   {deliverable}
                                 </li>
                               ))}
@@ -417,19 +646,21 @@ function StudyPlan() {
             {/* Sidebar */}
             <div className="space-y-6">
               {/* Progress Summary */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6" data-tour="progress-summary">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
-                  <TrendingUp className="h-5 w-5 mr-2 text-green-500" />
-                  Progress Summary
+                  <TrendingUp className={`h-5 w-5 ${isRTL ? 'ml-2' : 'mr-2'} text-green-500`} />
+                  {t('student.courses.modal.studyPlan.progressSummary')}
                 </h3>
                 <div className="space-y-4">
                   {studyPlan.weeklyPlan.map((week) => (
                     <div key={week.week} className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600 dark:text-gray-300">Week {week.week}</span>
+                      <span className="text-sm text-gray-600 dark:text-gray-300">{t('student.courses.modal.studyPlan.week', { num: week.week })}</span>
                       <div className="flex items-center space-x-2">
                         {getStatusIcon(week.status)}
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(week.status)}`}>
-                          {week.status.replace('-', ' ')}
+                          {week.status === 'completed' ? t('student.courses.modal.studyPlan.status.completed') :
+                           week.status === 'in-progress' ? t('student.courses.modal.studyPlan.status.inProgress') :
+                           t('student.courses.modal.studyPlan.status.notStarted')}
                         </span>
                       </div>
                     </div>
@@ -438,10 +669,10 @@ function StudyPlan() {
               </div>
 
               {/* Resources */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6" data-tour="resources">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
-                  <BookMarked className="h-5 w-5 mr-2 text-purple-500" />
-                  Learning Resources
+                  <BookMarked className={`h-5 w-5 ${isRTL ? 'ml-2' : 'mr-2'} text-purple-500`} />
+                  {t('student.courses.modal.studyPlan.learningResources')}
                 </h3>
                 <div className="space-y-3">
                   {studyPlan.resources.map((resource, index) => (
@@ -456,7 +687,7 @@ function StudyPlan() {
                             ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
                             : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
                         }`}>
-                          {resource.available ? 'Available' : 'Unavailable'}
+                          {resource.available ? t('student.courses.modal.studyPlan.resourceStatus.available') : t('student.courses.modal.studyPlan.resourceStatus.unavailable')}
                         </span>
                       </div>
                     </div>
@@ -465,17 +696,17 @@ function StudyPlan() {
               </div>
 
               {/* Milestones */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6" data-tour="milestones">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
-                  <Award className="h-5 w-5 mr-2 text-yellow-500" />
-                  Key Milestones
+                  <Award className={`h-5 w-5 ${isRTL ? 'ml-2' : 'mr-2'} text-yellow-500`} />
+                  {t('student.courses.modal.studyPlan.keyMilestones')}
                 </h3>
                 <div className="space-y-3">
                   {studyPlan.milestones.map((milestone, index) => (
                     <div key={index} className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                       <div className="flex items-center justify-between mb-2">
                         <span className="font-medium text-gray-900 dark:text-gray-100">{milestone.title}</span>
-                        <span className="text-sm text-gray-500 dark:text-gray-400">Week {milestone.week}</span>
+                        <span className="text-sm text-gray-500 dark:text-gray-400">{t('student.courses.modal.studyPlan.week', { num: milestone.week })}</span>
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-sm text-gray-600 dark:text-gray-300">{milestone.type}</span>
@@ -493,4 +724,4 @@ function StudyPlan() {
   );
 }
 
-export default StudyPlan;
+export default StudyPlan; 

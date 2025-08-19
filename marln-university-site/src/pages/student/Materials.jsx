@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from '../../components/Sidebar';
 import { 
   FileText, 
@@ -13,8 +13,12 @@ import {
   FileVideo,
   FileAudio,
   FileArchive,
-  FileCode
+  FileCode,
+  Grid3X3,
+  List
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { useTour } from '../../context/TourContext.jsx';
 
 const materials = [
   {
@@ -25,7 +29,7 @@ const materials = [
     type: 'lecture-notes',
     format: 'pdf',
     size: '2.4 MB',
-    uploadedAt: '2024-03-15T10:30:00',
+    uploadedAt: '2025-03-15T10:30:00',
     description: 'Comprehensive notes covering basic programming concepts, variables, and control structures.',
     downloads: 145,
     instructor: 'Dr. Sarah Johnson'
@@ -38,7 +42,7 @@ const materials = [
     type: 'lecture-notes',
     format: 'pdf',
     size: '3.1 MB',
-    uploadedAt: '2024-03-14T14:20:00',
+    uploadedAt: '2025-03-14T14:20:00',
     description: 'Detailed overview of fundamental data structures including arrays, linked lists, and trees.',
     downloads: 98,
     instructor: 'Prof. Michael Chen'
@@ -51,7 +55,7 @@ const materials = [
     type: 'project',
     format: 'zip',
     size: '5.7 MB',
-    uploadedAt: '2024-03-13T09:15:00',
+    uploadedAt: '2025-03-13T09:15:00',
     description: 'Starter template for the final web development project with basic structure and dependencies.',
     downloads: 76,
     instructor: 'Dr. Emily Brown'
@@ -64,7 +68,7 @@ const materials = [
     type: 'lecture-notes',
     format: 'pdf',
     size: '1.8 MB',
-    uploadedAt: '2024-03-12T16:45:00',
+    uploadedAt: '2025-03-12T16:45:00',
     description: 'Common database design patterns and best practices for efficient data modeling.',
     downloads: 112,
     instructor: 'Dr. James Wilson'
@@ -77,7 +81,7 @@ const materials = [
     type: 'assignment',
     format: 'zip',
     size: '4.2 MB',
-    uploadedAt: '2024-03-11T11:20:00',
+    uploadedAt: '2025-03-11T11:20:00',
     description: 'Sample solutions and explanations for the programming assignments.',
     downloads: 89,
     instructor: 'Dr. Sarah Johnson'
@@ -85,10 +89,14 @@ const materials = [
 ];
 
 function Materials() {
+  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCourse, setSelectedCourse] = useState('all');
   const [selectedType, setSelectedType] = useState('all');
   const [selectedMaterial, setSelectedMaterial] = useState(null);
+  const [viewMode, setViewMode] = useState('grid');
+  const [isDownloading, setIsDownloading] = useState(false);
+  const { startTour } = useTour();
 
   const filteredMaterials = materials.filter(material => {
     const matchesSearch = material.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -129,8 +137,95 @@ function Materials() {
   };
 
   const getTypeLabel = (type) => {
-    return type.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    const key = type;
+    // Map to translation key under student.materials.types
+    return t(`student.materials.types.${key}`, type.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '));
   };
+
+  const handleDownload = async (material) => {
+    setIsDownloading(true);
+    
+    try {
+      // Simulate download process
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Create a dummy file for download
+      const content = `This is a sample ${material.format.toUpperCase()} file for: ${material.title}\n\nCourse: ${material.course}\nInstructor: ${material.instructor}\nDescription: ${material.description}\n\nThis is a demo file. In a real application, this would be the actual file content.`;
+      
+      const blob = new Blob([content], { type: 'text/plain' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${material.title.replace(/[^a-zA-Z0-9]/g, '_')}.${material.format}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      
+      // Show success message
+      alert(t('student.materials.downloadSuccess', 'File downloaded successfully!'));
+      
+    } catch (error) {
+      console.error('Download failed:', error);
+      alert(t('student.materials.downloadError', 'Download failed. Please try again.'));
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
+  const startMaterialsTour = () => {
+    const steps = [
+      { 
+        target: '#materials-search', 
+        title: t('student.tour.materials.title', 'Find Materials'), 
+        content: t('student.tour.materials.desc', 'Search for course materials by title, course name, or description.'),
+        placement: 'left',
+        disableBeacon: true
+      },
+      { 
+        target: '[data-tour="materials-filters"]', 
+        title: t('student.tour.materials.filtersTitle', 'Filter Options'), 
+        content: t('student.tour.materials.filtersDesc', 'Filter materials by course or content type to find what you need.'),
+        placement: 'left',
+        disableBeacon: true
+      },
+      { 
+        target: '[data-tour="materials-list"]', 
+        title: t('student.tour.materials.listTitle', 'Materials Library'), 
+        content: t('student.tour.materials.listDesc', 'Browse all available documents, projects, and course resources.'),
+        placement: 'top-start',
+        disableBeacon: true
+      }
+    ].filter(s => document.querySelector(s.target));
+    
+    if (steps.length) startTour('student:materials:v1', steps);
+  };
+
+  useEffect(() => {
+    // Auto-start tour for new users
+    const key = 'tour:student:materials:v1:autostart';
+    const hasSeenTour = localStorage.getItem(key);
+    const tourCompleted = localStorage.getItem('tour:student:materials:v1:state');
+    
+    if (!hasSeenTour && tourCompleted !== 'completed') {
+      setTimeout(() => {
+        startMaterialsTour();
+        localStorage.setItem(key, 'shown');
+      }, 600);
+    }
+    
+    // Handle tour launches from navigation
+    const onLaunch = () => {
+      const launch = localStorage.getItem('tour:launch');
+      if (launch === 'student-full' || launch === 'student-resume') {
+        localStorage.removeItem('tour:launch');
+        setTimeout(() => startMaterialsTour(), 200);
+      }
+    };
+    
+    window.addEventListener('tour:launch', onLaunch);
+    return () => window.removeEventListener('tour:launch', onLaunch);
+  }, []);
 
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
@@ -139,20 +234,46 @@ function Materials() {
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Course Materials</h1>
+            <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100 flex items-center gap-3">
+              <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-xl">
+                <BookOpen className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+              </div>
+              {t('student.materials.title')}
+            </h1>
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-1">
+              <button
+                onClick={() => setViewMode('grid')}
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition ${
+                  viewMode === 'grid' ? 'bg-blue-600 text-white' : 'text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100'
+                }`}
+                title={t('student.materials.view.grid')}
+              >
+                <Grid3X3 size={18} />
+              </button>
+              <button
+                onClick={() => setViewMode('list')}
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition ${
+                  viewMode === 'list' ? 'bg-blue-600 text-white' : 'text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100'
+                }`}
+                title={t('student.materials.view.list')}
+              >
+                <List size={18} />
+              </button>
+            </div>
           </div>
 
           {/* Filters */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow mb-6 p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow mb-6 p-4" data-tour="materials-filters">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500" size={20} />
                 <input
                   type="text"
-                  placeholder="Search materials..."
+                  placeholder={t('student.materials.searchPlaceholder')}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700"
+                  id="materials-search"
                 />
               </div>
               <select
@@ -160,7 +281,7 @@ function Materials() {
                 onChange={(e) => setSelectedCourse(e.target.value)}
                 className="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700"
               >
-                <option value="all">All Courses</option>
+                <option value="all">{t('student.materials.courses.all')}</option>
                 <option value="CS101">CS101 - Introduction to Computer Science</option>
                 <option value="CS201">CS201 - Data Structures and Algorithms</option>
                 <option value="CS301">CS301 - Web Development</option>
@@ -171,77 +292,178 @@ function Materials() {
                 onChange={(e) => setSelectedType(e.target.value)}
                 className="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700"
               >
-                <option value="all">All Types</option>
-                <option value="lecture-notes">Lecture Notes</option>
-                <option value="assignment">Assignments</option>
-                <option value="project">Projects</option>
-                <option value="resource">Resources</option>
+                <option value="all">{t('student.materials.types.all')}</option>
+                <option value="lecture-notes">{t('student.materials.types.lecture-notes')}</option>
+                <option value="assignment">{t('student.materials.types.assignment')}</option>
+                <option value="project">{t('student.materials.types.project')}</option>
+                <option value="resource">{t('student.materials.types.resource')}</option>
               </select>
               <button className="flex items-center justify-center gap-2 px-4 py-2 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700">
                 <Filter size={20} />
-                More Filters
+                {t('student.materials.filters')}
               </button>
             </div>
           </div>
 
-          {/* Materials Grid */}
-          <div className="grid grid-cols-1 gap-6">
-            {filteredMaterials.map(material => (
-              <div
-                key={material.id}
-                className="bg-white dark:bg-gray-800 rounded-xl shadow overflow-hidden hover:shadow-md transition-shadow duration-200"
-              >
-                <div className="p-6">
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="flex items-start gap-4">
-                      {getFileIcon(material.format)}
-                      <div>
-                        <h3 className="font-semibold text-gray-800 dark:text-gray-100">{material.title}</h3>
-                        <p className="text-sm text-gray-500 dark:text-gray-300">{material.course} ({material.code})</p>
+          {/* Materials Display */}
+          {viewMode === 'grid' ? (
+            <div className="grid grid-cols-1 gap-6" data-tour="materials-list">
+              {filteredMaterials.map(material => (
+                <div
+                  key={material.id}
+                  className="bg-white dark:bg-gray-800 rounded-xl shadow overflow-hidden hover:shadow-md transition-shadow duration-200"
+                >
+                  <div className="p-6">
+                    <div className="flex justify-between items-start mb-4">
+                      <div className="flex items-start gap-4">
+                        {getFileIcon(material.format)}
+                        <div>
+                          <h3 className="font-semibold text-gray-800 dark:text-gray-100">{material.title}</h3>
+                          <p className="text-sm text-gray-500 dark:text-gray-300">{material.course} ({material.code})</p>
+                        </div>
+                      </div>
+                      <span className="px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+                        {getTypeLabel(material.type)}
+                      </span>
+                    </div>
+
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">{material.description}</p>
+
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                      <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                        <FileType className="h-4 w-4 mr-2" />
+                        <span>{material.format.toUpperCase()}</span>
+                      </div>
+                      <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                        <FileText className="h-4 w-4 mr-2" />
+                        <span>{material.size}</span>
+                      </div>
+                      <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                        <BookOpen className="h-4 w-4 mr-2" />
+                        <span>{material.instructor}</span>
+                      </div>
+                      <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                        <Download className="h-4 w-4 mr-2" />
+                        <span>
+                          {t('student.materials.labels.downloadCount_other', { count: material.downloads })}
+                        </span>
                       </div>
                     </div>
-                    <span className="px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800">
-                      {getTypeLabel(material.type)}
-                    </span>
-                  </div>
 
-                  <p className="text-sm text-gray-600 mb-4">{material.description}</p>
-
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                    <div className="flex items-center text-sm text-gray-600">
-                      <FileType className="h-4 w-4 mr-2" />
-                      <span>{material.format.toUpperCase()}</span>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-gray-500 dark:text-gray-400">
+                        {t('student.materials.labels.uploaded')}: {new Date(material.uploadedAt).toLocaleDateString()}
+                      </span>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => handleDownload(material)}
+                          disabled={isDownloading}
+                          className={`flex items-center gap-2 px-3 py-2 text-sm font-medium text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 transition-colors ${
+                            isDownloading ? 'opacity-50 cursor-not-allowed' : ''
+                          }`}
+                        >
+                          <Download className={`h-4 w-4 ${isDownloading ? 'animate-pulse' : ''}`} />
+                          {isDownloading ? t('student.materials.downloading', 'Downloading...') : t('student.materials.download', 'Download')}
+                        </button>
+                        <button
+                          onClick={() => setSelectedMaterial(material)}
+                          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                          data-tour="view-details-btn"
+                        >
+                          {t('student.materials.labels.viewDetails')}
+                          <ChevronRight className="h-4 w-4" />
+                        </button>
+                      </div>
                     </div>
-                    <div className="flex items-center text-sm text-gray-600">
-                      <FileText className="h-4 w-4 mr-2" />
-                      <span>{material.size}</span>
-                    </div>
-                    <div className="flex items-center text-sm text-gray-600">
-                      <BookOpen className="h-4 w-4 mr-2" />
-                      <span>{material.instructor}</span>
-                    </div>
-                    <div className="flex items-center text-sm text-gray-600">
-                      <Download className="h-4 w-4 mr-2" />
-                      <span>{material.downloads} downloads</span>
-                    </div>
-                  </div>
-
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-500">
-                      Uploaded: {new Date(material.uploadedAt).toLocaleDateString()}
-                    </span>
-                    <button
-                      onClick={() => setSelectedMaterial(material)}
-                      className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700"
-                    >
-                      View Details
-                      <ChevronRight className="h-4 w-4" />
-                    </button>
                   </div>
                 </div>
+              ))}
+            </div>
+          ) : (
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow overflow-hidden" data-tour="materials-list">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50 dark:bg-gray-700">
+                    <tr>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-1/4">
+                        {t('student.materials.list.title')}
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-1/6">
+                        {t('student.materials.list.course')}
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-1/6">
+                        {t('student.materials.list.type')}
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-1/6">
+                        {t('student.materials.list.format')}
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-1/6">
+                        {t('student.materials.list.downloads')}
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-1/6">
+                        {t('student.materials.list.actions')}
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                    {filteredMaterials.map(material => (
+                      <tr key={material.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                        <td className="px-4 py-3">
+                          <div className="flex items-center gap-3">
+                            {getFileIcon(material.format)}
+                            <div>
+                              <div className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{material.title}</div>
+                              <div className="text-sm text-gray-500 dark:text-gray-400 truncate">{material.instructor}</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
+                          <div>
+                            <div className="font-medium">{material.code}</div>
+                            <div className="text-gray-500 dark:text-gray-400 truncate">{material.course}</div>
+                          </div>
+                        </td>
+                        <td className="px-4 py-3">
+                          <span className="px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+                            {getTypeLabel(material.type)}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
+                          <div>
+                            <div className="font-medium">{material.format.toUpperCase()}</div>
+                            <div className="text-gray-500 dark:text-gray-400">{material.size}</div>
+                          </div>
+                        </td>
+                        <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
+                          {t('student.materials.labels.downloadCount_other', { count: material.downloads })}
+                        </td>
+                        <td className="px-4 py-3 text-sm font-medium">
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => handleDownload(material)}
+                              disabled={isDownloading}
+                              className={`text-green-600 dark:text-green-400 hover:text-green-900 dark:hover:text-green-300 px-3 py-1 rounded hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors ${
+                                isDownloading ? 'opacity-50 cursor-not-allowed' : ''
+                              }`}
+                            >
+                              {isDownloading ? t('student.materials.downloading', 'Downloading...') : t('student.materials.download', 'Download')}
+                            </button>
+                            <button
+                              onClick={() => setSelectedMaterial(material)}
+                              className="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 px-3 py-1 rounded hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+                              data-tour="view-details-btn"
+                            >
+                              {t('student.materials.labels.viewDetails')}
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
-            ))}
-          </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -259,36 +481,36 @@ function Materials() {
 
             <div className="space-y-4">
               <div>
-                <h3 className="font-medium text-gray-900 mb-2">Description</h3>
+                <h3 className="font-medium text-gray-900 mb-2">{t('student.materials.modal.description')}</h3>
                 <p className="text-sm text-gray-600">{selectedMaterial.description}</p>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <h3 className="font-medium text-gray-900 mb-2">File Information</h3>
+                  <h3 className="font-medium text-gray-900 mb-2">{t('student.materials.modal.fileInfo')}</h3>
                   <ul className="space-y-2">
                     <li className="text-sm text-gray-600">
-                      Format: {selectedMaterial.format.toUpperCase()}
+                      {t('student.materials.modal.format')}: {selectedMaterial.format.toUpperCase()}
                     </li>
                     <li className="text-sm text-gray-600">
-                      Size: {selectedMaterial.size}
+                      {t('student.materials.modal.size')}: {selectedMaterial.size}
                     </li>
                     <li className="text-sm text-gray-600">
-                      Downloads: {selectedMaterial.downloads}
+                      {t('student.materials.modal.downloads')}: {selectedMaterial.downloads}
                     </li>
                   </ul>
                 </div>
                 <div>
-                  <h3 className="font-medium text-gray-900 mb-2">Course Information</h3>
+                  <h3 className="font-medium text-gray-900 mb-2">{t('student.materials.modal.courseInfo')}</h3>
                   <ul className="space-y-2">
                     <li className="text-sm text-gray-600">
-                      Instructor: {selectedMaterial.instructor}
+                      {t('student.materials.modal.instructor')}: {selectedMaterial.instructor}
                     </li>
                     <li className="text-sm text-gray-600">
-                      Type: {getTypeLabel(selectedMaterial.type)}
+                      {t('student.materials.modal.type')}: {getTypeLabel(selectedMaterial.type)}
                     </li>
                     <li className="text-sm text-gray-600">
-                      Uploaded: {new Date(selectedMaterial.uploadedAt).toLocaleString()}
+                      {t('student.materials.modal.uploaded')}: {new Date(selectedMaterial.uploadedAt).toLocaleString()}
                     </li>
                   </ul>
                 </div>
@@ -300,13 +522,17 @@ function Materials() {
                 onClick={() => setSelectedMaterial(null)}
                 className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
-                Close
+                {t('student.materials.modal.close')}
               </button>
               <button
-                className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 flex items-center gap-2"
+                onClick={() => handleDownload(selectedMaterial)}
+                disabled={isDownloading}
+                className={`px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 flex items-center gap-2 transition-colors ${
+                  isDownloading ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
               >
-                <Download className="h-4 w-4" />
-                Download
+                <Download className={`h-4 w-4 ${isDownloading ? 'animate-pulse' : ''}`} />
+                {isDownloading ? t('student.materials.modal.downloading', 'Downloading...') : t('student.materials.modal.download')}
               </button>
             </div>
           </div>

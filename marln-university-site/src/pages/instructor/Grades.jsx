@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Sidebar from '../../components/Sidebar';
 import { BookOpen, BarChart2, UserCircle, Edit, CheckCircle, X, MessageCircle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { useTour } from '../../context/TourContext.jsx';
+import { useLanguage } from '../../context/LanguageContext.jsx';
 
 const dummyCourses = [
   { id: 1, code: 'CS101', name: 'Introduction to Computer Science' },
@@ -25,11 +28,83 @@ const dummyGrades = {
 };
 
 export default function Grades() {
+  const { t } = useTranslation();
+  const { isRTL } = useLanguage();
+  const { startTour } = useTour();
   const [selectedCourse, setSelectedCourse] = useState(dummyCourses[0].code);
   const [showModal, setShowModal] = useState(false);
   const [activeStudent, setActiveStudent] = useState(null);
   const [editFinal, setEditFinal] = useState('');
   const [editFeedback, setEditFeedback] = useState('');
+  const [showMessageModal, setShowMessageModal] = useState(false);
+  const [messageRecipient, setMessageRecipient] = useState(null);
+  const [messageText, setMessageText] = useState('');
+
+  useEffect(() => {
+    // Auto-start tour for new users
+    const key = 'tour:instructor:grades:v1:autostart';
+    const hasSeenTour = localStorage.getItem(key);
+    const tourCompleted = localStorage.getItem('tour:instructor:grades:v1:state');
+    
+    if (!hasSeenTour && tourCompleted !== 'completed') {
+      setTimeout(() => {
+        startGradesTour();
+        localStorage.setItem(key, 'shown');
+      }, 100);
+    }
+    
+    // Handle tour launches from navigation
+    const onLaunch = () => {
+      const launch = localStorage.getItem('tour:launch');
+      if (launch === 'instructor-resume') {
+        localStorage.removeItem('tour:launch');
+        setTimeout(() => startGradesTour(), 200);
+      }
+    };
+    window.addEventListener('tour:launch', onLaunch);
+    return () => window.removeEventListener('tour:launch', onLaunch);
+  }, []);
+
+  const startGradesTour = () => {
+    const steps = [
+      {
+        target: '[data-tour="instructor-grades-header"]',
+        title: t('instructor.tour.grades.header.title', 'Grades Management'),
+        content: t('instructor.tour.grades.header.desc', 'Welcome to your grades management page. Here you can review, edit, and manage student grades across all your courses.'),
+        placement: 'bottom',
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="instructor-grades-course-selector"]',
+        title: t('instructor.tour.grades.courseSelector.title', 'Course Selection'),
+        content: t('instructor.tour.grades.courseSelector.desc', 'Select the course you want to manage grades for. Each course shows different students and their assignment scores.'),
+        placement: 'bottom',
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="instructor-grades-table"]',
+        title: t('instructor.tour.grades.table.title', 'Grades Overview'),
+        content: t('instructor.tour.grades.table.desc', 'Review and edit final grades and feedback. Each row shows a student with their assignment scores and final grade.'),
+        placement: 'top',
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="instructor-grades-edit"]',
+        title: t('instructor.tour.grades.edit.title', 'Edit Grades'),
+        content: t('instructor.tour.grades.edit.desc', 'Click the edit button to modify student grades and add feedback. This opens a detailed grade management modal.'),
+        placement: 'top',
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="instructor-grades-message"]',
+        title: t('instructor.tour.grades.message.title', 'Student Communication'),
+        content: t('instructor.tour.grades.message.desc', 'Click the message button to send direct messages to students about their grades, feedback, or any other academic matters.'),
+        placement: 'top',
+        disableBeacon: true
+      }
+    ].filter(s => document.querySelector(s.target));
+    if (steps.length) startTour('instructor:grades:v1', steps);
+  };
 
   const students = dummyGrades[selectedCourse] || [];
 
@@ -53,28 +128,49 @@ export default function Grades() {
     setShowModal(false);
   };
 
+  const openMessageModal = (student) => {
+    setMessageRecipient(student);
+    setMessageText('');
+    setShowMessageModal(true);
+  };
+
+  const closeMessageModal = () => {
+    setShowMessageModal(false);
+    setMessageRecipient(null);
+    setMessageText('');
+  };
+
+  const sendMessage = () => {
+    // Here you would typically send the message to the backend
+    console.log(`Sending message to ${messageRecipient.name}: ${messageText}`);
+    closeMessageModal();
+  };
+
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
       <Sidebar role="instructor" />
-      <div className="flex-1 overflow-auto p-8">
-        <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-8">Grades & Assessment</h1>
+      <div className="flex-1 overflow-auto p-8" dir={isRTL ? 'rtl' : 'ltr'}>
+        <div className="flex items-center gap-3 mb-8" data-tour="instructor-grades-header">
+          <BarChart2 className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">{t('instructor.grades.title')}</h1>
+        </div>
         {/* Course Selector */}
-        <div className="mb-6 flex items-center gap-4">
+        <div className="mb-6 flex items-center gap-4" data-tour="instructor-grades-course-selector">
           <BarChart2 size={24} className="text-blue-600 dark:text-blue-400" />
           <select value={selectedCourse} onChange={e => setSelectedCourse(e.target.value)} className="border border-gray-300 dark:border-gray-600 rounded px-3 py-2 text-lg dark:bg-gray-900 dark:text-gray-100">
             {dummyCourses.map(c => <option key={c.code} value={c.code}>{c.code}: {c.name}</option>)}
           </select>
         </div>
         {/* Grades Table */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl overflow-x-auto">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl overflow-x-auto" data-tour="instructor-grades-table">
           <table className="min-w-full text-sm">
             <thead className="bg-gray-50 dark:bg-gray-900">
               <tr>
-                <th className="py-3 px-4 text-left text-gray-700 dark:text-gray-200">Student</th>
-                <th className="py-3 px-4 text-left text-gray-700 dark:text-gray-200">Email</th>
-                <th className="py-3 px-4 text-center text-gray-700 dark:text-gray-200">Assignments</th>
-                <th className="py-3 px-4 text-center text-gray-700 dark:text-gray-200">Final Grade</th>
-                <th className="py-3 px-4 text-center text-gray-700 dark:text-gray-200">Actions</th>
+                <th className={`py-3 px-4 ${isRTL ? 'text-right' : 'text-left'} text-gray-700 dark:text-gray-200`}>{t('instructor.grades.table.student')}</th>
+                <th className={`py-3 px-4 ${isRTL ? 'text-right' : 'text-left'} text-gray-700 dark:text-gray-200`}>{t('instructor.grades.table.email')}</th>
+                <th className="py-3 px-4 text-center text-gray-700 dark:text-gray-200">{t('instructor.grades.table.assignments')}</th>
+                <th className="py-3 px-4 text-center text-gray-700 dark:text-gray-200">{t('instructor.grades.table.final')}</th>
+                <th className="py-3 px-4 text-center text-gray-700 dark:text-gray-200">{t('instructor.grades.table.actions')}</th>
               </tr>
             </thead>
             <tbody>
@@ -86,7 +182,7 @@ export default function Grades() {
                     </div>
                     <span className="font-semibold text-gray-800 dark:text-gray-100">{s.name}</span>
                   </td>
-                  <td className="py-3 px-4 text-gray-600 dark:text-gray-300">{s.email}</td>
+                  <td className={`py-3 px-4 text-gray-600 dark:text-gray-300 ${isRTL ? 'text-right' : 'text-left'}`}>{s.email}</td>
                   <td className="py-3 px-4 text-center">
                     {s.assignments.map((g, i) => (
                       <span key={i} className="inline-block bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-400 rounded px-2 py-1 text-xs font-semibold mr-1">{g}</span>
@@ -94,8 +190,22 @@ export default function Grades() {
                   </td>
                   <td className="py-3 px-4 text-center font-bold text-lg text-blue-700 dark:text-blue-400">{s.final}</td>
                   <td className="py-3 px-4 text-center">
-                    <button className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200 mr-2" title="Edit Grade" onClick={() => openModal(s)}><Edit size={18} /></button>
-                    <button className="text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-200" title="Message"><MessageCircle size={18} /></button>
+                    <button 
+                      className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200 mr-2" 
+                      title={t('instructor.grades.actions.editGrade')} 
+                      onClick={() => openModal(s)}
+                      data-tour="instructor-grades-edit"
+                    >
+                      <Edit size={18} />
+                    </button>
+                    <button 
+                      onClick={() => openMessageModal(s)}
+                      className="text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-200" 
+                      title={t('instructor.grades.actions.message')}
+                      data-tour="instructor-grades-message"
+                    >
+                      <MessageCircle size={18} />
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -106,8 +216,8 @@ export default function Grades() {
         {/* Grade Modal */}
         {showModal && activeStudent && (
           <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-lg p-8 relative animate-fadeIn">
-              <button className="absolute top-4 right-4 text-gray-400 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-100" onClick={closeModal}><X size={28} /></button>
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-lg p-8 relative animate-fadeIn" dir={isRTL ? 'rtl' : 'ltr'}>
+              <button className={`absolute top-4 ${isRTL ? 'left-4' : 'right-4'} text-gray-400 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-100`} onClick={closeModal}><X size={28} /></button>
               <div className="flex items-center gap-4 mb-4">
                 <div className="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
                   <UserCircle size={48} className="text-blue-600 dark:text-blue-400" />
@@ -118,21 +228,66 @@ export default function Grades() {
                 </div>
               </div>
               <div className="mb-4">
-                <div className="font-semibold text-gray-700 dark:text-gray-200 mb-1 flex items-center gap-2"><BarChart2 size={18}/> Assignment Grades</div>
+                <div className="font-semibold text-gray-700 dark:text-gray-200 mb-1 flex items-center gap-2"><BarChart2 size={18}/> {t('instructor.grades.modal.assignmentGrades')}</div>
                 <div className="flex gap-2 flex-wrap">
                   {activeStudent.assignments.map((g, i) => (
-                    <span key={i} className="inline-block bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-400 rounded px-2 py-1 text-xs font-semibold">Assignment {i+1}: {g}</span>
+                    <span key={i} className="inline-block bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-400 rounded px-2 py-1 text-xs font-semibold">{t('instructor.grades.modal.assignmentLabel', { index: i + 1, grade: g })}</span>
                   ))}
                 </div>
               </div>
               <div className="mb-4">
-                <div className="font-semibold text-gray-700 dark:text-gray-200 mb-1 flex items-center gap-2"><CheckCircle size={18}/> Final Grade</div>
+                <div className="font-semibold text-gray-700 dark:text-gray-200 mb-1 flex items-center gap-2"><CheckCircle size={18}/> {t('instructor.grades.modal.finalGrade')}</div>
                 <input type="number" className="border border-gray-300 dark:border-gray-600 rounded px-2 py-1 w-24 text-center text-lg font-bold dark:bg-gray-900 dark:text-gray-100" value={editFinal} onChange={e => setEditFinal(e.target.value)} />
               </div>
               <div className="mb-4">
-                <div className="font-semibold text-gray-700 dark:text-gray-200 mb-1 flex items-center gap-2"><Edit size={18}/> Feedback</div>
-                <textarea className="w-full border border-gray-300 dark:border-gray-600 rounded p-2 dark:bg-gray-900 dark:text-gray-100" rows={3} value={editFeedback} onChange={e => setEditFeedback(e.target.value)} placeholder="Add feedback..." />
-                <button className="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800" onClick={saveGrade}>Save Grade</button>
+                <div className="font-semibold text-gray-700 dark:text-gray-200 mb-1 flex items-center gap-2"><Edit size={18}/> {t('instructor.grades.modal.feedback')}</div>
+                <textarea className="w-full border border-gray-300 dark:border-gray-600 rounded p-2 dark:bg-gray-900 dark:text-gray-100" rows={3} value={editFeedback} onChange={e => setEditFeedback(e.target.value)} placeholder={t('instructor.grades.modal.feedbackPlaceholder')} />
+                <button className="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800" onClick={saveGrade}>{t('instructor.grades.modal.save')}</button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Message Modal */}
+        {showMessageModal && messageRecipient && (
+          <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-lg p-8 relative animate-fadeIn" dir={isRTL ? 'rtl' : 'ltr'}>
+              <button className={`absolute top-4 ${isRTL ? 'left-4' : 'right-4'} text-gray-400 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-100`} onClick={closeMessageModal}><X size={28} /></button>
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
+                  <UserCircle size={48} className="text-blue-600 dark:text-blue-400" />
+                </div>
+                <div>
+                  <div className="text-xl font-bold text-gray-800 dark:text-gray-100">{messageRecipient.name}</div>
+                  <div className="text-gray-500 dark:text-gray-300">{messageRecipient.email}</div>
+                </div>
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                  {t('instructor.grades.messageModal.subject', 'Message')}
+                </label>
+                <textarea
+                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg p-3 dark:bg-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  rows={4}
+                  value={messageText}
+                  onChange={(e) => setMessageText(e.target.value)}
+                  placeholder={t('instructor.grades.messageModal.placeholder', 'Type your message here...')}
+                />
+              </div>
+              <div className={`flex ${isRTL ? 'justify-start' : 'justify-end'} gap-3`}>
+                <button
+                  onClick={closeMessageModal}
+                  className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-900 dark:text-gray-100"
+                >
+                  {t('instructor.grades.messageModal.cancel', 'Cancel')}
+                </button>
+                <button
+                  onClick={sendMessage}
+                  disabled={!messageText.trim()}
+                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {t('instructor.grades.messageModal.send', 'Send Message')}
+                </button>
               </div>
             </div>
           </div>

@@ -1,18 +1,29 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/Sidebar';
 import { BookOpen, Users2, ClipboardList, Calendar, BarChart2, MessageCircle, FileText, CheckCircle, TrendingUp, Bell, Award, Library, Clock, AlertCircle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { useTour } from '../../context/TourContext.jsx';
 
-const stats = [
-  { label: 'Enrolled Courses', value: '5', icon: BookOpen, color: 'text-blue-600', bg: 'bg-blue-50' },
-  { label: 'Pending Assignments', value: '3', icon: ClipboardList, color: 'text-yellow-600', bg: 'bg-yellow-50' },
-  { label: 'Average Grade', value: '85%', icon: Award, color: 'text-green-600', bg: 'bg-green-50' },
-  { label: 'Next Class', value: 'Math 101', icon: Calendar, color: 'text-purple-600', bg: 'bg-purple-50' },
-];
+const statsData = {
+  'this': [
+    { labelKey: 'student.dashboard.stats.enrolledCourses', value: '5', icon: BookOpen, color: 'text-blue-600', bg: 'bg-blue-50' },
+    { labelKey: 'student.dashboard.stats.pendingAssignments', value: '3', icon: ClipboardList, color: 'text-yellow-600', bg: 'bg-yellow-50' },
+    { labelKey: 'student.dashboard.stats.averageGrade', value: '85%', icon: Award, color: 'text-green-600', bg: 'bg-green-50' },
+    { labelKey: 'student.dashboard.stats.nextClass', value: 'Mathematics', icon: Calendar, color: 'text-purple-600', bg: 'bg-purple-50' },
+  ],
+  'last': [
+    { labelKey: 'student.dashboard.stats.enrolledCourses', value: '4', icon: BookOpen, color: 'text-blue-600', bg: 'bg-blue-50' },
+    { labelKey: 'student.dashboard.stats.pendingAssignments', value: '0', icon: ClipboardList, color: 'text-yellow-600', bg: 'bg-yellow-50' },
+    { labelKey: 'student.dashboard.stats.averageGrade', value: '82%', icon: Award, color: 'text-green-600', bg: 'bg-green-50' },
+    { labelKey: 'student.dashboard.stats.nextClass', value: 'N/A', icon: Calendar, color: 'text-purple-600', bg: 'bg-purple-50' },
+  ]
+};
 
 const messages = [
-  { name: 'Dr. Emily Carter', time: '10:15 AM', msg: 'Your assignment has been graded. Great work!', avatar: '', color: 'bg-blue-200' },
-  { name: 'Study Group', time: 'Yesterday', msg: 'Meeting tomorrow at 2 PM in Library', avatar: '', color: 'bg-green-200' },
-  { name: 'Academic Advisor', time: '2 days ago', msg: 'Course registration opens next week', avatar: '', color: 'bg-yellow-200' },
+  { name: 'Dr. Emily Carter', time: '10:15 AM', msg: 'Your assignment has been graded. Great work!', avatar: '', color: 'bg-blue-200', status: 'online', unread: true },
+  { name: 'Study Group', time: 'Yesterday', msg: 'Meeting tomorrow at 2 PM in Library', avatar: '', color: 'bg-green-200', status: 'typing', unread: false },
+  { name: 'Academic Advisor', time: '2 days ago', msg: 'Course registration opens next week', avatar: '', color: 'bg-yellow-200', status: 'offline', unread: false },
 ];
 
 const activities = [
@@ -28,18 +39,26 @@ const upcomingClasses = [
   { time: '3:30 PM', title: 'Chemistry Lab', room: 'Lab 203, Science Building', instructor: 'Dr. Sarah Lee' },
 ];
 
-const courseProgress = [
-  { name: 'Mathematics 101', progress: 75, color: 'bg-blue-500' },
-  { name: 'Physics 201', progress: 60, color: 'bg-green-500' },
-  { name: 'Chemistry 101', progress: 85, color: 'bg-yellow-500' },
-  { name: 'Computer Science 101', progress: 90, color: 'bg-purple-500' },
-];
+const courseProgressData = {
+  'this': [
+    { name: 'Mathematics 101', progress: 75, color: 'bg-blue-500' },
+    { name: 'Physics 201', progress: 60, color: 'bg-green-500' },
+    { name: 'Chemistry 101', progress: 85, color: 'bg-yellow-500' },
+    { name: 'Computer Science 101', progress: 90, color: 'bg-purple-500' },
+  ],
+  'last': [
+    { name: 'Calculus I', progress: 88, color: 'bg-blue-500' },
+    { name: 'General Physics', progress: 72, color: 'bg-green-500' },
+    { name: 'Introduction to Chemistry', progress: 91, color: 'bg-yellow-500' },
+    { name: 'Programming Fundamentals', progress: 85, color: 'bg-purple-500' },
+  ]
+};
 
 const upcomingAssignments = [
   {
     course: 'Mathematics 101',
     title: 'Linear Algebra Assignment',
-    dueDate: '2024-03-20',
+    dueDate: '2025-03-20',
     daysLeft: 3,
     status: 'pending',
     priority: 'high'
@@ -47,7 +66,7 @@ const upcomingAssignments = [
   {
     course: 'Physics 201',
     title: 'Lab Report: Wave Motion',
-    dueDate: '2024-03-22',
+    dueDate: '2025-03-22',
     daysLeft: 5,
     status: 'in-progress',
     priority: 'medium'
@@ -55,25 +74,53 @@ const upcomingAssignments = [
   {
     course: 'Chemistry 101',
     title: 'Chemical Reactions Quiz',
-    dueDate: '2024-03-25',
+    dueDate: '2025-03-25',
     daysLeft: 8,
     status: 'not-started',
     priority: 'low'
   }
 ];
 
-const studyProgress = [
-  { label: 'Attendance Rate', value: '92%', icon: Users2, trend: '+2.5%' },
-  { label: 'Study Hours', value: '24h', icon: Clock, trend: '+5h' },
-  { label: 'Completed Tasks', value: '18/20', icon: CheckCircle, trend: '+3' },
-  { label: 'Current GPA', value: '3.8', icon: Award, trend: '+0.2' }
-];
+const studyProgressData = {
+  'this': [
+    { labelKey: 'student.dashboard.studyProgress.attendanceRate', value: '92%', icon: Users2, trend: '+2.5%' },
+    { labelKey: 'student.dashboard.studyProgress.studyHours', value: '24h', icon: Clock, trend: '+5h' },
+    { labelKey: 'student.dashboard.studyProgress.completedTasks', value: '18/20', icon: CheckCircle, trend: '+3' },
+    { labelKey: 'student.dashboard.studyProgress.currentGpa', value: '3.8', icon: Award, trend: '+0.2' }
+  ],
+  'last': [
+    { labelKey: 'student.dashboard.studyProgress.attendanceRate', value: '89%', icon: Users2, trend: '+1.2%' },
+    { labelKey: 'student.dashboard.studyProgress.studyHours', value: '28h', icon: Clock, trend: '+3h' },
+    { labelKey: 'student.dashboard.studyProgress.completedTasks', value: '22/25', icon: CheckCircle, trend: '+2' },
+    { labelKey: 'student.dashboard.studyProgress.currentGpa', value: '3.6', icon: Award, trend: '+0.1' }
+  ]
+};
 
 const quickActions = [
-  { label: 'Submit Assignment', icon: FileText, color: 'blue' },
-  { label: 'Join Study Group', icon: Users2, color: 'purple' },
-  { label: 'Book Library Slot', icon: Library, color: 'green' },
-  { label: 'Schedule Meeting', icon: Calendar, color: 'yellow' }
+  { 
+    labelKey: 'student.dashboard.widgets.buttons.courseMaterials', 
+    icon: FileText, 
+    color: 'blue',
+    path: '/student/materials'
+  },
+  { 
+    labelKey: 'student.dashboard.widgets.buttons.assignments', 
+    icon: ClipboardList, 
+    color: 'purple',
+    path: '/student/assignments'
+  },
+  { 
+    labelKey: 'student.dashboard.widgets.buttons.schedule', 
+    icon: Calendar, 
+    color: 'yellow',
+    path: '/student/schedule'
+  },
+  { 
+    labelKey: 'student.dashboard.widgets.buttons.grades', 
+    icon: Award, 
+    color: 'green',
+    path: '/student/grades'
+  }
 ];
 
 const upcomingDeadlines = [
@@ -81,14 +128,14 @@ const upcomingDeadlines = [
     type: 'Assignment',
     course: 'Mathematics 101',
     title: 'Linear Algebra Quiz',
-    deadline: '2024-03-22',
+    deadline: '2025-03-22',
     priority: 'high'
   },
   {
     type: 'Project',
     course: 'Computer Science',
     title: 'Database Design',
-    deadline: '2024-03-25',
+    deadline: '2025-03-25',
     priority: 'medium'
   }
 ];
@@ -124,20 +171,192 @@ function AnimatedNumber({ value }) {
 }
 
 export default function StudentDashboard() {
+  const { t } = useTranslation();
+  const { startTour } = useTour();
+  const navigate = useNavigate();
+  const [showTourChooser, setShowTourChooser] = useState(false);
+  const [selectedSemester, setSelectedSemester] = useState('this');
+  useEffect(() => {
+    const key = 'tour:student:v1:autostart';
+    const hasSeenTour = localStorage.getItem(key);
+    const tourCompleted = localStorage.getItem('tour:student:v1:state');
+    
+    // Only auto-start for truly new users who haven't seen or completed the tour
+    if (!hasSeenTour && tourCompleted !== 'completed') {
+      // Longer delay for better UX - let page fully load
+      setTimeout(() => {
+        startStudentTour(true);
+        localStorage.setItem(key, 'shown');
+      }, 800);
+    }
+    
+    const onLaunch = () => {
+      const launch = localStorage.getItem('tour:launch');
+      if (launch === 'student-full' || launch === 'student-resume') {
+        localStorage.removeItem('tour:launch');
+        // Small delay to ensure page is ready
+        setTimeout(() => startStudentTour(), 200);
+      }
+    };
+    
+    window.addEventListener('tour:launch', onLaunch);
+    return () => window.removeEventListener('tour:launch', onLaunch);
+  }, []);
+
+  // Check for pending tour launch when navigating to dashboard
+  useEffect(() => {
+    const launch = localStorage.getItem('tour:launch');
+    if (launch === 'student-full' || launch === 'student-resume') {
+      localStorage.removeItem('tour:launch');
+      // Delay to ensure page is fully rendered after navigation
+      setTimeout(() => startStudentTour(), 400);
+    }
+  }, []);
+  const startStudentTour = (auto = false) => {
+    const steps = [
+      {
+        target: '#sidebar-nav [data-tour="sidebar-link-dashboard"]',
+        title: t('student.tour.sidebar.title', 'Navigation'),
+        content: t('student.tour.sidebar.desc', 'Use this sidebar to navigate between different sections of your LMS.'),
+        placement: 'right',
+        disableBeacon: true,
+      },
+      {
+        target: '#stat-cards',
+        title: t('student.tour.dashboard.cards.title', 'Your Status'),
+        content: t('student.tour.dashboard.cards.desc', 'Quick overview of your academic progress and important metrics.'),
+        placement: 'bottom',
+        disableBeacon: true,
+      },
+      {
+        target: '[data-tour="academic-performance"]',
+        title: t('student.tour.performance.title', 'Academic Performance'),
+        content: t('student.tour.performance.desc', 'Track your overall academic progress and performance trends.'),
+        placement: 'bottom',
+        disableBeacon: true,
+      },
+      {
+        target: '[data-tour="study-stats"]',
+        title: t('student.tour.studyStats.title', 'Study Progress'),
+        content: t('student.tour.studyStats.desc', 'Monitor your attendance, study hours, and completed tasks.'),
+        placement: 'bottom',
+        disableBeacon: true,
+      },
+      {
+        target: '#upcoming-assignments',
+        title: t('student.tour.assignments.title', 'Upcoming Assignments'),
+        content: t('student.tour.assignments.desc', 'Stay on top of your deadlines and upcoming assignments.'),
+        placement: 'right',
+        disableBeacon: true,
+      },
+      {
+        target: '#quick-links',
+        title: t('student.tour.courses.title', 'Quick Links'),
+        content: t('student.tour.courses.desc', 'Access frequently used features and sections quickly.'),
+        placement: 'left',
+        disableBeacon: true,
+      },
+      {
+        target: '[data-tour="deadlines"]',
+        title: t('student.tour.deadlines.title', 'Important Deadlines'),
+        content: t('student.tour.deadlines.desc', 'Never miss important dates and deadlines.'),
+        placement: 'left',
+        disableBeacon: true,
+      },
+      {
+        target: '[data-tour="messages"]',
+        title: t('student.tour.messages.title', 'Messages'),
+        content: t('student.tour.messages.desc', 'Stay connected with your instructors and classmates.'),
+        placement: 'left',
+        disableBeacon: true,
+      },
+    ].filter(s => document.querySelector(s.target));
+    
+    startTour('student:v1', steps);
+  };
+
+  const startFullTour = () => {
+    // Force-set queue to the default set of pages (no Sage AI)
+    const defaultQueue = [
+      '/student/courses',
+      '/student/assignments', 
+      '/student/grades',
+      '/student/materials',
+      '/student/schedule',
+      '/student/messages',
+      '/student/notifications',
+      '/student/ecollab'
+    ];
+    localStorage.setItem('tour:queue', JSON.stringify(defaultQueue));
+    localStorage.setItem('tour:full:sequence', JSON.stringify(defaultQueue));
+    startStudentTour();
+    setShowTourChooser(false);
+  };
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
       <Sidebar role="student" />
       <div className="flex-1 overflow-auto p-6">
-        {/* Top Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-          {stats.map((stat) => (
-            <div key={stat.label} className={`rounded-xl shadow p-6 flex items-center gap-4 ${stat.bg} dark:bg-gray-800`}>
-              <stat.icon size={36} className={stat.color} />
-              <div>
-                <div className="text-2xl font-bold text-gray-800 dark:text-gray-100"><AnimatedNumber value={parseInt(stat.value)} /></div>
-                <div className="text-gray-500 dark:text-gray-300 text-sm">{stat.label}</div>
+        {/* Tour chooser accessible via sidebar Start Tour button; keeping the modal for demo */}
+        {false && (
+          <div className="flex justify-end mb-2">
+            <button onClick={() => setShowTourChooser(true)} className="px-3 py-1.5 text-xs rounded-md bg-purple-600 text-white hover:bg-purple-700">
+              {t('student.tour.cta.try', 'Start Tour')}
+            </button>
+          </div>
+        )}
+        {false && showTourChooser && (
+          <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-md p-5">
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">{t('student.tour.startPrompt.title', 'Choose your tour')}</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">{t('student.tour.startPrompt.desc', 'Take the full guided tour or jump to a section.')}</p>
+              <div className="space-y-2">
+                <button onClick={startFullTour} className="w-full px-3 py-2 rounded bg-purple-600 text-white hover:bg-purple-700 text-sm">{t('student.tour.startPrompt.full', 'Full tour (recommended)')}</button>
+                <div className="grid grid-cols-2 gap-2">
+                  <button onClick={() => { setShowTourChooser(false); startStudentTour(); }} className="px-3 py-2 rounded bg-gray-100 dark:bg-gray-700 text-sm">{t('navigation.dashboard', 'Dashboard')}</button>
+                  <button onClick={() => { localStorage.setItem('tour:queue', JSON.stringify([])); window.location.assign('/student/courses'); }} className="px-3 py-2 rounded bg-gray-100 dark:bg-gray-700 text-sm">{t('student.courses.title', 'My Courses')}</button>
+                  <button onClick={() => { localStorage.setItem('tour:queue', JSON.stringify([])); window.location.assign('/student/assignments'); }} className="px-3 py-2 rounded bg-gray-100 dark:bg-gray-700 text-sm">{t('student.assignments.title', 'Assignments')}</button>
+                  <button onClick={() => { localStorage.setItem('tour:queue', JSON.stringify([])); window.location.assign('/student/schedule'); }} className="px-3 py-2 rounded bg-gray-100 dark:bg-gray-700 text-sm">{t('student.schedule.title', 'Schedule')}</button>
+                </div>
+                <button onClick={() => setShowTourChooser(false)} className="w-full px-3 py-2 rounded border dark:border-gray-600 text-sm">{t('common.cancel', 'Cancel')}</button>
               </div>
             </div>
+          </div>
+        )}
+        {/* Top Stats */}
+        <div id="stat-cards" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6" data-tour="stat-cards">
+          {statsData[selectedSemester].map((stat) => (
+            <button
+              key={stat.labelKey}
+              onClick={() => {
+                if (stat.labelKey === 'student.dashboard.stats.enrolledCourses') {
+                  navigate('/student/courses');
+                } else if (stat.labelKey === 'student.dashboard.stats.pendingAssignments') {
+                  navigate('/student/assignments');
+                } else if (stat.labelKey === 'student.dashboard.stats.averageGrade') {
+                  navigate('/student/grades');
+                } else if (stat.labelKey === 'student.dashboard.stats.nextClass') {
+                  navigate('/student/schedule');
+                }
+              }}
+              className={`rounded-xl shadow p-6 flex items-center gap-4 ${stat.bg} dark:bg-gray-800 hover:shadow-lg transition-all duration-200 hover:scale-105 cursor-pointer`}
+            >
+              <stat.icon size={36} className={stat.color} />
+              <div>
+                <div className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+                  {stat.value === 'N/A' ? 'N/A' : 
+                   stat.value === 'Mathematics' ? stat.value :
+                   stat.value.includes('%') ? (
+                     <>
+                       <AnimatedNumber value={parseInt(stat.value)} />
+                       <span>%</span>
+                     </>
+                   ) : (
+                     <AnimatedNumber value={parseInt(stat.value)} />
+                   )}
+                </div>
+                <div className="text-gray-500 dark:text-gray-300 text-sm">{t(stat.labelKey)}</div>
+              </div>
+            </button>
           ))}
         </div>
 
@@ -145,16 +364,20 @@ export default function StudentDashboard() {
         <div className="grid grid-cols-12 gap-6">
           {/* Left Column - Academic Performance */}
           <div className="col-span-12 lg:col-span-8">
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6 mb-6">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6 mb-6" data-tour="academic-performance">
               <div className="flex justify-between items-center mb-4">
-                <div className="font-semibold text-gray-700 dark:text-gray-100">Academic Performance</div>
-                <select className="border rounded px-2 py-1 text-sm dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700">
-                  <option>This Semester</option>
-                  <option>Last Semester</option>
+                <div className="font-semibold text-gray-700 dark:text-gray-100">{t('student.dashboard.academicPerformance.title')}</div>
+                <select 
+                  value={selectedSemester}
+                  onChange={(e) => setSelectedSemester(e.target.value)}
+                  className="border rounded px-2 py-1 text-sm dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700"
+                >
+                  <option value="this">{t('student.dashboard.academicPerformance.semester.this')}</option>
+                  <option value="last">{t('student.dashboard.academicPerformance.semester.last')}</option>
                 </select>
               </div>
               <div className="space-y-4">
-                {courseProgress.map((course) => (
+                {courseProgressData[selectedSemester].map((course) => (
                   <div key={course.name}>
                     <div className="flex justify-between mb-1">
                       <span className="text-sm font-medium text-gray-700 dark:text-gray-200">{course.name}</span>
@@ -167,8 +390,8 @@ export default function StudentDashboard() {
             </div>
 
             {/* Study Progress Overview */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-              {studyProgress.map((item, index) => (
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6" data-tour="study-stats">
+              {studyProgressData[selectedSemester].map((item, index) => (
                 <div key={index} className="bg-white dark:bg-gray-800 rounded-xl shadow p-4">
                   <div className="flex items-center justify-between mb-2">
                     <item.icon size={18} className="text-blue-600" />
@@ -176,229 +399,197 @@ export default function StudentDashboard() {
                       item.trend.startsWith('+') ? 'text-green-600' : 'text-red-600'
                     }`}>{item.trend}</span>
                   </div>
-                  <div className="text-2xl font-bold text-gray-800 dark:text-gray-100">{item.value}</div>
-                  <div className="text-sm text-gray-500 dark:text-gray-300">{item.label}</div>
+                  <div className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+                    {item.value.includes('%') ? (
+                      <>
+                        <AnimatedNumber value={parseInt(item.value)} />
+                        <span>%</span>
+                      </>
+                    ) : item.value.includes('h') ? (
+                      <>
+                        <AnimatedNumber value={parseInt(item.value)} />
+                        <span>h</span>
+                      </>
+                    ) : item.value.includes('/') ? (
+                      item.value.split('/').map((part, i) => (
+                        <span key={i}>
+                          {i === 0 ? <AnimatedNumber value={parseInt(part)} /> : parseInt(part)}
+                          {i === 0 ? '/' : ''}
+                        </span>
+                      ))
+                    ) : item.value.includes('.') ? (
+                      <>
+                        <AnimatedNumber value={parseFloat(item.value) * 10} />
+                        <span>/10</span>
+                      </>
+                    ) : (
+                      <AnimatedNumber value={parseInt(item.value)} />
+                    )}
+                  </div>
+                  <div className="text-sm text-gray-500 dark:text-gray-300">{t(item.labelKey)}</div>
                 </div>
               ))}
             </div>
 
             {/* Upcoming Assignments */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-4 mb-6">
+            <div id="upcoming-assignments" className="bg-white dark:bg-gray-800 rounded-xl shadow p-4 mb-6" data-tour="upcoming-assignments">
               <div className="flex justify-between items-center mb-2">
                 <div className="flex items-center gap-2">
                   <Clock size={16} className="text-blue-600" />
-                  <span className="font-medium text-gray-700 dark:text-gray-100">Upcoming Assignments</span>
+                  <span className="font-medium text-gray-700 dark:text-gray-100">{t('student.dashboard.upcomingAssignments.title')}</span>
                 </div>
-                <a href="#" className="text-blue-600 dark:text-blue-400 text-sm hover:underline flex items-center">
-                  View All
+                                <button 
+                  onClick={() => navigate('/student/assignments')}
+                  className="text-blue-600 dark:text-blue-400 text-sm hover:underline flex items-center hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
+                >
+                  {t('student.dashboard.upcomingAssignments.viewAll')}
                   <svg className="w-3 h-3 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
                   </svg>
-                </a>
+                </button>
               </div>
-              <div className="space-y-1">
-                {upcomingAssignments.map((assignment, index) => (
-                  <div key={index} className="flex items-center justify-between py-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg cursor-pointer">
-                    <div className="flex items-center gap-2">
-                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center ${
-                        assignment.course.includes('Mathematics') ? 'bg-blue-50 dark:bg-blue-900' :
-                        assignment.course.includes('Physics') ? 'bg-purple-50 dark:bg-purple-900' :
-                        'bg-green-50 dark:bg-green-900'
-                      }`}>
-                        <span className={`text-sm font-medium ${
-                          assignment.course.includes('Mathematics') ? 'text-blue-600 dark:text-blue-300' :
-                          assignment.course.includes('Physics') ? 'text-purple-600 dark:text-purple-300' :
-                          'text-green-600 dark:text-green-300'
-                        }`}>
-                          {assignment.course.split(' ')[0][0]}
-                        </span>
-                      </div>
-                      <div>
-                        <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{assignment.title}</div>
-                        <div className="text-xs text-gray-500 dark:text-gray-300">{assignment.course}</div>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="text-right">
-                        <div className="text-sm text-gray-900 dark:text-gray-100">Due Mar {assignment.dueDate.split('-')[2]}</div>
-                        <div className="text-xs text-red-500">{assignment.daysLeft} days left</div>
-                      </div>
-                      <div className={`px-2 py-0.5 rounded-full text-xs ${
-                        assignment.status === 'pending' ? 'bg-yellow-50 dark:bg-yellow-900 text-yellow-600 dark:text-yellow-300' :
-                        assignment.status === 'in-progress' ? 'bg-blue-50 dark:bg-blue-900 text-blue-600 dark:text-blue-300' :
-                        'bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300'
-                      }`}>
-                        {assignment.status.replace('-', ' ')}
-                      </div>
-                      <svg className="w-3 h-3 text-gray-400 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-                      </svg>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Quick Actions */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="font-semibold text-gray-700 dark:text-gray-100">Quick Actions</h2>
-              </div>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {quickActions.map((action, index) => (
-                  <button
-                    key={index}
-                    className={`flex flex-col items-center justify-center p-4 rounded-xl bg-${action.color}-50 hover:bg-${action.color}-100 transition-colors dark:bg-${action.color}-900 dark:hover:bg-${action.color}-800`}
+              <div className="space-y-4">
+                {upcomingAssignments.map((a, idx) => (
+                  <button 
+                    key={idx} 
+                    onClick={() => navigate('/student/assignments')}
+                    className="w-full text-left flex justify-between items-center p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                   >
-                    <action.icon size={24} className={`text-${action.color}-600 mb-2 dark:text-${action.color}-400`} />
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-200">{action.label}</span>
+                    <div>
+                      <div className="font-medium text-gray-700 dark:text-gray-200">{a.title}</div>
+                      <div className="text-sm text-gray-500 dark:text-gray-300">{a.course} • {a.dueDate}</div>
+                    </div>
+                    <span className="text-xs text-gray-500 dark:text-gray-400">{a.daysLeft}d</span>
                   </button>
                 ))}
               </div>
             </div>
           </div>
 
-          {/* Right Column - Schedule */}
+          {/* Right Column - Widgets */}
           <div className="col-span-12 lg:col-span-4">
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
-              <div className="font-semibold text-gray-700 dark:text-gray-100 mb-4">Today's Schedule</div>
-              <div className="space-y-4">
-                {upcomingClasses.map((class_, index) => (
-                  <div key={index} className="flex items-start gap-4 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">
-                    <div className="flex-shrink-0 w-16 text-center">
-                      <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{class_.time}</div>
-                    </div>
-                    <div className="flex-1">
-                      <div className="font-medium text-gray-900 dark:text-gray-100">{class_.title}</div>
-                      <div className="text-sm text-gray-500 dark:text-gray-300">{class_.room}</div>
-                      <div className="text-sm text-gray-500 dark:text-gray-300">Instructor: {class_.instructor}</div>
-                    </div>
-                  </div>
+            {/* Quick Actions */}
+            <div id="quick-links" className="bg-white dark:bg-gray-800 rounded-xl shadow p-4 mb-6" data-tour="quick-links">
+              <div className="flex items-center gap-2 mb-4">
+                <FileText size={18} className="text-blue-600" />
+                <span className="font-medium text-gray-700 dark:text-gray-100">{t('student.dashboard.widgets.quickLinks', 'Quick Links')}</span>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                {quickActions.map((action, idx) => (
+                  <button 
+                    key={idx} 
+                    onClick={() => navigate(action.path)}
+                    className={`flex items-center gap-2 px-3 py-2 rounded transition-all duration-200 hover:scale-105 ${
+                      action.color === 'blue' ? 'bg-blue-100 dark:bg-blue-900/20 hover:bg-blue-200 dark:hover:bg-blue-800/30 text-blue-700 dark:text-blue-300' :
+                      action.color === 'purple' ? 'bg-purple-100 dark:bg-purple-900/20 hover:bg-purple-200 dark:hover:bg-purple-800/30 text-purple-700 dark:text-purple-300' :
+                      action.color === 'yellow' ? 'bg-yellow-100 dark:bg-yellow-900/20 hover:bg-yellow-200 dark:hover:bg-yellow-800/30 text-yellow-700 dark:text-yellow-300' :
+                      'bg-green-100 dark:bg-green-900/20 hover:bg-green-200 dark:hover:bg-green-800/30 text-green-700 dark:text-green-300'
+                    }`}
+                  >
+                    <action.icon size={16} />
+                    <span className="text-sm font-medium">{t(action.labelKey)}</span>
+                  </button>
                 ))}
               </div>
             </div>
 
-            {/* Important Deadlines */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6 mb-6">
-              <h2 className="font-semibold text-gray-700 dark:text-gray-100 mb-4">Important Deadlines</h2>
-              <div className="space-y-4">
-                {upcomingDeadlines.map((deadline, index) => (
-                  <div key={index} className="flex items-start gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800">
-                    <div className={`w-2 h-2 mt-2 rounded-full ${
-                      deadline.priority === 'high' ? 'bg-red-500' : 'bg-yellow-500'
-                    }`} />
-                    <div>
-                      <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{deadline.title}</div>
-                      <div className="text-xs text-gray-500 dark:text-gray-300">{deadline.course}</div>
-                      <div className="text-xs text-gray-500 dark:text-gray-300 mt-1">Due: {new Date(deadline.deadline).toLocaleDateString()}</div>
-                    </div>
-                    <span className="text-xs font-medium px-2 py-1 rounded-full bg-gray-200 text-gray-700 ml-auto dark:bg-gray-700 dark:text-gray-200">
-                      {deadline.type}
-                    </span>
+            {/* Recent Messages */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-4 mb-6" data-tour="messages">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <div className="relative">
+                    <MessageCircle size={18} className="text-blue-600" />
+                    {/* Subtle notification dot */}
+                    <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></div>
                   </div>
-                ))}
+                  <span className="font-medium text-gray-700 dark:text-gray-100">{t('student.dashboard.widgets.messages')}</span>
+                  <span className="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded-full">
+                    {messages.filter(m => m.unread).length} new
+                  </span>
+                </div>
+                <button 
+                  onClick={() => navigate('/student/messages')}
+                  className="text-blue-600 dark:text-blue-400 text-sm hover:underline hover:text-blue-700 dark:hover:text-blue-300 transition-colors flex items-center gap-1 group"
+                >
+                  {t('common.viewAll')}
+                  <svg className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
               </div>
-            </div>
-
-            {/* Study Resources */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
-              <h2 className="font-semibold text-gray-700 dark:text-gray-100 mb-4">Study Resources</h2>
               <div className="space-y-3">
-                <a href="#" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">
-                  <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center dark:bg-purple-900">
-                    <Library size={20} className="text-purple-600 dark:text-purple-400" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-sm font-medium text-gray-900 dark:text-gray-100">Digital Library</div>
-                    <div className="text-xs text-gray-500 dark:text-gray-300">Access course materials</div>
-                  </div>
-                </a>
-                <a href="#" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">
-                  <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center dark:bg-green-900">
-                    <Users2 size={20} className="text-green-600 dark:text-green-400" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-sm font-medium text-gray-900 dark:text-gray-100">Study Groups</div>
-                    <div className="text-xs text-gray-500 dark:text-gray-300">Join or create study groups</div>
-                  </div>
-                </a>
-                <a href="#" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">
-                  <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center dark:bg-blue-900">
-                    <MessageCircle size={20} className="text-blue-600 dark:text-blue-400" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-sm font-medium text-gray-900 dark:text-gray-100">Academic Support</div>
-                    <div className="text-xs text-gray-500 dark:text-gray-300">Get help from tutors</div>
-                  </div>
-                </a>
+                {messages.map((m, idx) => (
+                  <button 
+                    key={idx} 
+                    onClick={() => navigate('/student/messages')}
+                    className={`w-full text-left flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 relative group ${
+                      m.unread ? 'bg-blue-50 dark:bg-blue-900/10' : ''
+                    }`}
+                  >
+                    <div className="relative">
+                      <div className={`w-8 h-8 rounded-full ${m.color} flex items-center justify-center text-xs font-medium text-gray-700 group-hover:scale-110 transition-transform duration-200`}>
+                        {m.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                      </div>
+                      {/* Status indicator */}
+                      {m.status === 'online' && (
+                        <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-800"></div>
+                      )}
+                      {m.status === 'typing' && (
+                        <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-blue-500 rounded-full border-2 border-white dark:border-gray-800"></div>
+                      )}
+                      {m.status === 'offline' && (
+                        <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-gray-400 rounded-full border-2 border-white dark:border-gray-800"></div>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <div className="text-sm font-medium text-gray-700 dark:text-gray-200 truncate">{m.name}</div>
+                        <div className="flex items-center gap-1">
+                          {m.unread && (
+                            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                          )}
+                          <span className="text-xs text-gray-500 dark:text-gray-400">{m.time}</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="text-xs text-gray-500 dark:text-gray-300 truncate flex-1">
+                          {m.status === 'typing' ? (
+                            <span className="flex items-center gap-1">
+                              <span className="text-blue-500">Typing</span>
+                              <div className="flex gap-0.5">
+                                <div className="w-1 h-1 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                                <div className="w-1 h-1 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                                <div className="w-1 h-1 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                              </div>
+                            </span>
+                          ) : (
+                            m.msg
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </button>
+                ))}
               </div>
             </div>
-          </div>
-        </div>
 
-        {/* Bottom Widgets */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-          {/* Messages */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6 flex flex-col">
-            <div className="font-semibold text-gray-700 dark:text-gray-100 mb-4 flex items-center gap-2">
-              <MessageCircle size={18}/> Messages
-            </div>
-            <div className="flex-1 flex flex-col gap-3">
-              {messages.map((msg, i) => (
-                <div key={i} className="flex items-start gap-3">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${msg.color} dark:bg-blue-600`}>
-                    <Users2 size={28} className="text-white" />
+            {/* Upcoming Deadlines */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-4" data-tour="deadlines">
+              <div className="flex items-center gap-2 mb-4">
+                <Bell size={18} className="text-blue-600" />
+                <span className="font-medium text-gray-700 dark:text-gray-100">{t('student.dashboard.deadlines.title')}</span>
+              </div>
+              <div className="space-y-3">
+                {upcomingDeadlines.map((d, idx) => (
+                  <div key={idx} className="flex items-center justify-between">
+                    <div>
+                      <div className="text-sm font-medium text-gray-700 dark:text-gray-200">{d.title}</div>
+                      <div className="text-xs text-gray-500 dark:text-gray-300">{d.type} • {d.course} • {d.deadline}</div>
+                    </div>
+                    <AlertCircle size={16} className="text-yellow-500" />
                   </div>
-                  <div className="flex-1">
-                    <div className="font-semibold text-gray-800 dark:text-gray-100 text-sm">{msg.name}</div>
-                    <div className="text-xs text-gray-500 dark:text-gray-300">{msg.msg}</div>
-                  </div>
-                  <div className="text-xs text-gray-400 dark:text-gray-300 whitespace-nowrap">{msg.time}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Recent Activities */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6 flex flex-col">
-            <div className="font-semibold text-gray-700 dark:text-gray-100 mb-4 flex items-center gap-2">
-              <Bell size={18}/> Recent Activities
-            </div>
-            <div className="flex-1 flex flex-col gap-3">
-              {activities.map((activity, i) => (
-                <div key={i} className="flex items-center gap-3">
-                  <activity.icon size={22} className={activity.color} />
-                  <div className="flex-1">
-                    <div className="font-semibold text-gray-800 dark:text-gray-100 text-sm">{activity.desc}</div>
-                  </div>
-                  <div className="text-xs text-gray-400 dark:text-gray-300 whitespace-nowrap">{activity.time}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Quick Links */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6 flex flex-col">
-            <div className="font-semibold text-gray-700 dark:text-gray-100 mb-4 flex items-center gap-2">
-              <Library size={18}/> Quick Links
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              <button className="p-3 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors dark:bg-blue-900 dark:text-blue-400 dark:hover:bg-blue-800">
-                <BookOpen size={20} className="mx-auto mb-1" />
-                <span className="text-sm">Course Materials</span>
-              </button>
-              <button className="p-3 rounded-lg bg-green-50 text-green-600 hover:bg-green-100 transition-colors dark:bg-green-900 dark:text-green-400 dark:hover:bg-green-800">
-                <ClipboardList size={20} className="mx-auto mb-1" />
-                <span className="text-sm">Assignments</span>
-              </button>
-              <button className="p-3 rounded-lg bg-purple-50 text-purple-600 hover:bg-purple-100 transition-colors dark:bg-purple-900 dark:text-purple-400 dark:hover:bg-purple-800">
-                <Calendar size={20} className="mx-auto mb-1" />
-                <span className="text-sm">Schedule</span>
-              </button>
-              <button className="p-3 rounded-lg bg-yellow-50 text-yellow-600 hover:bg-yellow-100 transition-colors dark:bg-yellow-900 dark:text-yellow-400 dark:hover:bg-yellow-800">
-                <Award size={20} className="mx-auto mb-1" />
-                <span className="text-sm">Grades</span>
-              </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>

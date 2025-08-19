@@ -1,5 +1,6 @@
 import Sidebar from '../../components/Sidebar';
 import { UserCircle, Users2, Briefcase, School, Building2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 // Dummy data for university hierarchy
 const university = {
@@ -56,30 +57,38 @@ const university = {
 };
 
 function Card({ icon: Icon, color, name, title, className = '' }) {
+  const { t } = useTranslation();
+  const translatedTitle =
+    title === 'University Dean' ? t('admin.departmentDashboard.roles.universityDean') :
+    title === 'College Dean' ? t('admin.departmentDashboard.roles.collegeDean') :
+    title === 'HoD' ? t('admin.departmentDashboard.roles.hod') :
+    title === 'Instructor' ? t('admin.departmentDashboard.roles.instructor') :
+    title;
   return (
     <div className={`flex flex-col items-center p-4 rounded-xl shadow-lg bg-white border ${className}`} style={{ minWidth: 180 }}>
       <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-2 ${color}`}>
         <Icon size={36} className="text-white" />
       </div>
       <div className="font-bold text-gray-800 text-center">{name}</div>
-      <div className="text-sm text-blue-700 text-center">{title}</div>
+      <div className="text-sm text-blue-700 text-center">{translatedTitle}</div>
     </div>
   );
 }
 
 export default function DepartmentDashboard() {
+  const { t } = useTranslation();
   return (
     <div className="flex h-screen bg-gray-100">
       <Sidebar role="admin" />
       <div className="flex-1 overflow-auto p-8">
-        <h1 className="text-3xl font-bold text-gray-800 mb-10">University Hierarchy</h1>
+        <h1 className="text-3xl font-bold text-gray-800 mb-10">{t('admin.departmentDashboard.title')}</h1>
         <div className="flex flex-col items-center w-full">
           {/* University Dean */}
           <Card
             icon={Building2}
             color={university.dean.color}
             name={university.name}
-            title={university.dean.title + ' - ' + university.dean.name}
+            title={university.dean.title}
             className="mb-8 border-blue-200"
           />
           {/* Connect to Colleges */}
@@ -92,20 +101,20 @@ export default function DepartmentDashboard() {
                   icon={School}
                   color={college.color}
                   name={college.name}
-                  title={college.dean.title + ' - ' + college.dean.name}
+                  title={college.dean.title}
                   className="mb-6 border-green-200"
                 />
                 {/* Connect to Departments */}
                 <div className="w-1 h-6 bg-gray-400 mb-2"></div>
                 {/* Departments */}
-                <div className="flex flex-row flex-wrap justify-center gap-8">
+                <div className="flex flex-row flex-wrap justify_center gap-8">
                   {college.departments.map((dept, di) => (
                     <div key={di} className="flex flex-col items-center">
                       <Card
                         icon={Briefcase}
                         color={dept.hod.color}
                         name={dept.name}
-                        title={dept.hod.title + ' - ' + dept.hod.name}
+                        title={dept.hod.title}
                         className="mb-4 border-purple-200"
                       />
                       {/* Connect to Instructors */}

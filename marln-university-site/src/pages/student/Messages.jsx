@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Sidebar from '../../components/Sidebar';
 import { 
   Search,
@@ -13,8 +13,12 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
-  Filter
+  Filter,
+  MessageCircle
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { useLanguage } from '../../context/LanguageContext';
+import { useTour } from '../../context/TourContext.jsx';
 
 const conversations = [
   {
@@ -26,7 +30,9 @@ const conversations = [
     time: '10:30 AM',
     unread: 2,
     avatar: 'SJ',
-    online: true
+    online: true,
+    status: 'online',
+    typing: false
   },
   {
     id: 2,
@@ -37,7 +43,9 @@ const conversations = [
     time: 'Yesterday',
     unread: 0,
     avatar: 'MC',
-    online: false
+    online: false,
+    status: 'offline',
+    typing: false
   },
   {
     id: 3,
@@ -48,7 +56,9 @@ const conversations = [
     time: '2 days ago',
     unread: 0,
     avatar: 'EB',
-    online: true
+    online: true,
+    status: 'typing',
+    typing: true
   },
   {
     id: 4,
@@ -59,7 +69,9 @@ const conversations = [
     time: '3 days ago',
     unread: 0,
     avatar: 'JW',
-    online: false
+    online: false,
+    status: 'offline',
+    typing: false
   }
 ];
 
@@ -90,12 +102,21 @@ const initialMessages = {
 };
 
 function Messages() {
+  const { t } = useTranslation();
+  const { isRTL } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [newMessage, setNewMessage] = useState('');
   const [showAttachments, setShowAttachments] = useState(false);
   const [chatMessages, setChatMessages] = useState(initialMessages);
   const [isReplying, setIsReplying] = useState(false);
+  const [showMoreMenu, setShowMoreMenu] = useState(false);
+  const [isCallActive, setIsCallActive] = useState(false);
+  const [isVideoActive, setIsVideoActive] = useState(false);
+  const [showActionPopup, setShowActionPopup] = useState(false);
+  const [actionMessage, setActionMessage] = useState('');
+  const { startTour } = useTour();
+  const moreMenuRef = useRef(null);
 
   const filteredConversations = conversations.filter(conversation =>
     conversation.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -130,6 +151,83 @@ function Messages() {
         setIsReplying(false);
       }, 1000);
     }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
+
+  const handleCall = () => {
+    if (selectedConversation) {
+      setIsCallActive(true);
+      // Simulate call functionality
+      setActionMessage(`Calling ${selectedConversation.name}...`);
+      setShowActionPopup(true);
+      // In a real app, this would integrate with a calling service
+      setTimeout(() => {
+        setIsCallActive(false);
+        setShowActionPopup(false);
+        setActionMessage('');
+      }, 3000);
+    }
+  };
+
+  const handleVideoCall = () => {
+    if (selectedConversation) {
+      setIsVideoActive(true);
+      // Simulate video call functionality
+      setActionMessage(`Starting video call with ${selectedConversation.name}...`);
+      setShowActionPopup(true);
+      // In a real app, this would integrate with a video calling service
+      setTimeout(() => {
+        setIsVideoActive(false);
+        setShowActionPopup(false);
+        setActionMessage('');
+      }, 3000);
+    }
+  };
+
+  const handleMoreMenu = () => {
+    setShowMoreMenu(!showMoreMenu);
+  };
+
+  const handleMoreMenuAction = (action) => {
+    setShowMoreMenu(false);
+    let message = '';
+    switch (action) {
+      case 'block':
+        message = `Blocked ${selectedConversation.name}`;
+        break;
+      case 'report':
+        message = `Reported ${selectedConversation.name}`;
+        break;
+      case 'clear':
+        if (selectedConversation) {
+          setChatMessages(prev => ({
+            ...prev,
+            [selectedConversation.id]: []
+          }));
+          message = 'Chat cleared successfully';
+        }
+        break;
+      case 'export':
+        message = 'Exporting conversation...';
+        break;
+      default:
+        break;
+    }
+    if (message) {
+      setActionMessage(message);
+      setShowActionPopup(true);
+    }
+  };
+
+  const closeActionPopup = () => {
+    setShowActionPopup(false);
+    setActionMessage('');
   };
 
   // Generate a demo reply based on the conversation
@@ -173,51 +271,140 @@ function Messages() {
     };
   }
 
+  const startMessagesTour = () => {
+    const steps = [
+      { 
+        target: '#messages-search', 
+        title: t('student.tour.messages.title', 'Find Conversations'), 
+        content: t('student.tour.messages.desc', 'Search for conversations by person name or course.'),
+        placement: 'bottom-start',
+        disableBeacon: true
+      },
+      { 
+        target: '[data-tour="conversations-list"]', 
+        title: t('student.tour.messages.listTitle', 'Message Threads'), 
+        content: t('student.tour.messages.listDesc', 'View all your conversations with unread message indicators.'),
+        placement: 'right-start',
+        disableBeacon: true
+      },
+      { 
+        target: '[data-tour="open-conversation"]', 
+        title: t('student.tour.messages.openTitle', 'Open Chat'), 
+        content: t('student.tour.messages.openDesc', 'Click on any conversation to start chatting.'),
+        placement: 'right-start',
+        disableBeacon: true
+      }
+    ].filter(s => document.querySelector(s.target));
+    
+    if (steps.length) startTour('student:messages:v1', steps);
+  };
+
+  useEffect(() => {
+    // Auto-start tour for new users
+    const key = 'tour:student:messages:v1:autostart';
+    const hasSeenTour = localStorage.getItem(key);
+    const tourCompleted = localStorage.getItem('tour:student:messages:v1:state');
+    
+    if (!hasSeenTour && tourCompleted !== 'completed') {
+      setTimeout(() => {
+        startMessagesTour();
+        localStorage.setItem(key, 'shown');
+      }, 600);
+    }
+    
+    // Handle tour launches from navigation
+    const onLaunch = () => {
+      const launch = localStorage.getItem('tour:launch');
+      if (launch === 'student-full' || launch === 'student-resume') {
+        localStorage.removeItem('tour:launch');
+        setTimeout(() => startMessagesTour(), 200);
+      }
+    };
+    
+    window.addEventListener('tour:launch', onLaunch);
+    return () => window.removeEventListener('tour:launch', onLaunch);
+  }, []);
+
+  // Handle clicking outside more menu
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (moreMenuRef.current && !moreMenuRef.current.contains(event.target)) {
+        setShowMoreMenu(false);
+      }
+    };
+
+    if (showMoreMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showMoreMenu]);
+
   return (
-    <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
+    <div className="flex h-screen bg-gray-100 dark:bg-gray-900 overflow-hidden">
       <Sidebar role="student" />
-      <div className="flex-1 flex">
+      <div className="flex-1 flex min-h-0">
         {/* Conversations List */}
-        <div className="w-80 bg-white dark:bg-gray-800 border-r dark:border-gray-700">
-          <div className="p-4 border-b dark:border-gray-700">
+        <div className="w-80 bg-white dark:bg-gray-800 border-r dark:border-gray-700 flex flex-col">
+          <div className="p-4 border-b dark:border-gray-700 flex-shrink-0">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">Messages</h3>
+              <div className="flex items-center gap-2">
+                <span className="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded-full">
+                  {conversations.filter(c => c.unread > 0).length} new
+                </span>
+                <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+              </div>
+            </div>
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500" size={20} />
               <input
                 type="text"
-                placeholder="Search conversations..."
+                placeholder={t('student.messages.searchPlaceholder')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700"
+                className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700 text-gray-900 dark:text-gray-100"
+                id="messages-search"
               />
             </div>
           </div>
 
-          <div className="overflow-y-auto h-[calc(100vh-4rem)]">
+          <div className="flex-1 overflow-y-auto" data-tour="conversations-list">
             {filteredConversations.map(conversation => (
               <button
                 key={conversation.id}
                 onClick={() => setSelectedConversation(conversation)}
-                className={`w-full p-4 border-b hover:bg-gray-50 transition-colors ${
-                  selectedConversation?.id === conversation.id ? 'bg-blue-50' : ''
+                className={`w-full p-4 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${
+                  selectedConversation?.id === conversation.id ? 'bg-blue-50 dark:bg-blue-900/20' : ''
                 }`}
+                data-tour="open-conversation"
               >
                 <div className="flex items-start gap-3">
                   <div className="relative">
                     <div className="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-semibold">
                       {conversation.avatar}
                     </div>
-                    {conversation.online && (
-                      <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white" />
+                    {/* Status indicators */}
+                    {conversation.status === 'online' && (
+                      <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-800"></div>
+                    )}
+                    {conversation.status === 'typing' && (
+                      <div className="absolute bottom-0 right-0 w-3 h-3 bg-blue-500 rounded-full border-2 border-white dark:border-gray-800"></div>
+                    )}
+                    {conversation.status === 'offline' && (
+                      <div className="absolute bottom-0 right-0 w-3 h-3 bg-gray-400 rounded-full border-2 border-white dark:border-gray-800"></div>
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="font-medium text-gray-900">{conversation.name}</h3>
-                        <p className="text-sm text-gray-500">{conversation.role}</p>
+                        <h3 className="font-medium text-gray-900 dark:text-gray-100">{conversation.name}</h3>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{conversation.role}</p>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="text-sm text-gray-500">{conversation.time}</span>
+                        <span className="text-sm text-gray-500 dark:text-gray-400">{conversation.time}</span>
                         {conversation.unread > 0 && (
                           <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
                             {conversation.unread}
@@ -225,8 +412,21 @@ function Messages() {
                         )}
                       </div>
                     </div>
-                    <p className="text-sm text-gray-600 truncate mt-1">{conversation.lastMessage}</p>
-                    <p className="text-xs text-gray-500 mt-1">{conversation.course}</p>
+                    <div className="flex items-center gap-2 mt-1">
+                      {conversation.typing ? (
+                        <span className="flex items-center gap-1 text-blue-500 text-sm">
+                          <span>Typing</span>
+                          <div className="flex gap-0.5">
+                            <div className="w-1 h-1 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                            <div className="w-1 h-1 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                            <div className="w-1 h-1 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                          </div>
+                        </span>
+                      ) : (
+                        <p className="text-sm text-gray-600 dark:text-gray-300 truncate">{conversation.lastMessage}</p>
+                      )}
+                    </div>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{conversation.course}</p>
                   </div>
                 </div>
               </button>
@@ -235,67 +435,152 @@ function Messages() {
         </div>
 
         {/* Chat Area */}
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col min-h-0">
           {selectedConversation ? (
             <>
               {/* Chat Header */}
-              <div className="p-4 border-b bg-white flex items-center justify-between">
+              <div className="p-4 border-b dark:border-gray-700 bg-white dark:bg-gray-800 flex items-center justify-between flex-shrink-0">
                 <div className="flex items-center gap-3">
                   <div className="relative">
                     <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-semibold">
                       {selectedConversation.avatar}
                     </div>
-                    {selectedConversation.online && (
-                      <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white" />
+                    {/* Status indicators */}
+                    {selectedConversation.status === 'online' && (
+                      <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white dark:border-gray-800"></div>
+                    )}
+                    {selectedConversation.status === 'typing' && (
+                      <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-blue-500 rounded-full border-2 border-white dark:border-gray-800"></div>
+                    )}
+                    {selectedConversation.status === 'offline' && (
+                      <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-gray-400 rounded-full border-2 border-white dark:border-gray-800"></div>
                     )}
                   </div>
                   <div>
-                    <h2 className="font-medium text-gray-900">{selectedConversation.name}</h2>
-                    <p className="text-sm text-gray-500">{selectedConversation.role}</p>
+                    <div className="flex items-center gap-2">
+                    <h2 className="font-medium text-gray-900 dark:text-gray-100">{selectedConversation.name}</h2>
+                      {selectedConversation.typing && (
+                        <span className="flex items-center gap-1 text-blue-500 text-xs">
+                          <span>typing</span>
+                          <div className="flex gap-0.5">
+                            <div className="w-1 h-1 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                            <div className="w-1 h-1 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                            <div className="w-1 h-1 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                          </div>
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">{selectedConversation.role}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <button className="p-2 hover:bg-gray-100 rounded-full">
-                    <Phone size={20} className="text-gray-600" />
+                  <button 
+                    onClick={handleCall}
+                    disabled={isCallActive}
+                    className={`p-2 rounded-full transition-colors ${
+                      isCallActive 
+                        ? 'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400' 
+                        : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400'
+                    }`}
+                    title={isCallActive ? 'End Call' : 'Call'}
+                  >
+                    <Phone size={20} />
                   </button>
-                  <button className="p-2 hover:bg-gray-100 rounded-full">
-                    <Video size={20} className="text-gray-600" />
+                  <button 
+                    onClick={handleVideoCall}
+                    disabled={isVideoActive}
+                    className={`p-2 rounded-full transition-colors ${
+                      isVideoActive 
+                        ? 'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400' 
+                        : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400'
+                    }`}
+                    title={isVideoActive ? 'End Video Call' : 'Video Call'}
+                  >
+                    <Video size={20} />
                   </button>
-                  <button className="p-2 hover:bg-gray-100 rounded-full">
-                    <MoreVertical size={20} className="text-gray-600" />
+                  <div className="relative">
+                    <button 
+                      onClick={handleMoreMenu}
+                      className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full text-gray-600 dark:text-gray-400"
+                      title="More options"
+                    >
+                      <MoreVertical size={20} />
+                    </button>
+                    
+                    {/* More Menu Dropdown */}
+                    {showMoreMenu && (
+                      <div className={`absolute ${isRTL ? 'left-0' : 'right-0'} top-full mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border dark:border-gray-700 py-2 z-20`} ref={moreMenuRef}>
+                        <button
+                          onClick={() => handleMoreMenuAction('block')}
+                          className={`w-full px-4 py-2 ${isRTL ? 'text-right' : 'text-left'} text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700`}
+                        >
+                          {t('student.messages.menu.blockUser')}
+                        </button>
+                        <button
+                          onClick={() => handleMoreMenuAction('report')}
+                          className={`w-full px-4 py-2 ${isRTL ? 'text-right' : 'text-left'} text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700`}
+                        >
+                          {t('student.messages.menu.reportUser')}
+                        </button>
+                        <button
+                          onClick={() => handleMoreMenuAction('clear')}
+                          className={`w-full px-4 py-2 ${isRTL ? 'text-right' : 'text-left'} text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700`}
+                        >
+                          {t('student.messages.menu.clearChat')}
+                        </button>
+                        <button
+                          onClick={() => handleMoreMenuAction('export')}
+                          className={`w-full px-4 py-2 ${isRTL ? 'text-right' : 'text-left'} text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700`}
+                        >
+                          {t('student.messages.menu.exportChat')}
                   </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
 
               {/* Messages */}
-              <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
+              <div className="flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-gray-900 min-h-0">
                 <div className="max-w-3xl mx-auto space-y-4">
-                  {chatMessages[selectedConversation.id]?.map(message => (
+                  {chatMessages[selectedConversation.id]?.map((message, index) => (
                     <div
                       key={message.id}
-                      className={`flex ${message.isInstructor ? 'justify-start' : 'justify-end'}`}
+                      className={`flex ${message.isInstructor ? 'justify-start' : 'justify-end'} animate-in slide-in-from-bottom-2 duration-300`}
+                      style={{ animationDelay: `${index * 50}ms` }}
                     >
                       <div
-                        className={`max-w-[70%] rounded-lg p-3 ${
+                        className={`max-w-[70%] rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow duration-200 ${
                           message.isInstructor
-                            ? 'bg-white border'
+                            ? 'bg-white dark:bg-gray-800 border dark:border-gray-700'
                             : 'bg-blue-600 text-white'
                         }`}
+                        dir={isRTL ? 'rtl' : 'ltr'}
                       >
-                        <div className="flex items-center gap-2 mb-1">
+                        <div className={`flex items-center gap-2 mb-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
                           <span className="text-sm font-medium">
-                            {message.isInstructor ? message.sender : 'You'}
+                            {message.isInstructor ? message.sender : t('student.messages.you')}
                           </span>
                           <span className="text-xs opacity-75">{message.time}</span>
+                          {message.isInstructor && (
+                            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                          )}
                         </div>
                         <p className="text-sm">{message.content}</p>
                       </div>
                     </div>
                   ))}
                   {isReplying && (
-                    <div className="flex justify-start">
-                      <div className="max-w-[70%] rounded-lg p-3 bg-white border opacity-60 italic text-gray-400">
-                        Typing...
+                    <div className="flex justify-start animate-in slide-in-from-bottom-2 duration-300">
+                      <div className="max-w-[70%] rounded-lg p-3 bg-white dark:bg-gray-800 border dark:border-gray-700 shadow-sm" dir={isRTL ? 'rtl' : 'ltr'}>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm text-gray-500 dark:text-gray-400">{t('student.messages.typing')}</span>
+                          <div className="flex gap-1">
+                            <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                            <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                            <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   )}
@@ -303,47 +588,52 @@ function Messages() {
               </div>
 
               {/* Message Input */}
-              <div className="p-4 bg-white border-t">
+              <div className="p-4 bg-white dark:bg-gray-800 border-t dark:border-gray-700 flex-shrink-0 relative">
                 <div className="max-w-3xl mx-auto">
                   <div className="relative">
                     <button
                       onClick={() => setShowAttachments(!showAttachments)}
-                      className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      className={`absolute ${isRTL ? 'right-3' : 'left-3'} top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400`}
+                      id="toggle-attachments"
                     >
                       <Paperclip size={20} />
                     </button>
                     <input
                       type="text"
-                      placeholder="Type a message..."
+                      placeholder={t('student.messages.inputPlaceholder')}
                       value={newMessage}
                       onChange={(e) => setNewMessage(e.target.value)}
-                      className="w-full pl-10 pr-24 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      onKeyPress={handleKeyPress}
+                      className={`w-full ${isRTL ? 'pr-10 pl-24' : 'pl-10 pr-24'} py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700 text-gray-900 dark:text-gray-100`}
+                      id="message-input"
+                      dir={isRTL ? 'rtl' : 'ltr'}
                     />
-                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-2">
-                      <button className="text-gray-400 hover:text-gray-600">
+                    <div className={`absolute ${isRTL ? 'left-3' : 'right-3'} top-1/2 transform -translate-y-1/2 flex items-center gap-2`}>
+                      <button className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400">
                         <Smile size={20} />
                       </button>
                       <button
                         onClick={handleSendMessage}
-                        className="bg-blue-600 text-white px-4 py-1 rounded-lg hover:bg-blue-700 flex items-center gap-2"
+                        className="bg-blue-600 text-white px-4 py-1 rounded-lg hover:bg-blue-700 flex items-center gap-2 transition-all duration-200 hover:scale-105 active:scale-95"
+                        id="send-message"
                       >
-                        <Send size={16} />
-                        Send
+                        <Send size={16} className="group-hover:translate-x-0.5 transition-transform" />
+                        {t('student.messages.send')}
                       </button>
                     </div>
                   </div>
 
                   {/* Attachments Menu */}
                   {showAttachments && (
-                    <div className="absolute bottom-full left-0 mb-2 bg-white rounded-lg shadow-lg border p-2">
+                    <div className={`absolute bottom-full ${isRTL ? 'right-0' : 'left-0'} mb-2 bg-white dark:bg-gray-800 rounded-lg shadow-lg border dark:border-gray-700 p-2 z-10`}>
                       <div className="grid grid-cols-4 gap-2">
-                        <button className="p-2 hover:bg-gray-100 rounded-lg flex flex-col items-center gap-1">
-                          <ImageIcon size={20} className="text-blue-600" />
-                          <span className="text-xs">Image</span>
+                        <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg flex flex-col items-center gap-1">
+                          <ImageIcon size={20} className="text-blue-600 dark:text-blue-400" />
+                          <span className="text-xs text-gray-700 dark:text-gray-300">{t('student.messages.attachments.image')}</span>
                         </button>
-                        <button className="p-2 hover:bg-gray-100 rounded-lg flex flex-col items-center gap-1">
-                          <File size={20} className="text-blue-600" />
-                          <span className="text-xs">File</span>
+                        <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg flex flex-col items-center gap-1">
+                          <File size={20} className="text-blue-600 dark:text-blue-400" />
+                          <span className="text-xs text-gray-700 dark:text-gray-300">{t('student.messages.attachments.file')}</span>
                         </button>
                       </div>
                     </div>
@@ -352,15 +642,42 @@ function Messages() {
               </div>
             </>
           ) : (
-            <div className="flex-1 flex items-center justify-center bg-gray-50">
+            <div className="flex-1 flex items-center justify-center bg-gray-50 dark:bg-gray-900">
               <div className="text-center">
-                <h3 className="text-lg font-medium text-gray-900">Select a conversation</h3>
-                <p className="text-gray-500">Choose a conversation to start messaging</p>
+                <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <MessageCircle className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                </div>
+                <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">{t('student.messages.empty.title')}</h3>
+                <p className="text-gray-500 dark:text-gray-400">{t('student.messages.empty.subtitle')}</p>
               </div>
             </div>
           )}
         </div>
       </div>
+
+      {/* Action Popup */}
+      {showActionPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={closeActionPopup}></div>
+          <div className="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto p-6" dir={isRTL ? 'rtl' : 'ltr'}>
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('student.messages.actionStatus.title')}</h3>
+              <button onClick={closeActionPopup} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                <X className="w-6 h-6 text-gray-500 dark:text-gray-400" />
+              </button>
+            </div>
+            <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap break-words">{actionMessage}</p>
+            <div className={`flex ${isRTL ? 'justify-start' : 'justify-end'} mt-6`}>
+              <button
+                onClick={closeActionPopup}
+                className="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg transition-colors"
+              >
+                {t('common.close')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
