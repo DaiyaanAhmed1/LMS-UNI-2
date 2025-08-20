@@ -1519,6 +1519,11 @@
         "studyTips": "إليك استراتيجيات دراسية مخصصة لمادتك:\n\n**أساليب التعلم النشط:**\n• إنشاء خرائط ذهنية ومخططات مفاهيم\n• استخدام تقنية فاينمان (اشرح للآخرين)\n• الممارسة بواسطة البطاقات والتكرار المتباعد\n\n**إدارة الوقت:**\n• تقنية بومودورو (جلسات تركيز 25 دقيقة)\n• جدولة جلسات مراجعة منتظمة\n• تقسيم المواضيع المعقدة إلى أجزاء أصغر\n\n**تعزيز الذاكرة:**\n• ربط المعلومات الجديدة بالمعرفة السابقة\n• استخدام الأساليب التذكيرية والاختصارات\n• ممارسة الاسترجاع عبر الاختبارات الذاتية\n\n**تحسين البيئة:**\n• اختيار مكان دراسة هادئ بعيد عن المشتتات\n• الالتزام بأوقات دراسة ثابتة\n• أخذ فترات راحة منتظمة للحفاظ على التركيز",
         "practiceQuestions": "إليك أسئلة تدريبية بلغة بايثون لاختبار فهمك:\n\n**أسئلة اختيار من متعدد:**\n1. ما ناتج `print(type([]))`؟\n   أ) <class 'list'>\n   ب) <class 'array'>\n   ج) <class 'sequence'>\n   د) <class 'collection'>\n\n2. أي دالة تُستخدم لإضافة عنصر إلى نهاية القائمة؟\n   أ) list.insert()\n   ب) list.append()\n   ج) list.add()\n   د) list.push()\n\n**أسئلة تحليل الشيفرة:**\n3. ما ناتج الشيفرة التالية؟\n```python\nx = [1, 2, 3]\ny = x\ny.append(4)\nprint(x)\n```\n\n4. اشرح الفرق بين `==` و `is` في بايثون.\n\n**أسئلة حل المشكلات:**\n5. اكتب دالة تعثر على ثاني أكبر رقم في قائمة.\n\n6. أنشئ برنامجًا يحسب تكرار كل حرف في سلسلة.\n\n7. نفّذ دالة تتحقق مما إذا كانت السلسلة متناظرة (Palindrome).\n\n**أسئلة تنقيح:**\n8. اعثر على الخطأ في الشيفرة التالية وأصلحه:\n```python\ndef calculate_average(numbers):\n    total = 0\n    for num in numbers:\n        total += num\n    return total / len(numbers)\n\nresult = calculate_average([1, 2, 3, 4, 5])\nprint(result)\n```\n\n**أسئلة مفاهيمية:**\n9. اشرح الفرق بين الـ tuple والـ list في بايثون.\n\n10. ما هي الاستقراءات (list comprehensions)؟ أعطِ مثالًا.\n\n**أسئلة متقدمة:**\n11. اكتب مُزيّنًا (decorator) يقيس زمن تنفيذ دالة.\n\n12. اشرح مفهوم المولّدات (generators) وأنشئ مولّدًا بسيطًا.\n\nهل ترغب أن أقدّم الإجابات أو أنشئ أسئلة أكثر تخصصًا لموضوعك في بايثون؟",
         "default": "أفهم أنك تسأل حول دراستك. أنا هنا للمساعدة في ملخصات المقررات، نصائح الدراسة، أسئلة تدريبية، ودعم أكاديمي عام. هل يمكنك توضيح ما الذي تحتاج المساعدة فيه تحديدًا؟"
+      },
+      "arabicResponses": {
+        "enable": "تفعيل الردود العربية",
+        "disable": "إيقاف الردود العربية",
+        "indicator": "الردود ستكون باللغة العربية"
       }
     },
     "definitionsForm": {
@@ -1919,6 +1924,50 @@
         "attendance": "الحضور",
         "instructorNotes": "ملاحظات المدرس",
         "notesPlaceholder": "أضف ملاحظات أو تعليقات..."
+      },
+      "buttons": {
+        "addNew": "إضافة طالب جديد"
+      },
+      "addModal": {
+        "title": "إضافة طالب جديد",
+        "subtitle": "إضافة طالب جديد إلى {{course}}",
+        "fields": {
+          "fullName": "الاسم الكامل",
+          "email": "البريد الإلكتروني",
+          "academicYear": "السنة الدراسية",
+          "courseProgress": "تقدم المقرر (%)",
+          "attendanceRate": "معدل الحضور (%)",
+          "lastActive": "آخر نشاط",
+          "instructorNotes": "ملاحظات المدرس",
+          "notesPlaceholder": "أضف أي ملاحظات حول الطالب..."
+        },
+        "yearOptions": {
+          "freshman": "السنة الأولى",
+          "sophomore": "السنة الثانية",
+          "junior": "السنة الثالثة",
+          "senior": "السنة الرابعة"
+        },
+        "lastActiveOptions": {
+          "today": "اليوم",
+          "yesterday": "أمس",
+          "2daysAgo": "منذ يومين",
+          "3daysAgo": "منذ 3 أيام",
+          "1weekAgo": "منذ أسبوع"
+        },
+        "buttons": {
+          "cancel": "إلغاء",
+          "add": "إضافة الطالب"
+        },
+        "validation": {
+          "nameRequired": "يرجى ملء الاسم والبريد الإلكتروني على الأقل",
+          "namePlaceholder": "أدخل الاسم الكامل للطالب",
+          "emailPlaceholder": "student@example.com"
+        }
+      },
+      "successModal": {
+        "title": "تم إضافة الطالب بنجاح!",
+        "message": "تم إضافة الطالب الجديد إلى {{course}} وهو متاح الآن في قائمة الطلاب.",
+        "continue": "متابعة"
       }
     },
     "studentMessages": {
@@ -2475,22 +2524,38 @@
       },
       "addModal": {
         "title": "إضافة طالب جديد",
+        "subtitle": "إضافة طالب جديد إلى {{course}}",
         "fields": {
           "fullName": "الاسم الكامل",
           "email": "البريد الإلكتروني",
-          "program": "البرنامج",
-          "selectProgram": "اختر البرنامج",
-          "year": "السنة",
-          "selectYear": "اختر السنة",
-          "phone": "الهاتف",
-          "dateOfBirth": "تاريخ الميلاد",
-          "gender": "النوع",
-          "selectGender": "اختر النوع",
-          "male": "ذكر",
-          "female": "أنثى",
-          "other": "آخر",
-          "nationality": "الجنسية",
-          "address": "العنوان"
+          "academicYear": "السنة الدراسية",
+          "courseProgress": "تقدم المقرر (%)",
+          "attendanceRate": "معدل الحضور (%)",
+          "lastActive": "آخر نشاط",
+          "instructorNotes": "ملاحظات المدرس",
+          "notesPlaceholder": "أضف أي ملاحظات حول الطالب..."
+        },
+        "yearOptions": {
+          "freshman": "السنة الأولى",
+          "sophomore": "السنة الثانية",
+          "junior": "السنة الثالثة",
+          "senior": "السنة الرابعة"
+        },
+        "lastActiveOptions": {
+          "today": "اليوم",
+          "yesterday": "أمس",
+          "2daysAgo": "منذ يومين",
+          "3daysAgo": "منذ 3 أيام",
+          "1weekAgo": "منذ أسبوع"
+        },
+        "buttons": {
+          "cancel": "إلغاء",
+          "add": "إضافة الطالب"
+        },
+        "validation": {
+          "nameRequired": "يرجى ملء الاسم والبريد الإلكتروني على الأقل",
+          "namePlaceholder": "أدخل الاسم الكامل للطالب",
+          "emailPlaceholder": "student@example.com"
         }
       },
       "uploadModal": {
@@ -2522,6 +2587,11 @@
       },
       "deleteModal": {
         "confirm": "هل أنت متأكد أنك تريد حذف {{name}}؟ هذا الإجراء لا يمكن التراجع عنه."
+      },
+      "successModal": {
+        "title": "تم إضافة الطالب بنجاح!",
+        "message": "تم إضافة الطالب الجديد إلى {{course}} وهو متاح الآن في قائمة الطلاب.",
+        "continue": "متابعة"
       }
     },
     "programManagement": {
@@ -2866,6 +2936,17 @@
       },
       "feedback": "تقديم تغذية راجعة في الوقت المناسب على جميع الأعمال المقدمة للحفاظ على الزخم"
     }
+  },
+  "copyButton": {
+    "copy": "نسخ",
+    "copied": "تم النسخ!",
+    "copyToClipboard": "نسخ إلى الحافظة"
+  },
+  "translateButton": {
+    "translateToArabic": "ترجمة إلى العربية",
+    "showOriginal": "إظهار النص الأصلي",
+    "translating": "جاري الترجمة...",
+    "translate": "ترجمة"
   }
 },
     "menu": {

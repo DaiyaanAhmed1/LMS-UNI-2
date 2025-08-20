@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/Sidebar';
-import { BookOpen, Users2, ClipboardList, Calendar, BarChart2, MessageCircle, FileText, CheckCircle, TrendingUp, Bell, Award, Library, Clock, AlertCircle } from 'lucide-react';
+import { BookOpen, Users2, ClipboardList, Calendar, BarChart2, MessageCircle, FileText, CheckCircle, TrendingUp, Bell, Award, Library, Clock, AlertCircle, Brain } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useTour } from '../../context/TourContext.jsx';
+import AIInsightsPanel from '../../components/AIInsightsPanel';
 
 const statsData = {
   'this': [
@@ -120,6 +121,13 @@ const quickActions = [
     icon: Award, 
     color: 'green',
     path: '/student/grades'
+  },
+  { 
+    labelKey: 'AI Insights', 
+    icon: Brain, 
+    color: 'purple',
+    action: 'ai-insights',
+    customLabel: 'AI Insights'
   }
 ];
 
@@ -176,6 +184,51 @@ export default function StudentDashboard() {
   const navigate = useNavigate();
   const [showTourChooser, setShowTourChooser] = useState(false);
   const [selectedSemester, setSelectedSemester] = useState('this');
+  const [showAIInsights, setShowAIInsights] = useState(false);
+  const [insightType, setInsightType] = useState('student_performance');
+
+  // Sample data for AI Insights
+  const sampleStudentData = {
+    id: 1,
+    name: 'أحمد محمد',
+    currentGrade: 'B+',
+    progress: 75,
+    assignments: [
+      { name: 'Assignment 1', score: 85 },
+      { name: 'Assignment 2', score: 78 },
+      { name: 'Assignment 3', score: 92 }
+    ],
+    studyTime: 12,
+    attendance: 95,
+    learningStyle: 'Visual',
+    studyHabits: 'Regular evening study sessions',
+    weakAreas: ['Advanced Mathematics', 'Programming Concepts'],
+    engagement: 'High',
+    assignmentCompletion: 90
+  };
+
+  const sampleCourseData = {
+    id: 1,
+    name: 'Computer Networks',
+    averageGrade: 'B',
+    completionRate: 88,
+    engagement: 82,
+    assignments: [
+      { name: 'Network Basics', avgScore: 78 },
+      { name: 'Protocols', avgScore: 85 },
+      { name: 'Security', avgScore: 72 }
+    ],
+    feedback: [
+      'Great course content',
+      'Need more practical examples',
+      'Excellent instructor'
+    ],
+    difficulty: 'Intermediate',
+    currentTopic: 'Network Security',
+    upcomingAssignments: ['Final Project', 'Security Quiz'],
+    requiredGrade: 'C+',
+    remainingAssignments: 3
+  };
   useEffect(() => {
     const key = 'tour:student:v1:autostart';
     const hasSeenTour = localStorage.getItem(key);
@@ -478,7 +531,14 @@ export default function StudentDashboard() {
                 {quickActions.map((action, idx) => (
                   <button 
                     key={idx} 
-                    onClick={() => navigate(action.path)}
+                    onClick={() => {
+                      if (action.action === 'ai-insights') {
+                        setInsightType('student_performance');
+                        setShowAIInsights(true);
+                      } else {
+                        navigate(action.path);
+                      }
+                    }}
                     className={`flex items-center gap-2 px-3 py-2 rounded transition-all duration-200 hover:scale-105 ${
                       action.color === 'blue' ? 'bg-blue-100 dark:bg-blue-900/20 hover:bg-blue-200 dark:hover:bg-blue-800/30 text-blue-700 dark:text-blue-300' :
                       action.color === 'purple' ? 'bg-purple-100 dark:bg-purple-900/20 hover:bg-purple-200 dark:hover:bg-purple-800/30 text-purple-700 dark:text-purple-300' :
@@ -487,7 +547,7 @@ export default function StudentDashboard() {
                     }`}
                   >
                     <action.icon size={16} />
-                    <span className="text-sm font-medium">{t(action.labelKey)}</span>
+                    <span className="text-sm font-medium">{action.customLabel || t(action.labelKey)}</span>
                   </button>
                 ))}
               </div>
@@ -594,6 +654,15 @@ export default function StudentDashboard() {
           </div>
         </div>
       </div>
+
+      {/* AI Insights Panel */}
+      <AIInsightsPanel
+        studentData={sampleStudentData}
+        courseData={sampleCourseData}
+        insightType={insightType}
+        isVisible={showAIInsights}
+        onClose={() => setShowAIInsights(false)}
+      />
     </div>
   );
 }

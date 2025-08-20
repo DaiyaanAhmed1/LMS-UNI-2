@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Sidebar from '../../components/Sidebar';
-import { Bot, Sparkles, BookOpen, Lightbulb, Target, Zap, Lock, X, Send, MessageCircle, Plus, Mic, ArrowRight, Trash2, Paperclip, ChevronLeft, ChevronRight, Crown, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
+import { Bot, Sparkles, BookOpen, Lightbulb, Target, Zap, Lock, X, Send, MessageCircle, Plus, Mic, ArrowRight, Trash2, Paperclip, ChevronLeft, ChevronRight, Crown, PanelLeftClose, PanelLeftOpen, Languages } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
+import aiService from '../../utils/aiService';
 
 const availablePrompts = [
   {
@@ -117,7 +118,7 @@ const MarkdownRenderer = ({ content, isTyping = false }) => {
 
 export default function InstructorSageAI() {
   const { t } = useTranslation();
-  const { isRTL } = useLanguage();
+  const { isRTL, currentLanguage } = useLanguage();
   const navigate = useNavigate();
   const [chats, setChats] = useState([]);
   const [currentChatId, setCurrentChatId] = useState(null);
@@ -129,8 +130,13 @@ export default function InstructorSageAI() {
   const [hasShownInitialHelp, setHasShownInitialHelp] = useState(false);
   const [hasUpgradeMessage, setHasUpgradeMessage] = useState(false);
   const [messageCount, setMessageCount] = useState(0);
+  const [remainingMessages, setRemainingMessages] = useState(aiService.sageAILimits.free); // Track remaining messages
+  const [forceArabicResponse, setForceArabicResponse] = useState(false); // Force all responses in Arabic
   const textareaRef = useRef(null);
   const chatContainerRef = useRef(null);
+
+  // Use a consistent user ID for rate limiting
+  const userId = 'instructor-user-456'; // Consistent user ID
 
   // Load chats from localStorage on component mount
   useEffect(() => {
@@ -263,41 +269,50 @@ export default function InstructorSageAI() {
     setMessageCount(newMessageCount);
 
     try {
-      setTimeout(() => {
-        let aiResponse;
-        
-        // Show PRO upgrade prompt after second user message
-        if (newMessageCount >= 2) {
-          aiResponse = {
-            id: Date.now() + 1,
-            type: 'ai',
-            content: `🚀 **Upgrade to PRO for unlimited AI assistance!**\n\nYou've reached the free tier limit. Upgrade to PRO to continue chatting with unlimited messages and access advanced features like:\n\n• **Plagiarism Detection Patterns** - Spot common cheating techniques\n• **Code Feedback Suggestions** - AI-powered code review assistance\n• **Rubric Optimization** - Optimize grading criteria and weights\n• **Student Analytics** - Analyze performance patterns\n• **Extended Chat Sessions** - Unlimited conversations\n\n💎 **PRO Features:**\n• Unlimited AI conversations\n• Advanced educational tools\n• Priority support\n• Custom prompt templates\n• Student performance insights\n\nClick the PRO badge to upgrade now!`,
-            timestamp: new Date().toLocaleTimeString(),
-            isProUpgrade: true
-          };
-          setHasUpgradeMessage(true);
-        } else {
-          aiResponse = {
-            id: Date.now() + 1,
-            type: 'ai',
-            content: generateAIResponse(currentInput),
-            timestamp: new Date().toLocaleTimeString()
-          };
-        }
+      // Use consistent user ID for rate limiting
+      const userType = 'free'; // Free tier for demo
+      const language = forceArabicResponse ? 'ar' : (currentLanguage === 'ar' ? 'ar' : 'en');
 
-        setChats(prev => prev.map(chat => 
-          chat.id === currentChatId 
-            ? { ...chat, messages: [...chat.messages, aiResponse] }
-            : chat
-        ));
-        setIsLoading(false);
-        setIsTyping(true);
-        
-        // Simulate typing animation
-        setTimeout(() => {
-          setIsTyping(false);
-        }, 2000);
-      }, 1000);
+      console.log('🔍 SageAI Debug Info:');
+      console.log('  - forceArabicResponse:', forceArabicResponse);
+      console.log('  - currentLanguage:', currentLanguage);
+      console.log('  - selected language:', language);
+      console.log('  - user input:', currentInput);
+
+      // Get AI response
+      const aiResponseText = await aiService.getAIResponse(
+        currentInput, 
+        userId, 
+        userType, 
+        language,
+        true // isSageAI = true
+      );
+
+      // Create AI response
+      const aiResponse = {
+        id: Date.now() + 1,
+        type: 'ai',
+        content: aiResponseText,
+        timestamp: new Date().toLocaleTimeString(),
+        isProUpgrade: aiResponseText.includes('Upgrade to PRO')
+      };
+
+      // Update remaining messages count
+      const remainingRequests = aiService.getRemainingSageAIMessages(userId, userType);
+      setRemainingMessages(remainingRequests);
+
+      setChats(prev => prev.map(chat => 
+        chat.id === currentChatId 
+          ? { ...chat, messages: [...chat.messages, aiResponse] }
+          : chat
+      ));
+      setIsLoading(false);
+      setIsTyping(true);
+      
+      // Simulate typing animation
+      setTimeout(() => {
+        setIsTyping(false);
+      }, 2000);
     } catch (error) {
       console.error('Error generating AI response:', error);
       const errorResponse = {
@@ -387,6 +402,36 @@ export default function InstructorSageAI() {
           </div>
           
           <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'}`}>
+            {/* Remaining Messages Display or PRO Upgrade */}
+            {!isProUser && (
+              remainingMessages > 0 ? (
+                <div className="flex items-center space-x-2 px-3 py-1 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                  <Sparkles className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                  <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
+                    {isRTL ? `${remainingMessages} رسالة متبقية` : `${remainingMessages} messages left`}
+                  </span>
+                </div>
+              ) : (
+                <div className="flex items-center space-x-2 px-3 py-1 bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 rounded-lg border border-orange-200 dark:border-orange-800">
+                  <Zap className="w-4 h-4 text-orange-600 dark:text-orange-400" />
+                  <span className="text-sm font-medium text-orange-700 dark:text-orange-300">
+                    {isRTL ? "ترقية إلى PRO" : "Upgrade to PRO"}
+                  </span>
+                  <button
+                                          onClick={() => {
+                        aiService.resetSageAILimits();
+                        setRemainingMessages(aiService.sageAILimits.free);
+                        alert('Sage AI limits reset! You can now chat with AI again.');
+                      }}
+                    className="ml-2 p-1 text-orange-600 hover:text-orange-800 dark:text-orange-400 dark:hover:text-orange-200 rounded transition-colors"
+                    title={isRTL ? "إعادة تعيين للاختبار" : "Reset for testing"}
+                  >
+                    <Zap className="w-3 h-3" />
+                  </button>
+                </div>
+              )
+            )}
+            
             {/* New Chat Button */}
             <button
               onClick={createNewChat}
@@ -403,6 +448,19 @@ export default function InstructorSageAI() {
               title={showChatHistory ? (isRTL ? 'إخفاء سجل المحادثات' : 'Hide Chat History') : (isRTL ? 'عرض سجل المحادثات' : 'Show Chat History')}
             >
               {showChatHistory ? <PanelLeftClose className="w-5 h-5" /> : <PanelLeftOpen className="w-5 h-5" />}
+            </button>
+            
+            {/* Arabic Response Toggle */}
+            <button
+              onClick={() => setForceArabicResponse(!forceArabicResponse)}
+              className={`p-2 rounded-lg transition-colors ${
+                forceArabicResponse 
+                  ? 'bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-800' 
+                  : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
+              }`}
+              title={forceArabicResponse ? t('instructor.sageAI.arabicResponses.disable', 'Disable Arabic Responses') : t('instructor.sageAI.arabicResponses.enable', 'Enable Arabic Responses')}
+            >
+              <Languages className="w-5 h-5" />
             </button>
           </div>
         </div>
@@ -424,6 +482,18 @@ export default function InstructorSageAI() {
                 <p className={`text-gray-500 dark:text-gray-400 mb-6 ${isRTL ? 'font-arabic' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
                   {isRTL ? "أنا هنا لمساعدتك في إنشاء الاختبارات والمحاضرات والمهام." : "I'm here to help you create quizzes, lectures, and assignments."}
                 </p>
+                
+                {/* Arabic Response Indicator */}
+                {forceArabicResponse && (
+                  <div className="mb-6 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                    <div className={`flex items-center justify-center space-x-2 ${isRTL ? 'space-x-reverse' : ''}`}>
+                      <Languages className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                      <span className={`text-sm font-medium text-blue-700 dark:text-blue-300 ${isRTL ? 'font-arabic' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
+                        {t('instructor.sageAI.arabicResponses.indicator', 'Responses will be in Arabic')}
+                      </span>
+                    </div>
+                  </div>
+                )}
                 
                 {/* Quick Prompts */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
