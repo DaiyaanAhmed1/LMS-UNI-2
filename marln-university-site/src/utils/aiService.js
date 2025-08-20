@@ -85,7 +85,6 @@ class AIService {
       if (stored) {
         const parsed = JSON.parse(stored);
         this.sageAIRequests = new Map(Object.entries(parsed));
-        console.log('📱 Loaded Sage AI requests from localStorage:', parsed);
       }
     } catch (error) {
       console.warn('⚠️ Failed to load Sage AI requests from localStorage:', error);
@@ -97,7 +96,6 @@ class AIService {
     try {
       const data = Object.fromEntries(this.sageAIRequests);
       localStorage.setItem('sageAIRequests', JSON.stringify(data));
-      console.log('💾 Saved Sage AI requests to localStorage:', data);
     } catch (error) {
       console.warn('⚠️ Failed to save Sage AI requests to localStorage:', error);
     }
@@ -113,10 +111,7 @@ class AIService {
     
     const usedRequests = this.sageAIRequests.get(userId);
     
-    console.log(`🔍 Sage AI limit check: ${usedRequests}/${limit} for user ${userId}`);
-    
     if (usedRequests >= limit) {
-      console.log(`🚫 Sage AI limit exceeded: ${usedRequests}/${limit}`);
       return false;
     }
     
@@ -125,8 +120,6 @@ class AIService {
     
     // Save to localStorage after incrementing
     this.saveSageAIToStorage();
-    
-    console.log(`✅ Sage AI request allowed: ${usedRequests + 1}/${limit}`);
     return true;
   }
 
@@ -146,24 +139,15 @@ class AIService {
 
   // Get AI response with fallback
   async getAIResponse(message, userId, userType = 'free', language = 'en', isSageAI = false) {
-    console.log('🚀 getAIResponse called with:', {
-      message: message.substring(0, 50) + '...',
-      userId,
-      userType,
-      language,
-      isSageAI
-    });
     
     try {
       // Check Sage AI specific limit if this is a Sage AI request
       if (isSageAI && !this.checkSageAILimit(userId, userType)) {
-        console.log('Sage AI limit exceeded, showing PRO upgrade message');
         return this.getProUpgradeMessage(userType, language, 'sage_ai_limit');
       }
       
       // Check overall rate limit
       if (!this.checkRateLimit(userId, userType)) {
-        console.log('Rate limit exceeded, showing PRO upgrade message');
         return this.getProUpgradeMessage(userType, language);
       }
 
@@ -181,13 +165,8 @@ class AIService {
       }
       
       if (!apiKey || apiKey === 'your_deepseek_api_key_here' || apiKey === 'your_gemini_api_key_here' || apiKey === 'your_openai_api_key_here') {
-        console.log('No valid API key found, using fallback responses');
         return this.getFallbackResponse(message, language);
       }
-
-      console.log('Using AI service:', serviceName);
-      console.log('API Key length:', apiKey.length);
-      console.log('🌐 Language setting:', language);
 
       // Prepare prompt based on language
       const systemPrompt = this.getSystemPrompt(language);
@@ -196,14 +175,12 @@ class AIService {
       let userMessage = message;
       if (language === 'ar') {
         userMessage = `Please respond in Arabic language only: ${message}`;
-        console.log('🌐 Arabic mode enabled - Modified user message:', userMessage);
       }
       
       let response;
       
       if (this.useDeepSeek) {
         // Use OpenRouter DeepSeek API
-        console.log('Making OpenRouter DeepSeek API request...');
         const deepseekBody = {
           model: 'deepseek/deepseek-chat',
           messages: [
@@ -213,8 +190,6 @@ class AIService {
           max_tokens: 500,
           temperature: 0.7
         };
-        
-        console.log('OpenRouter DeepSeek request body:', JSON.stringify(deepseekBody, null, 2));
         
         response = await fetch(this.deepseekURL, {
           method: 'POST',
@@ -226,11 +201,8 @@ class AIService {
           },
           body: JSON.stringify(deepseekBody)
         });
-        
-        console.log('OpenRouter DeepSeek response status:', response.status);
       } else if (this.useGemini) {
         // Use Gemini API
-        console.log('Making Gemini API request...');
         const geminiBody = {
           contents: [{
             parts: [{
@@ -245,8 +217,6 @@ class AIService {
           }
         };
         
-        console.log('Gemini request body:', JSON.stringify(geminiBody, null, 2));
-        
         response = await fetch(`${this.geminiURL}?key=${apiKey}`, {
           method: 'POST',
           headers: {
@@ -254,11 +224,8 @@ class AIService {
           },
           body: JSON.stringify(geminiBody)
         });
-        
-        console.log('Gemini response status:', response.status);
       } else {
         // Use OpenAI API
-        console.log('Making OpenAI API request...');
         response = await fetch(this.openaiURL, {
           method: 'POST',
           headers: {
@@ -275,8 +242,6 @@ class AIService {
             temperature: 0.7
           })
         });
-        
-        console.log('OpenAI response status:', response.status);
       }
 
       if (!response.ok) {
@@ -311,7 +276,6 @@ class AIService {
       }
 
       const data = await response.json();
-      console.log('API Response data:', data);
       
       // Extract response based on API
       let aiResponse;
@@ -338,8 +302,6 @@ class AIService {
         }
       }
 
-      console.log('AI Response:', aiResponse);
-      console.log('✅ Successfully returning AI response');
       return aiResponse;
 
     } catch (error) {
@@ -469,7 +431,6 @@ class AIService {
     // Also clear from localStorage
     try {
       localStorage.removeItem('sageAIRequests');
-      console.log('🗑️ Sage AI limits reset and cleared from localStorage');
     } catch (error) {
       console.warn('⚠️ Failed to clear Sage AI requests from localStorage:', error);
     }
@@ -477,12 +438,8 @@ class AIService {
 
   // Debug function to test Sage AI response
   async testSageAIResponse(message = 'Hello, can you help me with my studies?') {
-    console.log('🧪 Testing Sage AI response...');
-    console.log('  - Message:', message);
-    
     try {
       const response = await this.getAIResponse(message, 'test-user', 'free', 'en', true);
-      console.log('✅ Test response:', response);
       return response;
     } catch (error) {
       console.error('❌ Test failed:', error);
@@ -492,8 +449,6 @@ class AIService {
 
   // Check API key status and provide guidance
   checkAPIKeyStatus() {
-    console.log('🔍 API Key Status Check:');
-    
     const status = {
       openai: {
         hasKey: !!this.openaiKey && this.openaiKey.length > 0,
@@ -513,19 +468,6 @@ class AIService {
       currentService: this.useDeepSeek ? 'DeepSeek' : (this.useGemini ? 'Gemini' : 'OpenAI')
     };
     
-    console.log('📊 Status:', status);
-    
-    if (status.currentService === 'DeepSeek' && !status.deepseek.hasKey) {
-      console.log('⚠️ DeepSeek is selected but no API key found!');
-      console.log('💡 To fix: Add VITE_DEEPSEEK_API_KEY to your .env file');
-    } else if (status.currentService === 'Gemini' && !status.gemini.hasKey) {
-      console.log('⚠️ Gemini is selected but no API key found!');
-      console.log('💡 To fix: Add VITE_GEMINI_API_KEY to your .env file');
-    } else if (status.currentService === 'OpenAI' && !status.openai.hasKey) {
-      console.log('⚠️ OpenAI is selected but no API key found!');
-      console.log('💡 To fix: Add VITE_OPENAI_API_KEY to your .env file');
-    }
-    
     return status;
   }
 
@@ -543,7 +485,6 @@ class AIService {
 
   // Test function to check API connection
   async testConnection() {
-    console.log('🧪 Starting API connection test...');
     try {
       let apiKey, serviceName;
       if (this.useDeepSeek) {
@@ -560,10 +501,6 @@ class AIService {
       if (!apiKey || apiKey === 'your_deepseek_api_key_here' || apiKey === 'your_gemini_api_key_here' || apiKey === 'your_openai_api_key_here') {
         return { success: false, error: 'No valid API key found' };
       }
-
-      console.log('Testing API connection...');
-      console.log('Using service:', serviceName);
-      console.log('API Key length:', apiKey.length);
 
       if (this.useDeepSeek) {
         // OpenRouter DeepSeek test

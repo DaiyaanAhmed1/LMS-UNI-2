@@ -123,29 +123,57 @@ class FileAnalysisService {
     try {
       const prompt = language === 'ar' 
         ? `قم بتحليل هذه الصورة وقدم وصفاً مفصلاً لما تراه. يجب أن يتضمن التحليل:
-        
-        - وصف عام للصورة
-        - العناصر الرئيسية الموجودة
-        - الألوان والتصميم
-        - السياق أو الغرض المحتمل
-        - أي نص أو أرقام مرئية
-        - الملاحظات المهمة
-        
-        الصورة: [IMAGE_DATA]
-        
-        يرجى تقديم تحليل شامل ومفصل باللغة العربية.`
+
+## وصف عام للصورة
+[وصف شامل للصورة]
+
+## العناصر الرئيسية
+- [العنصر الأول]
+- [العنصر الثاني]
+- [العنصر الثالث]
+
+## الألوان والتصميم
+- [وصف الألوان]
+- [وصف التصميم]
+
+## السياق أو الغرض
+[وصف السياق المحتمل]
+
+## النص والأرقام المرئية
+[أي نص أو أرقام موجودة]
+
+## الملاحظات المهمة
+[ملاحظات إضافية مهمة]
+
+الصورة: [IMAGE_DATA]
+
+يرجى تقديم تحليل شامل ومفصل باللغة العربية مع استخدام التنسيق المناسب.`
         : `Please analyze this image and provide a detailed description of what you see. The analysis should include:
-        
-        - General description of the image
-        - Main elements present
-        - Colors and design
-        - Context or likely purpose
-        - Any visible text or numbers
-        - Important observations
-        
-        Image: [IMAGE_DATA]
-        
-        Please provide a comprehensive and detailed analysis.`;
+
+## General Description
+[Comprehensive description of the image]
+
+## Main Elements
+- [First element]
+- [Second element]
+- [Third element]
+
+## Colors and Design
+- [Color description]
+- [Design description]
+
+## Context or Purpose
+[Likely context or purpose]
+
+## Visible Text and Numbers
+[Any visible text or numbers]
+
+## Important Observations
+[Additional important notes]
+
+Image: [IMAGE_DATA]
+
+Please provide a comprehensive and detailed analysis with proper formatting.`;
 
       // For now, we'll use a text-based approach
       // In a real implementation, you'd send the base64 image to an AI service that supports image analysis
@@ -168,31 +196,67 @@ class FileAnalysisService {
     try {
       const prompt = language === 'ar' 
         ? `قم بتحليل هذا المستند وقدم ملخصاً شاملاً ومفصلاً. يجب أن يتضمن التحليل:
-        
-        - الموضوع الرئيسي للمستند
-        - النقاط الرئيسية والمواضيع المهمة
-        - المفاهيم الأساسية والمصطلحات
-        - الملخص التنفيذي
-        - الاستنتاجات والتوصيات
-        - الأسئلة المحتملة حول المحتوى
-        
-        اسم الملف: ${filename}
-        المحتوى: ${text.substring(0, 3000)}...
-        
-        يرجى تقديم تحليل منظم ومفصل باللغة العربية.`
+
+## الموضوع الرئيسي
+[وصف الموضوع الرئيسي للمستند]
+
+## النقاط الرئيسية
+- [النقطة الأولى]
+- [النقطة الثانية]
+- [النقطة الثالثة]
+
+## المفاهيم الأساسية
+- [المفهوم الأول]
+- [المفهوم الثاني]
+- [المفهوم الثالث]
+
+## الملخص التنفيذي
+[ملخص شامل للمستند]
+
+## الاستنتاجات والتوصيات
+- [الاستنتاج الأول]
+- [التوصية الأولى]
+
+## الأسئلة المحتملة
+1. [السؤال الأول]
+2. [السؤال الثاني]
+3. [السؤال الثالث]
+
+اسم الملف: ${filename}
+المحتوى: ${text.substring(0, 3000)}...
+
+يرجى تقديم تحليل منظم ومفصل باللغة العربية مع استخدام التنسيق المناسب.`
         : `Please analyze this document and provide a comprehensive, detailed summary. The analysis should include:
-        
-        - Main topic of the document
-        - Key points and important themes
-        - Core concepts and terminology
-        - Executive summary
-        - Conclusions and recommendations
-        - Potential questions about the content
-        
-        Filename: ${filename}
-        Content: ${text.substring(0, 3000)}...
-        
-        Please provide an organized and detailed analysis.`;
+
+## Main Topic
+[Description of the main topic of the document]
+
+## Key Points
+- [First key point]
+- [Second key point]
+- [Third key point]
+
+## Core Concepts
+- [First concept]
+- [Second concept]
+- [Third concept]
+
+## Executive Summary
+[Comprehensive summary of the document]
+
+## Conclusions and Recommendations
+- [First conclusion]
+- [First recommendation]
+
+## Potential Questions
+1. [First question]
+2. [Second question]
+3. [Third question]
+
+Filename: ${filename}
+Content: ${text.substring(0, 3000)}...
+
+Please provide an organized and detailed analysis with proper formatting.`;
 
       const analysis = await aiService.getAIResponse(
         prompt,
@@ -215,33 +279,67 @@ class FileAnalysisService {
       
       const prompt = language === 'ar' 
         ? `قم بتحليل هذا الكود وقدم تقييماً شاملاً. يجب أن يتضمن التحليل:
-        
-        - الغرض من الكود
-        - الوظائف والطرق المستخدمة
-        - جودة الكود وأفضل الممارسات
-        - المشاكل المحتملة أو التحسينات
-        - شرح للمنطق والخطوات
-        - اقتراحات للتحسين
-        
-        لغة البرمجة: ${programmingLanguage}
-        اسم الملف: ${filename}
-        الكود: ${code.substring(0, 2000)}...
-        
-        يرجى تقديم تحليل مفصل ومفيد باللغة العربية.`
+
+## الغرض من الكود
+[وصف الغرض الرئيسي من الكود]
+
+## الوظائف والطرق
+- [الوظيفة الأولى]
+- [الوظيفة الثانية]
+- [الوظيفة الثالثة]
+
+## جودة الكود
+- [تقييم الجودة]
+- [أفضل الممارسات المستخدمة]
+
+## المشاكل والتحسينات
+- [المشكلة الأولى]
+- [التحسين المقترح الأول]
+
+## شرح المنطق
+[شرح مفصل للمنطق والخطوات]
+
+## اقتراحات التحسين
+1. [الاقتراح الأول]
+2. [الاقتراح الثاني]
+3. [الاقتراح الثالث]
+
+لغة البرمجة: ${programmingLanguage}
+اسم الملف: ${filename}
+الكود: ${code.substring(0, 2000)}...
+
+يرجى تقديم تحليل مفصل ومفيد باللغة العربية مع استخدام التنسيق المناسب.`
         : `Please analyze this code and provide a comprehensive review. The analysis should include:
-        
-        - Purpose of the code
-        - Functions and methods used
-        - Code quality and best practices
-        - Potential issues or improvements
-        - Explanation of logic and steps
-        - Suggestions for enhancement
-        
-        Programming Language: ${programmingLanguage}
-        Filename: ${filename}
-        Code: ${code.substring(0, 2000)}...
-        
-        Please provide a detailed and helpful analysis.`;
+
+## Purpose
+[Description of the main purpose of the code]
+
+## Functions and Methods
+- [First function]
+- [Second function]
+- [Third function]
+
+## Code Quality
+- [Quality assessment]
+- [Best practices used]
+
+## Issues and Improvements
+- [First issue]
+- [First improvement suggestion]
+
+## Logic Explanation
+[Detailed explanation of logic and steps]
+
+## Enhancement Suggestions
+1. [First suggestion]
+2. [Second suggestion]
+3. [Third suggestion]
+
+Programming Language: ${programmingLanguage}
+Filename: ${filename}
+Code: ${code.substring(0, 2000)}...
+
+Please provide a detailed and helpful analysis with proper formatting.`;
 
       const analysis = await aiService.getAIResponse(
         prompt,

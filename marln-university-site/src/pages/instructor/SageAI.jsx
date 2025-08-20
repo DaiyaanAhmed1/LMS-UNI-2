@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import aiService from '../../utils/aiService';
 import fileAnalysisService from '../../utils/fileAnalysisService';
+import ReactMarkdown from 'react-markdown';
 
 const availablePrompts = [
   {
@@ -66,54 +67,66 @@ const MarkdownRenderer = ({ content, isTyping = false }) => {
     }
   }, [content, currentIndex, isTyping]);
 
-  const renderMarkdown = (text) => {
-    // Detect if content is primarily English or Arabic
-    const isEnglishContent = /^[a-zA-Z\s\d\-\.,!?()[\]{}:;'"`~@#$%^&*+=|\\/<>]+$/.test(text.replace(/\n/g, ' ').substring(0, 100));
-    
-    // Basic markdown rendering
-    return text
-      .split('\n')
-      .map((line, index) => {
-        // Bold text
-        if (line.includes('**')) {
-          line = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-        }
-        // Headers
-        if (line.startsWith('**') && line.endsWith('**')) {
-          const alignment = isEnglishContent ? 'text-left' : (isRTL ? 'text-right' : 'text-left');
-          const fontClass = isEnglishContent ? '' : (isRTL ? 'font-arabic' : '');
-          return `<h3 class="text-lg font-semibold mb-2 ${alignment} ${fontClass}">${line.replace(/\*\*/g, '')}</h3>`;
-        }
-        // Lists
-        if (line.trim().startsWith('•')) {
-          const alignment = isEnglishContent ? 'ml-4 text-left' : (isRTL ? 'mr-4 text-right' : 'ml-4 text-left');
-          const fontClass = isEnglishContent ? '' : (isRTL ? 'font-arabic' : '');
-          return `<li class="${alignment} ${fontClass}">${line.trim().substring(1)}</li>`;
-        }
-        // Code blocks
-        if (line.includes('```')) {
-          const alignment = isEnglishContent ? 'text-left' : (isRTL ? 'text-right' : 'text-left');
-          const fontClass = isEnglishContent ? '' : (isRTL ? 'font-arabic' : '');
-          return `<pre class="bg-gray-100 dark:bg-gray-800 p-3 rounded-lg my-2 overflow-x-auto ${alignment} ${fontClass}"><code>${line.replace(/```/g, '')}</code></pre>`;
-        }
-        // Regular paragraphs
-        if (line.trim() === '') {
-          return '<br>';
-        }
-        const alignment = isEnglishContent ? 'text-left' : (isRTL ? 'text-right' : 'text-left');
-        const fontClass = isEnglishContent ? '' : (isRTL ? 'font-arabic' : '');
-        return `<p class="mb-2 ${alignment} ${fontClass}">${line}</p>`;
-      })
-      .join('');
-  };
-
   return (
-    <div 
-      className={`prose dark:prose-invert max-w-none ${isRTL ? 'text-right' : 'text-left'} ${isRTL ? 'font-arabic' : ''}`}
-      dangerouslySetInnerHTML={{ __html: renderMarkdown(displayedContent) }}
-      dir={isRTL ? 'rtl' : 'ltr'}
-      style={{ direction: 'auto' }}
-    />
+    <div className={`prose dark:prose-invert max-w-none markdown-content ${isRTL ? 'text-right' : 'text-left'} ${isRTL ? 'font-arabic' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
+      <ReactMarkdown
+        components={{
+          table: ({node, ...props}) => (
+            <div className="overflow-x-auto my-4">
+              <table className="min-w-full border border-gray-300 dark:border-gray-600 rounded-lg" {...props} />
+            </div>
+          ),
+          thead: ({node, ...props}) => (
+            <thead className="bg-gray-50 dark:bg-gray-800" {...props} />
+          ),
+          th: ({node, ...props}) => (
+            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 border-b border-gray-300 dark:border-gray-600" {...props} />
+          ),
+          td: ({node, ...props}) => (
+            <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-700" {...props} />
+          ),
+          tr: ({node, ...props}) => (
+            <tr className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" {...props} />
+          ),
+          code: ({node, inline, className, children, ...props}) => {
+            const match = /language-(\w+)/.exec(className || '');
+            return !inline ? (
+              <pre className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg my-4 overflow-x-auto">
+                <code className={className} {...props}>
+                  {children}
+                </code>
+              </pre>
+            ) : (
+              <code className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-sm font-mono" {...props}>
+                {children}
+              </code>
+            );
+          },
+          blockquote: ({node, children, ...props}) => (
+            <blockquote className="border-l-4 border-blue-500 pl-4 py-2 my-4 bg-blue-50 dark:bg-blue-900/20 italic text-gray-700 dark:text-gray-300" {...props}>
+              {children}
+            </blockquote>
+          ),
+          ul: ({node, children, ...props}) => (
+            <ul className="list-disc list-inside space-y-2 my-4" {...props}>
+              {children}
+            </ul>
+          ),
+          ol: ({node, children, ...props}) => (
+            <ol className="list-decimal list-inside space-y-2 my-4" {...props}>
+              {children}
+            </ol>
+          ),
+          li: ({node, children, ...props}) => (
+            <li className="text-gray-700 dark:text-gray-300" {...props}>
+              {children}
+            </li>
+          ),
+        }}
+      >
+        {displayedContent}
+      </ReactMarkdown>
+    </div>
   );
 };
 
@@ -196,6 +209,9 @@ export default function InstructorSageAI() {
   }, [isTyping]);
 
   const createNewChat = () => {
+    // Prevent creating new chat if AI is responding
+    if (isLoading || isTyping) return;
+    
     const newChat = {
       id: Date.now(),
       title: 'New Chat',
@@ -210,7 +226,22 @@ export default function InstructorSageAI() {
     setMessageCount(0); // Reset message count for new chat
   };
 
+  // Update remaining messages count
+  const updateRemainingMessages = () => {
+    const userType = 'free';
+    const remaining = aiService.getRemainingSageAIMessages(userId, userType);
+    setRemainingMessages(remaining);
+  };
+
+  // Update remaining messages on component mount and after each message
+  useEffect(() => {
+    updateRemainingMessages();
+  }, [chats]); // Update when chats change
+
   const deleteChat = (chatId) => {
+    // Prevent deleting chat if AI is responding
+    if (isLoading || isTyping) return;
+    
     setChats(prev => prev.filter(chat => chat.id !== chatId));
     if (currentChatId === chatId) {
       if (chats.length > 1) {
@@ -227,6 +258,9 @@ export default function InstructorSageAI() {
   };
 
   const updateChatTitle = (chatId, firstMessage) => {
+    // Prevent updating title if AI is responding
+    if (isLoading || isTyping) return;
+    
     const title = firstMessage.length > 50 ? firstMessage.substring(0, 50) + '...' : firstMessage;
     setChats(prev => prev.map(chat => 
       chat.id === chatId ? { ...chat, title } : chat
@@ -234,12 +268,15 @@ export default function InstructorSageAI() {
   };
 
   const handlePromptClick = (prompt) => {
+    // Prevent setting prompts if AI is responding
+    if (isLoading || isTyping) return;
+    
     setInputMessage(prompt);
     setShowChatHistory(false); // Close chat history when starting new conversation
   };
 
   const handleSendMessage = async () => {
-    if (!inputMessage.trim() || !currentChatId) return;
+    if (!inputMessage.trim() || !currentChatId || isLoading || isTyping) return;
 
     const userMessage = {
       id: Date.now(),
@@ -276,11 +313,7 @@ export default function InstructorSageAI() {
       const userType = 'free'; // Free tier for demo
       const language = forceArabicResponse ? 'ar' : (currentLanguage === 'ar' ? 'ar' : 'en');
 
-      console.log('🔍 SageAI Debug Info:');
-      console.log('  - forceArabicResponse:', forceArabicResponse);
-      console.log('  - currentLanguage:', currentLanguage);
-      console.log('  - selected language:', language);
-      console.log('  - user input:', currentInput);
+
 
       // Get AI response
       const aiResponseText = await aiService.getAIResponse(
@@ -358,16 +391,25 @@ export default function InstructorSageAI() {
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      handleSendMessage();
+      // Prevent sending message if AI is responding
+      if (!isLoading && !isTyping) {
+        handleSendMessage();
+      }
     }
   };
 
   const handleVoiceInput = () => {
+    // Prevent voice input if AI is responding
+    if (isLoading || isTyping) return;
+    
     // Voice input functionality (placeholder)
     alert('Voice input feature coming soon!');
   };
 
   const handleFileAttachment = () => {
+    // Prevent file attachment if AI is responding
+    if (isLoading || isTyping) return;
+    
     // Create a hidden file input
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
@@ -388,24 +430,23 @@ export default function InstructorSageAI() {
   };
 
   const handleFileUpload = async (file) => {
+    // Prevent file upload if AI is responding
+    if (isLoading || isTyping) return;
+    
     try {
       setIsAnalyzingFile(true);
       setAttachedFile(file);
       
-      // Analyze the file
-      const analysis = await fileAnalysisService.analyzeFile(file, currentLanguage);
-      
-      // Create a message with the file analysis
+      // Create a user message for the file attachment
       const fileMessage = {
         id: Date.now(),
         type: 'user',
-        content: `📎 Attached file: ${file.name}\n\n${analysis.analysis}`,
+        content: `📎 Attached file: ${file.name}`,
         timestamp: new Date().toLocaleTimeString(),
         fileInfo: {
           name: file.name,
           size: file.size,
-          type: analysis.fileType,
-          analysis: analysis.analysis
+          type: file.type
         }
       };
       
@@ -424,13 +465,68 @@ export default function InstructorSageAI() {
         updateChatTitle(currentChatId, `File Analysis: ${file.name}`);
       }
       
+      // Now get AI response for the file analysis
+      setIsLoading(true);
+      
+      try {
+        // Analyze the file
+        const analysis = await fileAnalysisService.analyzeFile(file, currentLanguage);
+        
+        // Get AI response for the file analysis
+        const aiResponse = await aiService.getAIResponse(
+          `Please analyze this file and provide insights: ${analysis.analysis}`,
+          userId,
+          'free',
+          currentLanguage,
+          true // This is a Sage AI request
+        );
+        
+        // Create AI response message
+        const aiMessage = {
+          id: Date.now() + 1,
+          type: 'ai',
+          content: aiResponse,
+          timestamp: new Date().toLocaleTimeString(),
+          isTyping: false
+        };
+        
+        // Add AI response to chat
+        const finalMessages = [...updatedMessages, aiMessage];
+        setChats(prev => prev.map(chat => 
+          chat.id === currentChatId 
+            ? { ...chat, messages: finalMessages }
+            : chat
+        ));
+        
+        // Update remaining messages count
+        updateRemainingMessages();
+        
+      } catch (aiError) {
+        // Show error message if AI analysis fails
+        const errorMessage = {
+          id: Date.now() + 1,
+          type: 'ai',
+          content: `❌ File analysis failed: ${aiError.message}`,
+          timestamp: new Date().toLocaleTimeString(),
+          isTyping: false
+        };
+        
+        const finalMessages = [...updatedMessages, errorMessage];
+        setChats(prev => prev.map(chat => 
+          chat.id === currentChatId 
+            ? { ...chat, messages: finalMessages }
+            : chat
+        ));
+      }
+      
     } catch (error) {
       // Show error message
       const errorMessage = {
         id: Date.now(),
         type: 'ai',
-        content: `❌ File analysis failed: ${error.message}`,
-        timestamp: new Date().toLocaleTimeString()
+        content: `❌ File upload failed: ${error.message}`,
+        timestamp: new Date().toLocaleTimeString(),
+        isTyping: false
       };
       
       const currentChat = getCurrentChat();
@@ -443,11 +539,15 @@ export default function InstructorSageAI() {
       ));
     } finally {
       setIsAnalyzingFile(false);
+      setIsLoading(false);
       setAttachedFile(null);
     }
   };
 
   const handleUpgradeToPro = () => {
+    // Prevent upgrade action if AI is responding
+    if (isLoading || isTyping) return;
+    
     // Upgrade to Pro functionality (placeholder)
     alert('Upgrade to Pro to access unlimited chat history and advanced features!');
   };

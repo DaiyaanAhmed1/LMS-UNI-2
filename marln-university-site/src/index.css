@@ -199,6 +199,84 @@ body.react-joyride-active {
   border-top-color: #4b5563;
 }
 
+/* Enhanced Table Styling for Markdown */
+.markdown-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.markdown-content thead {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.markdown-content th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #1e293b;
+  border-bottom: 2px solid #e2e8f0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.markdown-content td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.markdown-content tr:hover {
+  background-color: #f8fafc;
+  transition: background-color 0.2s ease;
+}
+
+.markdown-content tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Dark mode table support */
+.dark .markdown-content table {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+}
+
+.dark .markdown-content thead {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+}
+
+.dark .markdown-content th {
+  color: #f1f5f9;
+  border-bottom-color: #475569;
+}
+
+.dark .markdown-content td {
+  color: #cbd5e1;
+  border-bottom-color: #334155;
+}
+
+.dark .markdown-content tr:hover {
+  background-color: #1e293b;
+}
+
+/* Responsive table support */
+@media (max-width: 768px) {
+  .markdown-content table {
+    font-size: 0.875rem;
+  }
+  
+  .markdown-content th,
+  .markdown-content td {
+    padding: 8px 12px;
+  }
+}
+
+
+
 .__floater,
 .__floater__container,
 .__react_joyride__tooltip__container {
