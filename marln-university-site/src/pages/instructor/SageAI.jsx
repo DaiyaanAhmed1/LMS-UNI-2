@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import aiService from '../../utils/aiService';
+import fileAnalysisService from '../../utils/fileAnalysisService';
 
 const availablePrompts = [
   {
@@ -132,6 +133,8 @@ export default function InstructorSageAI() {
   const [messageCount, setMessageCount] = useState(0);
   const [remainingMessages, setRemainingMessages] = useState(aiService.sageAILimits.free); // Track remaining messages
   const [forceArabicResponse, setForceArabicResponse] = useState(false); // Force all responses in Arabic
+  const [attachedFile, setAttachedFile] = useState(null);
+  const [isAnalyzingFile, setIsAnalyzingFile] = useState(false);
   const textareaRef = useRef(null);
   const chatContainerRef = useRef(null);
 
@@ -365,8 +368,83 @@ export default function InstructorSageAI() {
   };
 
   const handleFileAttachment = () => {
-    // File attachment functionality (placeholder)
-    alert('File attachment feature coming soon!');
+    // Create a hidden file input
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.jpg,.jpeg,.png,.gif,.webp,.bmp,.pdf,.txt,.doc,.docx,.rtf,.js,.jsx,.ts,.tsx,.py,.java,.cpp,.c,.html,.css,.json,.xml,.md';
+    fileInput.style.display = 'none';
+    
+    fileInput.onchange = async (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        await handleFileUpload(file);
+      }
+      // Clean up
+      document.body.removeChild(fileInput);
+    };
+    
+    document.body.appendChild(fileInput);
+    fileInput.click();
+  };
+
+  const handleFileUpload = async (file) => {
+    try {
+      setIsAnalyzingFile(true);
+      setAttachedFile(file);
+      
+      // Analyze the file
+      const analysis = await fileAnalysisService.analyzeFile(file, currentLanguage);
+      
+      // Create a message with the file analysis
+      const fileMessage = {
+        id: Date.now(),
+        type: 'user',
+        content: `📎 Attached file: ${file.name}\n\n${analysis.analysis}`,
+        timestamp: new Date().toLocaleTimeString(),
+        fileInfo: {
+          name: file.name,
+          size: file.size,
+          type: analysis.fileType,
+          analysis: analysis.analysis
+        }
+      };
+      
+      // Add the file message to the current chat
+      const currentChat = getCurrentChat();
+      const updatedMessages = [...currentChat.messages, fileMessage];
+      
+      setChats(prev => prev.map(chat => 
+        chat.id === currentChatId 
+          ? { ...chat, messages: updatedMessages }
+          : chat
+      ));
+      
+      // Update chat title if this is the first message
+      if (currentChat.messages.length === 0) {
+        updateChatTitle(currentChatId, `File Analysis: ${file.name}`);
+      }
+      
+    } catch (error) {
+      // Show error message
+      const errorMessage = {
+        id: Date.now(),
+        type: 'ai',
+        content: `❌ File analysis failed: ${error.message}`,
+        timestamp: new Date().toLocaleTimeString()
+      };
+      
+      const currentChat = getCurrentChat();
+      const updatedMessages = [...currentChat.messages, errorMessage];
+      
+      setChats(prev => prev.map(chat => 
+        chat.id === currentChatId 
+          ? { ...chat, messages: updatedMessages }
+          : chat
+      ));
+    } finally {
+      setIsAnalyzingFile(false);
+      setAttachedFile(null);
+    }
   };
 
   const handleUpgradeToPro = () => {
@@ -452,7 +530,12 @@ export default function InstructorSageAI() {
             
             {/* Arabic Response Toggle */}
             <button
-              onClick={() => setForceArabicResponse(!forceArabicResponse)}
+              onClick={() => {
+                console.log('🌐 Translation button clicked!');
+                console.log('  - Current forceArabicResponse:', forceArabicResponse);
+                setForceArabicResponse(!forceArabicResponse);
+                console.log('  - New forceArabicResponse will be:', !forceArabicResponse);
+              }}
               className={`p-2 rounded-lg transition-colors ${
                 forceArabicResponse 
                   ? 'bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-800' 
@@ -631,10 +714,23 @@ export default function InstructorSageAI() {
               <div className={`absolute bottom-2 flex items-center ${isRTL ? 'left-2 space-x-reverse space-x-1' : 'right-2 space-x-1'}`}>
                 <button
                   onClick={handleFileAttachment}
-                  className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
-                  title={isRTL ? "إرفاق ملف" : "Attach file"}
+                  disabled={isAnalyzingFile}
+                  className={`p-2 rounded-lg transition-colors ${
+                    isAnalyzingFile 
+                      ? 'bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 animate-pulse'
+                      : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600'
+                  }`}
+                  title={
+                    isAnalyzingFile 
+                      ? t('instructor.sageAI.fileAnalysis.analyzingFile', 'Analyzing file...')
+                      : isRTL ? "إرفاق ملف" : "Attach file"
+                  }
                 >
-                  <Paperclip className="w-4 h-4" />
+                  {isAnalyzingFile ? (
+                    <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <Paperclip className="w-4 h-4" />
+                  )}
                 </button>
                 <button
                   onClick={handleVoiceInput}

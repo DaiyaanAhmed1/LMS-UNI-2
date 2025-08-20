@@ -95,6 +95,110 @@ body.react-joyride-active {
   height: 100% !important;
 }
 
+/* Enhanced Markdown Content Styling */
+.markdown-content {
+  line-height: 1.8;
+}
+
+.markdown-content h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 1.5rem;
+  margin-top: 2rem;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 0.5rem;
+}
+
+.markdown-content h2 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 1rem;
+  margin-top: 1.5rem;
+  border-left: 4px solid #3b82f6;
+  padding-left: 1rem;
+}
+
+.markdown-content h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #4b5563;
+  margin-bottom: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.markdown-content p {
+  margin-bottom: 1rem;
+  line-height: 1.7;
+}
+
+.markdown-content ul, .markdown-content ol {
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+}
+
+.markdown-content li {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+}
+
+.markdown-content strong {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.markdown-content em {
+  font-style: italic;
+  color: #6b7280;
+}
+
+.markdown-content blockquote {
+  border-left: 4px solid #e5e7eb;
+  padding-left: 1rem;
+  margin: 1rem 0;
+  font-style: italic;
+  color: #6b7280;
+}
+
+.markdown-content hr {
+  border: none;
+  border-top: 2px solid #e5e7eb;
+  margin: 2rem 0;
+}
+
+/* Dark mode support */
+.dark .markdown-content h1 {
+  color: #f9fafb;
+  border-bottom-color: #4b5563;
+}
+
+.dark .markdown-content h2 {
+  color: #e5e7eb;
+  border-left-color: #60a5fa;
+}
+
+.dark .markdown-content h3 {
+  color: #d1d5db;
+}
+
+.dark .markdown-content strong {
+  color: #f9fafb;
+}
+
+.dark .markdown-content em {
+  color: #9ca3af;
+}
+
+.dark .markdown-content blockquote {
+  border-left-color: #4b5563;
+  color: #9ca3af;
+}
+
+.dark .markdown-content hr {
+  border-top-color: #4b5563;
+}
+
 .__floater,
 .__floater__container,
 .__react_joyride__tooltip__container {

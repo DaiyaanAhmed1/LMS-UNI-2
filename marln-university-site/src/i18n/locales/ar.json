@@ -46,7 +46,44 @@
       "iframeTitle": "ملف الدورة",
       "notFound": "لم يتم العثور على ملف PDF.",
       "summarize": "تلخيص PDF",
-      "generating": "جارٍ توليد الملخص..."
+      "analyzePDF": "تحليل PDF",
+      "generating": "جارٍ توليد الملخص...",
+      "aiAnalysis": "تحليل PDF بالذكاء الاصطناعي",
+      "poweredBy": "مدعوم بـ Sage AI",
+      "documentTitle": "المستند",
+      "analyzeDescription": "توليد ملخص وأسئلة من محتوى PDF",
+      "analyzing": "جارٍ تحليل PDF...",
+      "extractingText": "استخراج النص من PDF...",
+      "generatingSummary": "توليد ملخص بالذكاء الاصطناعي...",
+      "generatingQuestions": "توليد الأسئلة...",
+      "retry": "إعادة المحاولة",
+      "summary": "الملخص",
+      "questions": "الأسئلة",
+      "copied": "تم النسخ!",
+      "copy": "نسخ المحتوى",
+      "footer": {
+        "line1": "تحليل PDF بالذكاء الاصطناعي لتعلم أفضل",
+        "line2": "مولد بتقنية Sage AI"
+      },
+      "scrollIndicator": "تمرير",
+      "translateToArabic": "ترجمة إلى العربية",
+      "showOriginal": "إظهار النص الأصلي",
+      "translating": "جاري الترجمة...",
+      "demoModal": {
+        "title": "جرب الوضع التجريبي",
+        "subtitle": "اختبر تحليل PDF بالذكاء الاصطناعي",
+        "description": "هل تريد أن ترى كيف يعمل تحليل PDF بالذكاء الاصطناعي مع بيانات أمن سيبراني تجريبية؟ سيعرض لك هذا جميع إمكانيات الملخص المولّد بالذكاء الاصطناعي وتوليد الأسئلة.",
+        "features": {
+          "title": "يشمل التجريبي:",
+          "summary": "ملخص شامل بالذكاء الاصطناعي",
+          "questions": "أنواع متعددة من الأسئلة",
+          "translation": "دعم الترجمة العربية",
+          "copy": "وظيفة النسخ"
+        },
+        "cancel": "إلغاء",
+        "start": "ابدأ التجريبي",
+        "dontShowAgain": "لا تظهر هذا مرة أخرى"
+      }
     },
     "videoViewer": {
       "title": "عارض الفيديو",
@@ -57,7 +94,30 @@
       "noTranscriptShort": "بدون نص",
       "close": "إغلاق الفيديو",
       "unsupported": "المتصفح الخاص بك لا يدعم وسم الفيديو.",
-      "notFound": "لم يتم العثور على الفيديو."
+      "notFound": "لم يتم العثور على الفيديو.",
+      "uploadVideo": "رفع فيديو",
+      "uploadShort": "رفع",
+      "aiAnalysisTitle": "تحليل الفيديو بالذكاء الاصطناعي",
+      "aiAnalysisShort": "ذكاء اصطناعي",
+      "aiAnalysis": "تحليل الفيديو بالذكاء الاصطناعي",
+      "poweredBy": "مدعوم بـ Sage AI",
+      "documentTitle": "الفيديو",
+      "copy": "نسخ المحتوى",
+      "copied": "تم النسخ!",
+      "translateToArabic": "ترجمة إلى العربية",
+      "translating": "جاري الترجمة...",
+      "analyzeVideo": "تحليل الفيديو بالذكاء الاصطناعي",
+      "analyzeDescription": "توليد نص، ملخص، ونقاط رئيسية من محتوى الفيديو",
+      "analyzing": "جارٍ تحليل الفيديو...",
+      "analysisReady": "التحليل جاهز!",
+      "analysisError": "فشل التحليل",
+      "loadAnalysis": "تحميل نتائج التحليل",
+      "loadAnalysisDesc": "تحميل محتوى الفيديو المحلل مسبقاً",
+      "retry": "إعادة المحاولة",
+      "summary": "الملخص",
+      "keyPoints": "النقاط الرئيسية",
+      "transcript": "النص",
+      "footer": "تحليل الفيديو بالذكاء الاصطناعي لتعلم أفضل"
     },
     "tour": {
       "startPrompt": {
@@ -1088,8 +1148,8 @@
             }
           }
         },
-        "checkMyVae": {
-          "title": "التحقق من الخبرة الأكاديمية (VAE)",
+            "checkMyVae": {
+      "title": "الانخراط الأكاديمي المُتحقق منه",
           "lastUpdated": "آخر تحديث: {{date}}",
           "refresh": "تحديث VAE",
           "tabs": {
@@ -1524,6 +1584,14 @@
         "enable": "تفعيل الردود العربية",
         "disable": "إيقاف الردود العربية",
         "indicator": "الردود ستكون باللغة العربية"
+      },
+      "fileAnalysis": {
+        "analyzingFile": "جارٍ تحليل الملف...",
+        "fileAttached": "تم إرفاق الملف",
+        "analysisComplete": "اكتمل التحليل",
+        "analysisFailed": "فشل التحليل",
+        "unsupportedFile": "نوع ملف غير مدعوم",
+        "fileTooLarge": "الملف كبير جداً"
       }
     },
     "definitionsForm": {

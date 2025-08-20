@@ -9,6 +9,13 @@ class AIService {
     this.useGemini = import.meta.env.VITE_USE_GEMINI === 'true';
     this.useDeepSeek = import.meta.env.VITE_USE_DEEPSEEK === 'true';
     
+    console.log('🔧 AI Service Configuration:');
+    console.log('  - OpenAI Key length:', this.openaiKey.length);
+    console.log('  - Gemini Key length:', this.geminiKey.length);
+    console.log('  - DeepSeek Key length:', this.deepseekKey.length);
+    console.log('  - Use Gemini:', this.useGemini);
+    console.log('  - Use DeepSeek:', this.useDeepSeek);
+    
     this.openaiURL = 'https://api.openai.com/v1/chat/completions';
     this.geminiURL = 'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent';
     this.deepseekURL = 'https://openrouter.ai/api/v1/chat/completions';
@@ -107,6 +114,14 @@ class AIService {
 
   // Get AI response with fallback
   async getAIResponse(message, userId, userType = 'free', language = 'en', isSageAI = false) {
+    console.log('🚀 getAIResponse called with:', {
+      message: message.substring(0, 50) + '...',
+      userId,
+      userType,
+      language,
+      isSageAI
+    });
+    
     try {
       // Check Sage AI specific limit if this is a Sage AI request
       if (isSageAI && !this.checkSageAILimit(userId, userType)) {
@@ -244,6 +259,12 @@ class AIService {
           return this.getProUpgradeMessage(userType, language, 'api_rate_limit');
         }
         
+        // Check if it's an authentication error (401)
+        if (response.status === 401) {
+          console.log('🚨 API Authentication failed, trying fallback response');
+          return this.getFallbackResponse(message, language);
+        }
+        
         // Try to parse error for better debugging
         try {
           const errorData = JSON.parse(errorText);
@@ -252,7 +273,9 @@ class AIService {
           console.error('Raw Error Text:', errorText);
         }
         
-        throw new Error(`API Error: ${response.status} - ${errorText}`);
+        // For other errors, use fallback instead of throwing
+        console.log('🚨 API Error, using fallback response');
+        return this.getFallbackResponse(message, language);
       }
 
       const data = await response.json();
@@ -284,6 +307,7 @@ class AIService {
       }
 
       console.log('AI Response:', aiResponse);
+      console.log('✅ Successfully returning AI response');
       return aiResponse;
 
     } catch (error) {
@@ -352,14 +376,20 @@ class AIService {
         "That's an interesting question. Let me help you understand this better.",
         "I can assist you with course materials, study tips, and academic guidance.",
         "Feel free to ask me about any subject you're studying. I'm here to help!",
-        "Great question! Let's explore this topic together."
+        "Great question! Let's explore this topic together.",
+        "I'm currently in demo mode. I can help you with study strategies, course materials, and academic guidance. What would you like to know?",
+        "Welcome to Sage AI! I'm here to support your learning journey. What topic are you working on today?",
+        "I can help you with note-taking techniques, exam preparation, and understanding complex concepts. What do you need help with?"
       ],
       ar: [
         "أنا هنا لمساعدتك في دراستك! ما هو الموضوع المحدد الذي تريد مناقشته؟",
         "هذا سؤال مثير للاهتمام. دعني أساعدك في فهم هذا بشكل أفضل.",
         "يمكنني مساعدتك في المواد الدراسية ونصائح الدراسة والتوجيه الأكاديمي.",
         "لا تتردد في سؤالي عن أي مادة تدرسها. أنا هنا للمساعدة!",
-        "سؤال رائع! دعنا نستكشف هذا الموضوع معاً."
+        "سؤال رائع! دعنا نستكشف هذا الموضوع معاً.",
+        "أنا حالياً في الوضع التجريبي. يمكنني مساعدتك في استراتيجيات الدراسة والمواد الدراسية والتوجيه الأكاديمي. ماذا تريد أن تعرف؟",
+        "مرحباً بك في Sage AI! أنا هنا لدعم رحلة تعلمك. ما هو الموضوع الذي تعمل عليه اليوم؟",
+        "يمكنني مساعدتك في تقنيات تدوين الملاحظات والتحضير للامتحانات وفهم المفاهيم المعقدة. فيم تحتاج المساعدة؟"
       ]
     };
 
@@ -401,6 +431,60 @@ class AIService {
     console.log('Sage AI limits reset');
   }
 
+  // Debug function to test Sage AI response
+  async testSageAIResponse(message = 'Hello, can you help me with my studies?') {
+    console.log('🧪 Testing Sage AI response...');
+    console.log('  - Message:', message);
+    
+    try {
+      const response = await this.getAIResponse(message, 'test-user', 'free', 'en', true);
+      console.log('✅ Test response:', response);
+      return response;
+    } catch (error) {
+      console.error('❌ Test failed:', error);
+      return null;
+    }
+  }
+
+  // Check API key status and provide guidance
+  checkAPIKeyStatus() {
+    console.log('🔍 API Key Status Check:');
+    
+    const status = {
+      openai: {
+        hasKey: !!this.openaiKey && this.openaiKey.length > 0,
+        keyLength: this.openaiKey.length,
+        isDefault: this.openaiKey === 'your_openai_api_key_here'
+      },
+      gemini: {
+        hasKey: !!this.geminiKey && this.geminiKey.length > 0,
+        keyLength: this.geminiKey.length,
+        isDefault: this.geminiKey === 'your_gemini_api_key_here'
+      },
+      deepseek: {
+        hasKey: !!this.deepseekKey && this.deepseekKey.length > 0,
+        keyLength: this.deepseekKey.length,
+        isDefault: this.deepseekKey === 'your_deepseek_api_key_here'
+      },
+      currentService: this.useDeepSeek ? 'DeepSeek' : (this.useGemini ? 'Gemini' : 'OpenAI')
+    };
+    
+    console.log('📊 Status:', status);
+    
+    if (status.currentService === 'DeepSeek' && !status.deepseek.hasKey) {
+      console.log('⚠️ DeepSeek is selected but no API key found!');
+      console.log('💡 To fix: Add VITE_DEEPSEEK_API_KEY to your .env file');
+    } else if (status.currentService === 'Gemini' && !status.gemini.hasKey) {
+      console.log('⚠️ Gemini is selected but no API key found!');
+      console.log('💡 To fix: Add VITE_GEMINI_API_KEY to your .env file');
+    } else if (status.currentService === 'OpenAI' && !status.openai.hasKey) {
+      console.log('⚠️ OpenAI is selected but no API key found!');
+      console.log('💡 To fix: Add VITE_OPENAI_API_KEY to your .env file');
+    }
+    
+    return status;
+  }
+
   // Get current rate limit status
   getRateLimitStatus(userId, userType = 'free') {
     const remaining = this.getRemainingRequests(userId, userType);
@@ -415,6 +499,7 @@ class AIService {
 
   // Test function to check API connection
   async testConnection() {
+    console.log('🧪 Starting API connection test...');
     try {
       let apiKey, serviceName;
       if (this.useDeepSeek) {

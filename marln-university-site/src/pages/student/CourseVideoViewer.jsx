@@ -34,6 +34,8 @@ function CourseVideoViewer() {
     setIsSummaryPanelOpen(false);
   };
 
+
+
   return (
     <div className="fixed inset-0 bg-gray-900 flex flex-col z-50">
       <div className="flex items-center justify-between p-4 bg-gray-800">
@@ -73,18 +75,22 @@ function CourseVideoViewer() {
         </div>
       </div>
       
-      <div className="flex-1 flex items-center justify-center bg-black">
+      <div className="flex-1 flex items-center justify-center bg-black relative">
         {videoUrl ? (
-          <video
-            src={videoUrl}
-            controls
-            controlsList="nodownload noremoteplayback"
-            disablePictureInPicture
-            className="w-full max-w-4xl h-[70vh] bg-black rounded shadow"
-            style={{ outline: 'none' }}
-          >
-            {t('student.videoViewer.unsupported')}
-          </video>
+          <>
+            <video
+              src={videoUrl}
+              controls
+              controlsList="nodownload noremoteplayback"
+              disablePictureInPicture
+              className="w-full max-w-4xl h-[70vh] bg-black rounded shadow"
+              style={{ outline: 'none' }}
+            >
+              {t('student.videoViewer.unsupported')}
+            </video>
+            
+
+          </>
         ) : (
           <div className="flex items-center justify-center h-full text-white">{t('student.videoViewer.notFound')}</div>
         )}
@@ -98,6 +104,8 @@ function CourseVideoViewer() {
         videoTitle={currentTranscript?.title || title}
         summary={currentTranscript?.summary || ''}
       />
+
+
     </div>
   );
 }
