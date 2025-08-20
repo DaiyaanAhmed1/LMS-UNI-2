@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Sidebar from '../../components/Sidebar';
-import { Bot, Sparkles, BookOpen, Lightbulb, Target, Zap, Lock, X, Send, MessageCircle, Plus, Mic, ArrowRight, Trash2, Paperclip, ChevronLeft, ChevronRight, Crown, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
+import { Bot, Sparkles, BookOpen, Lightbulb, Target, Zap, Lock, X, Send, MessageCircle, Plus, Mic, ArrowRight, Trash2, Paperclip, ChevronLeft, ChevronRight, Crown, PanelLeftClose, PanelLeftOpen, Languages } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
+import aiService from '../../utils/aiService';
+import fileAnalysisService from '../../utils/fileAnalysisService';
+import ReactMarkdown from 'react-markdown';
 
 const availablePrompts = [
   {
@@ -106,47 +109,72 @@ const MarkdownRenderer = ({ content, isTyping = false }) => {
     }
   }, [content, currentIndex, isTyping]);
 
-  const renderMarkdown = (text) => {
-    // Basic markdown rendering
-    return text
-      .split('\n')
-      .map((line, index) => {
-        // Bold text
-        if (line.includes('**')) {
-          line = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-        }
-        // Headers
-        if (line.startsWith('**') && line.endsWith('**')) {
-          return `<h3 class="text-lg font-semibold mb-2 ${isRTL ? 'text-right' : 'text-left'}">${line.replace(/\*\*/g, '')}</h3>`;
-        }
-        // Lists
-        if (line.trim().startsWith('•')) {
-          return `<li class="${isRTL ? 'mr-4' : 'ml-4'}">${line.trim().substring(1)}</li>`;
-        }
-        // Code blocks
-        if (line.includes('```')) {
-          return `<pre class="bg-gray-100 dark:bg-gray-800 p-3 rounded-lg my-2 overflow-x-auto ${isRTL ? 'text-right' : 'text-left'}"><code>${line.replace(/```/g, '')}</code></pre>`;
-        }
-        // Regular paragraphs
-        if (line.trim() === '') {
-          return '<br>';
-        }
-        return `<p class="mb-2 ${isRTL ? 'text-right' : 'text-left'}">${line}</p>`;
-      })
-      .join('');
-  };
-
   return (
-    <div 
-      className={`prose dark:prose-invert max-w-none ${isRTL ? 'text-right' : 'text-left'}`}
-      dangerouslySetInnerHTML={{ __html: renderMarkdown(displayedContent) }}
-    />
+    <div className={`prose dark:prose-invert max-w-none markdown-content ${isRTL ? 'text-right' : 'text-left'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+      <ReactMarkdown
+        components={{
+          table: ({node, ...props}) => (
+            <div className="overflow-x-auto my-4">
+              <table className="min-w-full border border-gray-300 dark:border-gray-600 rounded-lg" {...props} />
+            </div>
+          ),
+          thead: ({node, ...props}) => (
+            <thead className="bg-gray-50 dark:bg-gray-800" {...props} />
+          ),
+          th: ({node, ...props}) => (
+            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 border-b border-gray-300 dark:border-gray-600" {...props} />
+          ),
+          td: ({node, ...props}) => (
+            <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-700" {...props} />
+          ),
+          tr: ({node, ...props}) => (
+            <tr className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" {...props} />
+          ),
+          code: ({node, inline, className, children, ...props}) => {
+            const match = /language-(\w+)/.exec(className || '');
+            return !inline ? (
+              <pre className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg my-4 overflow-x-auto">
+                <code className={className} {...props}>
+                  {children}
+                </code>
+              </pre>
+            ) : (
+              <code className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-sm font-mono" {...props}>
+                {children}
+              </code>
+            );
+          },
+          blockquote: ({node, children, ...props}) => (
+            <blockquote className="border-l-4 border-blue-500 pl-4 py-2 my-4 bg-blue-50 dark:bg-blue-900/20 italic text-gray-700 dark:text-gray-300" {...props}>
+              {children}
+            </blockquote>
+          ),
+          ul: ({node, children, ...props}) => (
+            <ul className="list-disc list-inside space-y-2 my-4" {...props}>
+              {children}
+            </ul>
+          ),
+          ol: ({node, children, ...props}) => (
+            <ol className="list-decimal list-inside space-y-4 my-4" {...props}>
+              {children}
+            </ol>
+          ),
+          li: ({node, children, ...props}) => (
+            <li className="text-gray-700 dark:text-gray-300" {...props}>
+              {children}
+            </li>
+          ),
+        }}
+      >
+        {displayedContent}
+      </ReactMarkdown>
+    </div>
   );
 };
 
 export default function SageAI() {
   const { t } = useTranslation();
-  const { isRTL } = useLanguage();
+  const { isRTL, currentLanguage } = useLanguage();
   const navigate = useNavigate();
   const [chats, setChats] = useState([]);
   const [currentChatId, setCurrentChatId] = useState(null);
@@ -158,6 +186,10 @@ export default function SageAI() {
   const [isProUser, setIsProUser] = useState(false); // Set to false for free users
   const [hasShownInitialHelp, setHasShownInitialHelp] = useState(false);
   const [hasUpgradeMessage, setHasUpgradeMessage] = useState(false);
+  const [remainingMessages, setRemainingMessages] = useState(aiService.sageAILimits.free); // Track remaining messages
+  const [forceArabicResponse, setForceArabicResponse] = useState(false); // Force all responses in Arabic
+  const [attachedFile, setAttachedFile] = useState(null);
+  const [isAnalyzingFile, setIsAnalyzingFile] = useState(false);
   const textareaRef = useRef(null);
   const chatContainerRef = useRef(null);
 
@@ -216,6 +248,9 @@ export default function SageAI() {
   }, [isTyping]);
 
   const createNewChat = () => {
+    // Prevent creating new chat if AI is responding
+    if (isLoading || isTyping) return;
+    
     const newChat = {
       id: Date.now(),
       title: 'New Chat',
@@ -230,6 +265,9 @@ export default function SageAI() {
   };
 
   const deleteChat = (chatId) => {
+    // Prevent deleting chat if AI is responding
+    if (isLoading || isTyping) return;
+    
     setChats(prev => prev.filter(chat => chat.id !== chatId));
     if (currentChatId === chatId) {
       if (chats.length > 1) {
@@ -246,6 +284,9 @@ export default function SageAI() {
   };
 
   const updateChatTitle = (chatId, firstMessage) => {
+    // Prevent updating title if AI is responding
+    if (isLoading || isTyping) return;
+    
     const title = firstMessage.length > 50 ? firstMessage.substring(0, 50) + '...' : firstMessage;
     setChats(prev => prev.map(chat => 
       chat.id === chatId ? { ...chat, title } : chat
@@ -253,6 +294,9 @@ export default function SageAI() {
   };
 
   const handlePromptClick = (prompt) => {
+    // Prevent setting prompts if AI is responding
+    if (isLoading || isTyping) return;
+    
     if (prompt === 'exam-roadmapping') {
       setShowExamSelection(true);
     } else {
@@ -261,13 +305,16 @@ export default function SageAI() {
   };
 
   const handleRoadmapClick = (certification) => {
+    // Prevent setting roadmap if AI is responding
+    if (isLoading || isTyping) return;
+    
     const roadmapPrompt = `I want to prepare for the ${certification.title} (${certification.subtitle}) certification. Can you help me create a study roadmap covering these topics: ${certification.topics.join(', ')}? The certification typically takes ${certification.duration} to complete and is ${certification.difficulty} level.`;
     setInputMessage(roadmapPrompt);
     setShowExamSelection(false);
   };
 
   const handleSendMessage = async () => {
-    if (!inputMessage.trim() || !currentChatId) return;
+    if (!inputMessage.trim() || !currentChatId || isLoading || isTyping) return;
 
     const userMessage = {
       id: Date.now(),
@@ -296,27 +343,51 @@ export default function SageAI() {
     setIsLoading(true);
 
     try {
-      setTimeout(() => {
-        const aiResponse = {
-          id: Date.now() + 1,
-          type: 'ai',
-          content: generateAIResponse(currentInput),
-          timestamp: new Date().toLocaleTimeString()
-        };
+      // Use consistent user ID for rate limiting
+      const userType = 'free'; // Free tier for demo
+      const language = forceArabicResponse ? 'ar' : (currentLanguage === 'ar' ? 'ar' : 'en');
 
-        setChats(prev => prev.map(chat => 
-          chat.id === currentChatId 
-            ? { ...chat, messages: [...chat.messages, aiResponse] }
-            : chat
-        ));
-        setIsLoading(false);
-        setIsTyping(true);
-        
-        // Simulate typing animation
-        setTimeout(() => {
-          setIsTyping(false);
-        }, 2000);
-      }, 1000);
+      console.log('🔍 Student SageAI Debug Info:');
+      console.log('  - forceArabicResponse:', forceArabicResponse);
+      console.log('  - currentLanguage:', currentLanguage);
+      console.log('  - selected language:', language);
+      console.log('  - user input:', currentInput);
+
+      // Get AI response
+      const aiResponseText = await aiService.getAIResponse(
+        currentInput,
+        userId,
+        userType,
+        language,
+        true // isSageAI = true
+      );
+
+      // Check remaining Sage AI requests
+      // Create AI response
+      const aiResponse = {
+        id: Date.now() + 1,
+        type: 'ai',
+        content: aiResponseText,
+        timestamp: new Date().toLocaleTimeString(),
+        isProUpgrade: aiResponseText.includes('Upgrade to PRO')
+      };
+
+      // Update remaining messages count
+      const remainingRequests = aiService.getRemainingSageAIMessages(userId, userType);
+      setRemainingMessages(remainingRequests);
+
+      setChats(prev => prev.map(chat => 
+        chat.id === currentChatId 
+          ? { ...chat, messages: [...chat.messages, aiResponse] }
+          : chat
+      ));
+      setIsLoading(false);
+      setIsTyping(true);
+      
+      // Simulate typing animation
+      setTimeout(() => {
+        setIsTyping(false);
+      }, 2000);
     } catch (error) {
       console.error('Error generating AI response:', error);
       const errorResponse = {
@@ -561,24 +632,181 @@ I'd love to help you further with your studies! However, to continue our convers
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      handleSendMessage();
+      // Prevent sending message if AI is responding
+      if (!isLoading && !isTyping) {
+        handleSendMessage();
+      }
     }
   };
 
   const handleVoiceInput = () => {
+    // Prevent voice input if AI is responding
+    if (isLoading || isTyping) return;
+    
     // Voice input functionality (placeholder)
     alert('Voice input feature coming soon!');
   };
 
   const handleFileAttachment = () => {
-    // File attachment functionality (placeholder)
-    alert('File attachment feature coming soon!');
+    // Prevent file attachment if AI is responding
+    if (isLoading || isTyping) return;
+    
+    // Create a hidden file input
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.jpg,.jpeg,.png,.gif,.webp,.bmp,.pdf,.txt,.doc,.docx,.rtf,.js,.jsx,.ts,.tsx,.py,.java,.cpp,.c,.html,.css,.json,.xml,.md';
+    fileInput.style.display = 'none';
+    
+    fileInput.onchange = async (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        await handleFileUpload(file);
+      }
+      // Clean up
+      document.body.removeChild(fileInput);
+    };
+    
+    document.body.appendChild(fileInput);
+    fileInput.click();
+  };
+
+  const handleFileUpload = async (file) => {
+    // Prevent file upload if AI is responding
+    if (isLoading || isTyping) return;
+    
+    try {
+      setIsAnalyzingFile(true);
+      setAttachedFile(file);
+      
+      // Create a user message for the file attachment
+      const fileMessage = {
+        id: Date.now(),
+        type: 'user',
+        content: `📎 Attached file: ${file.name}`,
+        timestamp: new Date().toLocaleTimeString(),
+        fileInfo: {
+          name: file.name,
+          size: file.size,
+          type: file.type
+        }
+      };
+      
+      // Add the file message to the current chat
+      const currentChat = getCurrentChat();
+      const updatedMessages = [...currentChat.messages, fileMessage];
+      
+      setChats(prev => prev.map(chat => 
+        chat.id === currentChatId 
+          ? { ...chat, messages: updatedMessages }
+          : chat
+      ));
+      
+      // Update chat title if this is the first message
+      if (currentChat.messages.length === 0) {
+        updateChatTitle(currentChatId, `File Analysis: ${file.name}`);
+      }
+      
+      // Now get AI response for the file analysis
+      setIsLoading(true);
+      
+      try {
+        // Analyze the file
+        const analysis = await fileAnalysisService.analyzeFile(file, currentLanguage);
+        
+        // Get AI response for the file analysis
+        const aiResponse = await aiService.getAIResponse(
+          `Please analyze this file and provide insights: ${analysis.analysis}`,
+          userId,
+          'free',
+          currentLanguage,
+          true // This is a Sage AI request
+        );
+        
+        // Create AI response message
+        const aiMessage = {
+          id: Date.now() + 1,
+          type: 'ai',
+          content: aiResponse,
+          timestamp: new Date().toLocaleTimeString(),
+          isTyping: false
+        };
+        
+        // Add AI response to chat
+        const finalMessages = [...updatedMessages, aiMessage];
+        setChats(prev => prev.map(chat => 
+          chat.id === currentChatId 
+            ? { ...chat, messages: finalMessages }
+            : chat
+        ));
+        
+        // Update remaining messages count
+        updateRemainingMessages();
+        
+      } catch (aiError) {
+        // Show error message if AI analysis fails
+        const errorMessage = {
+          id: Date.now() + 1,
+          type: 'ai',
+          content: `❌ File analysis failed: ${aiError.message}`,
+          timestamp: new Date().toLocaleTimeString(),
+          isTyping: false
+        };
+        
+        const finalMessages = [...updatedMessages, errorMessage];
+        setChats(prev => prev.map(chat => 
+          chat.id === currentChatId 
+            ? { ...chat, messages: finalMessages }
+            : chat
+        ));
+      }
+      
+    } catch (error) {
+      // Show error message
+      const errorMessage = {
+        id: Date.now(),
+        type: 'ai',
+        content: `❌ File upload failed: ${error.message}`,
+        timestamp: new Date().toLocaleTimeString(),
+        isTyping: false
+      };
+      
+      const currentChat = getCurrentChat();
+      const updatedMessages = [...currentChat.messages, errorMessage];
+      
+      setChats(prev => prev.map(chat => 
+        chat.id === currentChatId 
+          ? { ...chat, messages: updatedMessages }
+          : chat
+      ));
+    } finally {
+      setIsAnalyzingFile(false);
+      setIsLoading(false);
+      setAttachedFile(null);
+    }
   };
 
   const handleUpgradeToPro = () => {
+    // Prevent upgrade action if AI is responding
+    if (isLoading || isTyping) return;
+    
     // Upgrade to Pro functionality (placeholder)
     alert('Upgrade to Pro to access unlimited chat history and advanced features!');
   };
+
+  // Use a consistent user ID for rate limiting
+  const userId = 'student-user-123'; // Consistent user ID
+
+  // Update remaining messages count
+  const updateRemainingMessages = () => {
+    const userType = 'free';
+    const remaining = aiService.getRemainingSageAIMessages(userId, userType);
+    setRemainingMessages(remaining);
+  };
+
+  // Update remaining messages on component mount and after each message
+  useEffect(() => {
+    updateRemainingMessages();
+  }, [chats]); // Update when chats change
 
   const currentChat = getCurrentChat();
   const visibleChats = isProUser ? chats : chats.slice(0, 2); // Limit to 2 chats for free users
@@ -608,22 +836,118 @@ I'd love to help you further with your studies! However, to continue our convers
           </div>
           
           <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'}`}>
+            {/* Remaining Messages Display or PRO Upgrade */}
+            {!isProUser && (
+              remainingMessages > 0 ? (
+                <div className="flex items-center space-x-2 px-3 py-1 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                  <Sparkles className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                  <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
+                    {isRTL ? `${remainingMessages} رسالة متبقية` : `${remainingMessages} messages left`}
+                  </span>
+                </div>
+              ) : (
+                <div className="flex items-center space-x-2 px-3 py-1 bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 rounded-lg border border-orange-200 dark:border-orange-800">
+                  <Zap className="w-4 h-4 text-orange-600 dark:text-orange-400" />
+                  <span className="text-sm font-medium text-orange-700 dark:text-orange-300">
+                    {isRTL ? "ترقية إلى PRO" : "Upgrade to PRO"}
+                  </span>
+                  <button
+                    onClick={() => {
+                      // Prevent reset if AI is responding
+                      if (isLoading || isTyping) return;
+                      
+                      aiService.resetSageAILimits();
+                      setRemainingMessages(aiService.sageAILimits.free);
+                      alert('Rate limits reset! You can now chat with AI again.');
+                    }}
+                    disabled={isLoading || isTyping}
+                    className={`ml-2 p-1 rounded transition-colors ${
+                      isLoading || isTyping
+                        ? 'text-gray-400 dark:text-gray-600 opacity-50 cursor-not-allowed'
+                        : 'text-orange-600 hover:text-orange-800 dark:text-orange-400 dark:hover:text-orange-200'
+                    }`}
+                    title={
+                      isLoading || isTyping
+                        ? (isRTL ? "AI يستجيب..." : "AI is responding...")
+                        : isRTL ? "إعادة تعيين للاختبار" : "Reset for testing"
+                    }
+                  >
+                    <Zap className="w-3 h-3" />
+                  </button>
+                </div>
+              )
+            )}
+            
             {/* New Chat Button */}
             <button
-              onClick={createNewChat}
-              className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-              title={isRTL ? "بدء محادثة جديدة" : "Start New Chat"}
+              onClick={() => {
+                // Prevent new chat if AI is responding
+                if (isLoading || isTyping) return;
+                createNewChat();
+              }}
+              disabled={isLoading || isTyping}
+              className={`p-2 rounded-lg transition-colors ${
+                isLoading || isTyping
+                  ? 'text-gray-300 dark:text-gray-600 opacity-50 cursor-not-allowed'
+                  : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
+              }`}
+              title={
+                isLoading || isTyping
+                  ? (isRTL ? "AI يستجيب..." : "AI is responding...")
+                  : isRTL ? "بدء محادثة جديدة" : "Start New Chat"
+              }
             >
               <Plus className="w-5 h-5" />
             </button>
             
             {/* Chat History Toggle */}
             <button
-              onClick={() => setShowChatHistory(!showChatHistory)}
-              className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-              title={showChatHistory ? (isRTL ? 'إخفاء سجل المحادثات' : 'Hide Chat History') : (isRTL ? 'عرض سجل المحادثات' : 'Show Chat History')}
+              onClick={() => {
+                // Prevent toggle if AI is responding
+                if (isLoading || isTyping) return;
+                setShowChatHistory(!showChatHistory);
+              }}
+              disabled={isLoading || isTyping}
+              className={`p-2 rounded-lg transition-colors ${
+                isLoading || isTyping
+                  ? 'text-gray-300 dark:text-gray-600 opacity-50 cursor-not-allowed'
+                  : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
+              }`}
+              title={
+                isLoading || isTyping
+                  ? (isRTL ? "AI يستجيب..." : "AI is responding...")
+                  : showChatHistory ? (isRTL ? 'إخفاء سجل المحادثات' : 'Hide Chat History') : (isRTL ? 'عرض سجل المحادثات' : 'Show Chat History')
+              }
             >
               {showChatHistory ? <PanelLeftClose className="w-5 h-5" /> : <PanelLeftOpen className="w-5 h-5" />}
+            </button>
+            
+            {/* Arabic Response Toggle */}
+            <button
+              onClick={() => {
+                // Prevent toggle if AI is responding
+                if (isLoading || isTyping) return;
+                
+                console.log('🌐 Translation button clicked!');
+                console.log('  - Current forceArabicResponse:', forceArabicResponse);
+                setForceArabicResponse(!forceArabicResponse);
+                console.log('  - New forceArabicResponse will be:', !forceArabicResponse);
+              }}
+              disabled={isLoading || isTyping}
+              className={`p-2 rounded-lg transition-colors ${
+                isLoading || isTyping
+                  ? 'text-gray-300 dark:text-gray-600 opacity-50 cursor-not-allowed'
+                  : forceArabicResponse 
+                    ? 'bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-800' 
+                    : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
+              }`}
+              title={
+                isLoading || isTyping
+                  ? (isRTL ? "AI يستجيب..." : "AI is responding...")
+                  : forceArabicResponse ? t('student.sageAI.arabicResponses.disable', 'Disable Arabic Responses') : t('student.sageAI.arabicResponses.enable', 'Enable Arabic Responses')
+              }
+            >
+              <Languages className="w-5 h-5" />
             </button>
           </div>
         </div>
@@ -646,13 +970,30 @@ I'd love to help you further with your studies! However, to continue our convers
                   {isRTL ? "أنا هنا لمساعدتك في دراستك واحتياجاتك الأكاديمية." : "I'm here to assist with your studies and academic needs."}
                 </p>
                 
+                {/* Arabic Response Indicator */}
+                {forceArabicResponse && (
+                  <div className="mb-8 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                    <div className={`flex items-center justify-center space-x-2 ${isRTL ? 'space-x-reverse' : ''}`}>
+                      <Languages className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                      <span className={`text-sm font-medium text-blue-700 dark:text-blue-300 ${isRTL ? 'font-arabic' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
+                        {t('student.sageAI.arabicResponses.indicator', 'Responses will be in Arabic')}
+                      </span>
+                    </div>
+                  </div>
+                )}
+                
                 {/* Quick Prompts */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {availablePrompts.map((prompt) => (
                     <button
                       key={prompt.id}
                       onClick={() => handlePromptClick(prompt.prompt)}
-                      className={`p-3 ${isRTL ? 'text-right' : 'text-left'} border border-gray-200 dark:border-gray-700 rounded-lg hover:border-green-300 dark:hover:border-green-600 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200 group`}
+                      disabled={isLoading || isTyping}
+                      className={`p-3 ${isRTL ? 'text-right' : 'text-left'} border border-gray-200 dark:border-gray-700 rounded-lg transition-all duration-200 group ${
+                        isLoading || isTyping
+                          ? 'opacity-50 cursor-not-allowed bg-gray-100 dark:bg-gray-800'
+                          : 'hover:border-green-300 dark:hover:border-green-600 hover:bg-gray-50 dark:hover:bg-gray-800'
+                      }`}
                     >
                       <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
                         <prompt.icon className="w-5 h-5 text-green-600 dark:text-green-400" />
@@ -735,7 +1076,8 @@ I'd love to help you further with your studies! However, to continue our convers
                 onChange={(e) => setInputMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder={isRTL ? "رسالة إلى Sage AI..." : "Message Sage AI..."}
-                className={`w-full p-4 border border-gray-300 dark:border-gray-600 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 ${isRTL ? 'pr-4 pl-24' : 'pr-24'}`}
+                disabled={isLoading || isTyping}
+                className={`w-full p-4 border border-gray-300 dark:border-gray-600 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 ${isRTL ? 'pr-4 pl-24' : 'pr-24'} ${(isLoading || isTyping) ? 'opacity-50 cursor-not-allowed bg-gray-100 dark:bg-gray-800' : ''}`}
                 rows={1}
                 style={{ minHeight: '52px', maxHeight: '200px' }}
               />
@@ -744,15 +1086,39 @@ I'd love to help you further with your studies! However, to continue our convers
               <div className={`absolute bottom-2 flex items-center ${isRTL ? 'left-2 space-x-reverse space-x-1' : 'right-2 space-x-1'}`}>
                 <button
                   onClick={handleFileAttachment}
-                  className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
-                  title={isRTL ? "إرفاق ملف" : "Attach file"}
+                  disabled={isAnalyzingFile || isLoading || isTyping}
+                  className={`p-2 rounded-lg transition-colors ${
+                    isAnalyzingFile || isLoading || isTyping
+                      ? 'bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 animate-pulse opacity-50 cursor-not-allowed'
+                      : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600'
+                  }`}
+                  title={
+                    isAnalyzingFile 
+                      ? t('student.sageAI.fileAnalysis.analyzingFile', 'Analyzing file...')
+                      : isLoading || isTyping
+                      ? (isRTL ? "AI يستجيب..." : "AI is responding...")
+                      : isRTL ? "إرفاق ملف" : "Attach file"
+                  }
                 >
-                  <Paperclip className="w-4 h-4" />
+                  {isAnalyzingFile ? (
+                    <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <Paperclip className="w-4 h-4" />
+                  )}
                 </button>
                 <button
                   onClick={handleVoiceInput}
-                  className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
-                  title={isRTL ? "إدخال صوتي" : "Voice input"}
+                  disabled={isLoading || isTyping}
+                  className={`p-2 rounded-lg transition-colors ${
+                    isLoading || isTyping
+                      ? 'text-gray-300 dark:text-gray-600 opacity-50 cursor-not-allowed'
+                      : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600'
+                  }`}
+                  title={
+                    isLoading || isTyping
+                      ? (isRTL ? "AI يستجيب..." : "AI is responding...")
+                      : isRTL ? "إدخال صوتي" : "Voice input"
+                  }
                 >
                   <Mic className="w-4 h-4" />
                 </button>
@@ -783,8 +1149,12 @@ I'd love to help you further with your studies! However, to continue our convers
                 key={chat.id}
                 className={`p-3 border-b border-gray-100 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${
                   currentChatId === chat.id ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800' : ''
-                }`}
-                onClick={() => setCurrentChatId(chat.id)}
+                } ${isLoading || isTyping ? 'opacity-50 cursor-not-allowed' : ''}`}
+                onClick={() => {
+                  // Prevent chat switching if AI is responding
+                  if (isLoading || isTyping) return;
+                  setCurrentChatId(chat.id);
+                }}
               >
                 <div className={`flex items-center ${isRTL ? 'justify-between' : 'justify-between'}`}>
                   <div className="flex-1 min-w-0">
@@ -798,10 +1168,21 @@ I'd love to help you further with your studies! However, to continue our convers
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
+                      // Prevent delete if AI is responding
+                      if (isLoading || isTyping) return;
                       deleteChat(chat.id);
                     }}
-                    className="p-1 text-gray-400 hover:text-red-600 dark:hover:text-red-400 rounded transition-colors"
-                    title={isRTL ? "حذف المحادثة" : "Delete chat"}
+                    disabled={isLoading || isTyping}
+                    className={`p-1 rounded transition-colors ${
+                      isLoading || isTyping
+                        ? 'text-gray-300 dark:text-gray-600 opacity-50 cursor-not-allowed'
+                        : 'text-gray-400 hover:text-red-600 dark:hover:text-red-400'
+                    }`}
+                    title={
+                      isLoading || isTyping
+                        ? (isRTL ? "AI يستجيب..." : "AI is responding...")
+                        : isRTL ? "حذف المحادثة" : "Delete chat"
+                    }
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -826,10 +1207,19 @@ I'd love to help you further with your studies! However, to continue our convers
                     }
                   </p>
                   <button
-                    onClick={handleUpgradeToPro}
-                    className="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white text-xs font-medium py-2 px-3 rounded-lg hover:from-green-700 hover:to-blue-700 transition-all duration-200"
+                    onClick={() => {
+                      // Prevent upgrade if AI is responding
+                      if (isLoading || isTyping) return;
+                      handleUpgradeToPro();
+                    }}
+                    disabled={isLoading || isTyping}
+                    className={`w-full text-xs font-medium py-2 px-3 rounded-lg transition-all duration-200 ${
+                      isLoading || isTyping
+                        ? 'bg-gray-400 dark:bg-gray-600 text-gray-200 cursor-not-allowed opacity-50'
+                        : 'bg-gradient-to-r from-green-600 to-blue-600 text-white hover:from-green-700 hover:to-blue-700'
+                    }`}
                   >
-                    {isRTL ? "ترقية الآن" : "Upgrade Now"}
+                    {isLoading || isTyping ? (isRTL ? "AI يستجيب..." : "AI is responding...") : (isRTL ? "ترقية الآن" : "Upgrade Now")}
                   </button>
                 </div>
               </div>

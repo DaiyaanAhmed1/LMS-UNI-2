@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { X, Sparkles, Lock } from 'lucide-react';
+import { X, Sparkles, FileText } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import SageAISummaryPanel from '../../components/SageAISummaryPanel';
+import PDFSummaryPanel from '../../components/PDFSummaryPanel';
 
 function CoursePdfViewer() {
   const location = useLocation();
@@ -12,13 +12,8 @@ function CoursePdfViewer() {
   const title = location.state?.title || t('student.pdfViewer.title');
 
   const [isPanelOpen, setIsPanelOpen] = useState(false);
-  const [summary, setSummary] = useState('');
-  const [isGenerating, setIsGenerating] = useState(false);
 
-  const handleSummarize = () => {
-    // Lock PDF summarization to PRO: open panel without summary (upsell shows)
-    setIsGenerating(false);
-    setSummary('');
+  const handleAnalyzePDF = () => {
     setIsPanelOpen(true);
   };
 
@@ -33,12 +28,12 @@ function CoursePdfViewer() {
         <div className="flex items-center gap-2">
           {pdfUrl && (
             <button
-              onClick={handleSummarize}
-              className="px-3 py-2 rounded-md bg-purple-600 hover:bg-purple-700 text-white text-sm flex items-center gap-2"
-              aria-label={t('student.pdfViewer.summarize')}
+              onClick={handleAnalyzePDF}
+              className="px-3 py-2 rounded-md bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white text-sm flex items-center gap-2 transition-all duration-200"
+              aria-label={t('student.pdfViewer.analyzePDF', 'Analyze PDF with AI')}
             >
-              <Lock size={16} />
-              {t('student.pdfViewer.summarize')}
+              <FileText size={16} />
+              {t('student.pdfViewer.analyzePDF', 'Analyze PDF')}
             </button>
           )}
           <button
@@ -66,13 +61,11 @@ function CoursePdfViewer() {
         )}
       </div>
 
-      <SageAISummaryPanel
+      <PDFSummaryPanel
         isOpen={isPanelOpen}
         onClose={() => setIsPanelOpen(false)}
-        videoTitle={title}
-        summary={summary}
-        isGenerating={isGenerating}
-        proLock={true}
+        pdfTitle={title}
+        pdfUrl={pdfUrl}
       />
     </div>
   );

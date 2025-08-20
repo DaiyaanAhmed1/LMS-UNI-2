@@ -5,6 +5,7 @@ import { BookOpen, Users2, ClipboardList, Calendar, BarChart2, MessageCircle, Fi
 import { useTranslation } from 'react-i18next';
 import { useTour } from '../../context/TourContext.jsx';
 
+
 const statsData = {
   'this': [
     { labelKey: 'student.dashboard.stats.enrolledCourses', value: '5', icon: BookOpen, color: 'text-blue-600', bg: 'bg-blue-50' },
@@ -120,7 +121,8 @@ const quickActions = [
     icon: Award, 
     color: 'green',
     path: '/student/grades'
-  }
+  },
+
 ];
 
 const upcomingDeadlines = [
@@ -487,7 +489,7 @@ export default function StudentDashboard() {
                     }`}
                   >
                     <action.icon size={16} />
-                    <span className="text-sm font-medium">{t(action.labelKey)}</span>
+                    <span className="text-sm font-medium">{action.customLabel || t(action.labelKey)}</span>
                   </button>
                 ))}
               </div>
@@ -594,6 +596,7 @@ export default function StudentDashboard() {
           </div>
         </div>
       </div>
+
     </div>
   );
 }

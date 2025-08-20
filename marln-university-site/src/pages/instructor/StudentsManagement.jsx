@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import Sidebar from '../../components/Sidebar';
-import { UserCircle, Mail, BarChart2, MessageCircle, Eye, CheckCircle, X, BookOpen, FileText, Sparkles, Users } from 'lucide-react';
+import { UserCircle, Mail, BarChart2, MessageCircle, Eye, CheckCircle, X, BookOpen, FileText, Sparkles, Users, Brain, Plus, Copy, Check, Languages } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useLanguage } from '../../context/LanguageContext';
-import SageAISummaryPanel from '../../components/SageAISummaryPanel';
+
 import { useTour } from '../../context/TourContext.jsx';
+import aiInsightsService from '../../utils/aiInsightsService';
 
 const dummyCourses = [
   { id: 1, code: 'CS101', name: 'Introduction to Computer Science' },
@@ -12,11 +13,12 @@ const dummyCourses = [
   { id: 3, code: 'DS220', name: 'Data Structures' },
 ];
 
-const dummyStudents = {
+const initialStudents = {
   CS101: [
     { id: 1, name: 'Sarah Lee', email: 'sarah.lee@example.com', year: 'Sophomore', avatar: '', progress: 85, attendance: 92, lastActive: '2 days ago', notes: 'Excellent participation.' },
     { id: 2, name: 'David Kim', email: 'david.kim@example.com', year: 'Freshman', avatar: '', progress: 70, attendance: 80, lastActive: '1 day ago', notes: 'Needs help with assignments.' },
     { id: 3, name: 'Eva Green', email: 'eva.green@example.com', year: 'Junior', avatar: '', progress: 95, attendance: 98, lastActive: 'Today', notes: 'Top performer.' },
+    { id: 8, name: 'Ahmed Hassan', email: 'ahmed.hassan@example.com', year: 'Freshman', avatar: '', progress: 45, attendance: 65, lastActive: '5 days ago', notes: 'Struggling with course material, needs extra support.' },
   ],
   ML305: [
     { id: 4, name: 'Tom White', email: 'tom.white@example.com', year: 'Senior', avatar: '', progress: 60, attendance: 75, lastActive: '3 days ago', notes: '' },
@@ -36,7 +38,7 @@ function getAttendanceColor(att) {
 
 export default function StudentsManagement() {
   const { t, i18n } = useTranslation();
-  const { isRTL } = useLanguage();
+  const { isRTL, currentLanguage } = useLanguage();
   const { startTour } = useTour();
   const [selectedCourse, setSelectedCourse] = useState(dummyCourses[0].code);
   const [showModal, setShowModal] = useState(false);
@@ -51,6 +53,24 @@ export default function StudentsManagement() {
   const [showMessageModal, setShowMessageModal] = useState(false);
   const [messageRecipient, setMessageRecipient] = useState(null);
   const [messageText, setMessageText] = useState('');
+  const [showAddStudentModal, setShowAddStudentModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [newStudent, setNewStudent] = useState({
+    name: '',
+    email: '',
+    year: 'Freshman',
+    progress: 75,
+    attendance: 85,
+    lastActive: 'Today',
+    notes: ''
+  });
+  const [copiedInsight, setCopiedInsight] = useState(false);
+  const [isTranslating, setIsTranslating] = useState(false);
+  const [translatedInsight, setTranslatedInsight] = useState('');
+  const [showTranslated, setShowTranslated] = useState(false);
+
 
 
 
@@ -94,7 +114,8 @@ export default function StudentsManagement() {
     if (steps.length) startTour('instructor:students:v1', steps);
   };
 
-  const students = dummyStudents[selectedCourse] || [];
+  const [allStudents, setAllStudents] = useState(initialStudents);
+  const students = allStudents[selectedCourse] || [];
 
   const openModal = (student) => {
     setActiveStudent(student);
@@ -128,6 +149,96 @@ export default function StudentsManagement() {
     console.log(`Sending message to ${messageRecipient.name}: ${messageText}`);
     closeMessageModal();
   };
+
+  const copyInsightToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(insightSummary);
+      setCopiedInsight(true);
+      setTimeout(() => setCopiedInsight(false), 2000); // Reset after 2 seconds
+    } catch (err) {
+      console.error('Failed to copy: ', err);
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = insightSummary;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      setCopiedInsight(true);
+      setTimeout(() => setCopiedInsight(false), 2000);
+    }
+  };
+
+  const translateInsight = async () => {
+    if (!insightSummary) return;
+    
+    setIsTranslating(true);
+    try {
+      // Use AI service to translate the insight
+      const translationPrompt = `Please translate the following text to Arabic. Maintain the same formatting, structure, and professional tone. Only provide the translated text without any additional explanations:
+
+${insightSummary}`;
+
+      const translatedText = await aiInsightsService.translateText(translationPrompt);
+      setTranslatedInsight(translatedText);
+      setShowTranslated(true);
+    } catch (error) {
+      console.error('Translation failed:', error);
+      // Fallback: show error message
+      alert('Translation failed. Please try again.');
+    } finally {
+      setIsTranslating(false);
+    }
+  };
+
+  const toggleTranslation = () => {
+    if (showTranslated) {
+      setShowTranslated(false);
+    } else {
+      translateInsight();
+    }
+  };
+
+  const handleAddStudent = () => {
+    if (!newStudent.name || !newStudent.email) {
+      setErrorMessage(t('instructor.studentsManagement.addModal.validation.nameRequired', 'Please fill in at least name and email'));
+      setShowErrorModal(true);
+      return;
+    }
+
+    const studentToAdd = {
+      id: Date.now(),
+      ...newStudent,
+      avatar: ''
+    };
+
+    // Add student to the current course
+    const updatedAllStudents = {
+      ...allStudents,
+      [selectedCourse]: [...allStudents[selectedCourse], studentToAdd]
+    };
+
+    // Update the students state
+    setAllStudents(updatedAllStudents);
+    console.log('Adding new student:', studentToAdd);
+    console.log('Updated students:', updatedAllStudents);
+
+    // Reset form
+    setNewStudent({
+      name: '',
+      email: '',
+      year: 'Freshman',
+      progress: 0,
+      attendance: 0,
+      lastActive: 'Today',
+      notes: ''
+    });
+
+    setShowAddStudentModal(false);
+    setShowSuccessModal(true);
+  };
+
+
 
 
 
@@ -209,33 +320,154 @@ ${t('instructor.studentsInsights.focusAreas', 'Focus Areas for Next Week')}
 • ${t('instructor.studentsInsights.focusAreas.feedback', 'Provide timely feedback on all submitted work to maintain momentum')}`;
   };
 
-  const openInsight = (s) => {
+  const openInsight = async (s) => {
     setInsightTitle(`${s.name} — ${selectedCourse}`);
     setIsInsightOpen(true);
-    setInsightGenerating(false);
+    setInsightGenerating(true);
     setCurrentInsightStudent(s);
-    
-    // Test translation before building insight
-    console.log('=== TRANSLATION TEST ===');
-    console.log('Current language:', i18n.language);
-    console.log('RTL status:', isRTL);
-    console.log('Test translation 1:', t('instructor.studentsManagement.title', 'Students Management'));
-    console.log('Test translation 2:', t('instructor.studentsInsights.title', 'Student Performance Analysis'));
-    console.log('Test translation 3:', t('instructor.studentsInsights.performance.excellent', 'excellent'));
-    console.log('=== END TEST ===');
-    
-    setInsightSummary(buildInsight(s));
     setProLockInsight(false);
+    
+    // Test AI service connection first
+    console.log('🧪 Testing AI service connection...');
+    try {
+      const testResult = await aiInsightsService.testConnection();
+      console.log('🔗 AI Service Test Result:', testResult);
+    } catch (testError) {
+      console.error('❌ AI Service Test Failed:', testError);
+    }
+    
+    try {
+      // Prepare student data for AI analysis
+      const studentData = {
+        id: s.id,
+        name: s.name,
+        currentGrade: s.progress >= 85 ? 'A' : s.progress >= 70 ? 'B' : s.progress >= 60 ? 'C' : 'D',
+        progress: s.progress,
+        assignments: [
+          { name: 'Course Progress', score: s.progress },
+          { name: 'Attendance', score: s.attendance }
+        ],
+        studyTime: 0, // Not available in current data
+        attendance: s.attendance,
+        learningStyle: 'Unknown',
+        studyHabits: 'Based on attendance and activity',
+        weakAreas: s.progress < 80 ? ['Course completion', 'Assignment submission'] : [],
+        engagement: s.lastActive.includes('Today') ? 'High' : s.lastActive.includes('Yesterday') ? 'Medium' : 'Low',
+        assignmentCompletion: s.progress
+      };
+
+      const courseData = {
+        id: selectedCourse,
+        name: dummyCourses.find(c => c.code === selectedCourse)?.name || selectedCourse,
+        averageGrade: 'B',
+        completionRate: 85,
+        engagement: 80,
+        assignments: [],
+        feedback: [],
+        difficulty: 'Intermediate',
+        currentTopic: 'Course Progress',
+        upcomingAssignments: [],
+        requiredGrade: 'C+',
+        remainingAssignments: 0
+      };
+
+      // Get AI insights
+      const language = i18n.language === 'ar' ? 'ar' : 'en';
+      let aiInsights;
+      
+      console.log('🔍 Starting AI insights generation...');
+      console.log('Student data:', studentData);
+      console.log('Language:', language);
+      
+      try {
+        if (language === 'ar') {
+          console.log('🌍 Using Arabic AI insights...');
+          aiInsights = await aiInsightsService.getArabicInsights(studentData, 'student_performance');
+        } else {
+          console.log('🌍 Using English AI insights...');
+          aiInsights = await aiInsightsService.analyzeStudentPerformance(studentData);
+        }
+        
+        console.log('🤖 AI Insights received:', aiInsights);
+      } catch (aiError) {
+        console.error('❌ AI Service Error:', aiError);
+        throw aiError;
+      }
+
+      // Format the AI response
+      let formattedInsight = '';
+      
+      if (aiInsights && aiInsights.summary) {
+        console.log('✅ Using AI-generated insights');
+        formattedInsight += `${t('instructor.studentsInsights.title', 'Student Performance Analysis')}\n\n`;
+        formattedInsight += `${t('instructor.studentsInsights.academicProgress', 'Academic Progress')}\n`;
+        formattedInsight += `${s.progress}% ${t('instructor.studentsInsights.completionRate', 'completion rate')}\n`;
+        formattedInsight += `${s.attendance}% ${t('instructor.studentsInsights.attendanceRate', 'attendance rate')}\n`;
+        formattedInsight += `${t('instructor.studentsInsights.lastActivity', 'Last activity')}: ${s.lastActive}\n\n`;
+        
+        formattedInsight += `${t('instructor.studentsInsights.instructorObservations', 'Instructor Observations')}\n`;
+        formattedInsight += `${s.notes || t('instructor.studentsInsights.noNotes', 'No instructor notes available yet.')}\n\n`;
+        
+        formattedInsight += `${t('instructor.studentsInsights.keyInsights', 'Key Insights')}\n`;
+        formattedInsight += `🤖 ${aiInsights.summary}\n\n`;
+        
+        if (aiInsights.strengths && aiInsights.strengths.length > 0) {
+          formattedInsight += `✅ ${t('instructor.studentsInsights.strengths', 'Strengths')}:\n`;
+          aiInsights.strengths.forEach(strength => {
+            formattedInsight += `• ${strength}\n`;
+          });
+          formattedInsight += '\n';
+        }
+        
+        if (aiInsights.improvements && aiInsights.improvements.length > 0) {
+          formattedInsight += `🎯 ${t('instructor.studentsInsights.focusAreas', 'Focus Areas for Next Week')}:\n`;
+          aiInsights.improvements.forEach(improvement => {
+            formattedInsight += `• ${improvement}\n`;
+          });
+          formattedInsight += '\n';
+        }
+        
+        if (aiInsights.riskLevel) {
+          formattedInsight += `⚠️ ${t('instructor.studentsInsights.riskLevel', 'Risk Level')}: ${aiInsights.riskLevel}\n`;
+        }
+        
+        if (aiInsights.confidenceScore) {
+          formattedInsight += `📊 ${t('instructor.studentsInsights.confidence', 'Confidence')}: ${aiInsights.confidenceScore}%\n`;
+        }
+      } else {
+        // Fallback to original logic if AI fails
+        console.log('⚠️ AI insights failed, using fallback logic');
+        console.log('AI Insights object:', aiInsights);
+        formattedInsight = buildInsight(s);
+      }
+      
+      setInsightSummary(formattedInsight);
+    } catch (error) {
+      console.error('Error generating AI insights:', error);
+      // Fallback to original logic
+      setInsightSummary(buildInsight(s));
+    } finally {
+      setInsightGenerating(false);
+    }
   };
 
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900" dir={isRTL ? 'rtl' : 'ltr'}>
       <Sidebar role="instructor" />
       <div className="flex-1 overflow-auto p-8">
-        <div className="flex items-center gap-3 mb-8">
-          <Users className="w-8 h-8 text-blue-600 dark:text-blue-400" />
-          <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">{t('instructor.studentsManagement.title')}</h1>
-        </div>
+                  <div className="flex items-center gap-3 mb-8">
+            <Users className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+            <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">{t('instructor.studentsManagement.title')}</h1>
+            
+            {/* Add New Student Button */}
+            <button
+              onClick={() => setShowAddStudentModal(true)}
+              className="ml-auto px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm flex items-center gap-2"
+            >
+              <Plus className="w-4 h-4" />
+              {t('instructor.studentsManagement.buttons.addNew')}
+            </button>
+          </div>
         {/* Course Selector */}
         <div className="mb-6 flex items-center gap-4">
           <BookOpen size={24} className="text-blue-600 dark:text-blue-400" />
@@ -280,12 +512,22 @@ ${t('instructor.studentsInsights.focusAreas', 'Focus Areas for Next Week')}
                       className="inline-flex items-center gap-1 text-fuchsia-700 dark:text-fuchsia-300 hover:text-fuchsia-900 dark:hover:text-fuchsia-100 px-2 py-1 rounded relative group" 
                       title={t('instructor.studentsManagement.actions.aiInsight', 'AI Insight')} 
                       onClick={() => openInsight(s)}
+                      disabled={insightGenerating}
                     >
-                      <Sparkles size={16} />
-                      <span className="hidden md:inline">{t('instructor.studentsManagement.actions.aiInsight', 'Insight')}</span>
+                      {insightGenerating ? (
+                        <>
+                          <Brain size={16} className="animate-pulse" />
+                          <span className="hidden md:inline text-xs">AI...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles size={16} />
+                          <span className="hidden md:inline">{t('instructor.studentsManagement.actions.aiInsight', 'Insight')}</span>
+                        </>
+                      )}
                       
-                      {/* Subtle upgrade glint */}
-                      <div className="absolute -top-1 -right-1 w-2 h-2 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-pulse"></div>
+                      {/* AI indicator */}
+                      <div className="absolute -top-1 -right-1 w-2 h-2 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full opacity-100 transition-opacity duration-300 animate-pulse"></div>
                     </button>
                   </td>
                   <td className="py-3 px-4 text-center">
@@ -314,7 +556,7 @@ ${t('instructor.studentsInsights.focusAreas', 'Focus Areas for Next Week')}
         {showModal && activeStudent && (
           <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-lg p-8 relative animate-fadeIn">
-              <button className="absolute top-4 right-4 text-gray-400 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-100" onClick={closeModal}><X size={28} /></button>
+              <button className={`absolute top-4 text-gray-400 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-100 ${currentLanguage === 'ar' ? 'left-4' : 'right-4'}`} onClick={closeModal}><X size={28} /></button>
               <div className="flex items-center gap-4 mb-4">
                 <div className="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
                   <UserCircle size={48} className="text-blue-600 dark:text-blue-400" />
@@ -352,7 +594,7 @@ ${t('instructor.studentsInsights.focusAreas', 'Focus Areas for Next Week')}
         {showMessageModal && messageRecipient && (
           <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-lg p-8 relative animate-fadeIn">
-              <button className="absolute top-4 right-4 text-gray-400 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-100" onClick={closeMessageModal}><X size={28} /></button>
+              <button className={`absolute top-4 text-gray-400 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-100 ${currentLanguage === 'ar' ? 'left-4' : 'right-4'}`} onClick={closeMessageModal}><X size={28} /></button>
               <div className="flex items-center gap-4 mb-4">
                 <div className="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
                   <UserCircle size={48} className="text-blue-600 dark:text-blue-400" />
@@ -393,19 +635,428 @@ ${t('instructor.studentsInsights.focusAreas', 'Focus Areas for Next Week')}
             </div>
           </div>
         )}
+
+        {/* Add New Student Modal */}
+        {showAddStudentModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-2xl mx-4 p-6 relative animate-fadeIn">
+              <button 
+                className={`absolute top-4 text-gray-400 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-100 ${currentLanguage === 'ar' ? 'left-4' : 'right-4'}`}
+                onClick={() => setShowAddStudentModal(false)}
+              >
+                <X size={28} />
+              </button>
+              
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                  <Plus className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('instructor.studentsManagement.addModal.title', 'Add New Student')}</h3>
+                  <p className="text-gray-500 dark:text-gray-400">{t('instructor.studentsManagement.addModal.subtitle', { course: selectedCourse }, 'Add a new student to {{course}}')}</p>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                {/* Name and Email Row */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                      {t('instructor.studentsManagement.addModal.fields.fullName', 'Full Name')} *
+                    </label>
+                    <input
+                      type="text"
+                      value={newStudent.name}
+                      onChange={(e) => setNewStudent({...newStudent, name: e.target.value})}
+                      className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 dark:bg-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder={t('instructor.studentsManagement.addModal.validation.namePlaceholder', 'Enter student\'s full name')}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                      {t('instructor.studentsManagement.addModal.fields.email', 'Email')} *
+                    </label>
+                    <input
+                      type="email"
+                      value={newStudent.email}
+                      onChange={(e) => setNewStudent({...newStudent, email: e.target.value})}
+                      className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 dark:bg-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder={t('instructor.studentsManagement.addModal.validation.emailPlaceholder', 'student@example.com')}
+                    />
+                  </div>
+                </div>
+
+                {/* Year and Progress Row */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                      {t('instructor.studentsManagement.addModal.fields.academicYear', 'Academic Year')}
+                    </label>
+                    <select
+                      value={newStudent.year}
+                      onChange={(e) => setNewStudent({...newStudent, year: e.target.value})}
+                      className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 dark:bg-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    >
+                      <option value="Freshman">{t('instructor.studentsManagement.addModal.yearOptions.freshman', 'Freshman')}</option>
+                      <option value="Sophomore">{t('instructor.studentsManagement.addModal.yearOptions.sophomore', 'Sophomore')}</option>
+                      <option value="Junior">{t('instructor.studentsManagement.addModal.yearOptions.junior', 'Junior')}</option>
+                      <option value="Senior">{t('instructor.studentsManagement.addModal.yearOptions.senior', 'Senior')}</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                      {t('instructor.studentsManagement.addModal.fields.courseProgress', 'Course Progress (%)')}
+                    </label>
+                    <div className="space-y-2">
+                      <input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={newStudent.progress}
+                        onChange={(e) => setNewStudent({...newStudent, progress: parseInt(e.target.value) || 0})}
+                        className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 dark:bg-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="0-100"
+                      />
+                      <div className="flex items-center space-x-2">
+                        <input
+                          type="range"
+                          min="0"
+                          max="100"
+                          value={newStudent.progress}
+                          onChange={(e) => setNewStudent({...newStudent, progress: parseInt(e.target.value)})}
+                          className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+                        />
+                        <span className="text-xs text-gray-500 dark:text-gray-400 w-8 text-center">
+                          {newStudent.progress}%
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Attendance and Last Active Row */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                      {t('instructor.studentsManagement.addModal.fields.attendanceRate', 'Attendance Rate (%)')}
+                    </label>
+                    <div className="space-y-2">
+                      <input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={newStudent.attendance}
+                        onChange={(e) => setNewStudent({...newStudent, attendance: parseInt(e.target.value) || 0})}
+                        className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 dark:bg-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="0-100"
+                      />
+                      <div className="flex items-center space-x-2">
+                        <input
+                          type="range"
+                          min="0"
+                          max="100"
+                          value={newStudent.attendance}
+                          onChange={(e) => setNewStudent({...newStudent, attendance: parseInt(e.target.value)})}
+                          className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+                        />
+                        <span className="text-xs text-gray-500 dark:text-gray-400 w-8 text-center">
+                          {newStudent.attendance}%
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                      {t('instructor.studentsManagement.addModal.fields.lastActive', 'Last Active')}
+                    </label>
+                    <select
+                      value={newStudent.lastActive}
+                      onChange={(e) => setNewStudent({...newStudent, lastActive: e.target.value})}
+                      className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 dark:bg-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    >
+                      <option value="Today">{t('instructor.studentsManagement.addModal.lastActiveOptions.today', 'Today')}</option>
+                      <option value="Yesterday">{t('instructor.studentsManagement.addModal.lastActiveOptions.yesterday', 'Yesterday')}</option>
+                      <option value="2 days ago">{t('instructor.studentsManagement.addModal.lastActiveOptions.2daysAgo', '2 days ago')}</option>
+                      <option value="3 days ago">{t('instructor.studentsManagement.addModal.lastActiveOptions.3daysAgo', '3 days ago')}</option>
+                      <option value="1 week ago">{t('instructor.studentsManagement.addModal.lastActiveOptions.1weekAgo', '1 week ago')}</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Instructor Notes */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                    {t('instructor.studentsManagement.addModal.fields.instructorNotes', 'Instructor Notes')}
+                  </label>
+                  <textarea
+                    value={newStudent.notes}
+                    onChange={(e) => setNewStudent({...newStudent, notes: e.target.value})}
+                    rows={3}
+                    className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 dark:bg-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder={t('instructor.studentsManagement.addModal.fields.notesPlaceholder', 'Add any notes about the student...')}
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <button
+                  onClick={() => setShowAddStudentModal(false)}
+                  className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-900 dark:text-gray-100 transition-colors"
+                >
+                  {t('instructor.studentsManagement.addModal.buttons.cancel', 'Cancel')}
+                </button>
+                <button
+                  onClick={handleAddStudent}
+                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
+                >
+                  <Plus className="w-4 h-4" />
+                  {t('instructor.studentsManagement.addModal.buttons.add', 'Add Student')}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
-      <SageAISummaryPanel
-        isOpen={isInsightOpen}
-        onClose={() => { 
-          setIsInsightOpen(false); 
-          setInsightSummary(''); 
-        }}
-        videoTitle={insightTitle}
-        summary={insightSummary}
-        isGenerating={insightGenerating}
-        proLock={proLockInsight}
-      />
+      {/* AI Insights Modal */}
+      {isInsightOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className={`bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-4xl mx-4 max-h-[90vh] overflow-hidden animate-fadeIn ${currentLanguage === 'ar' ? 'text-right' : 'text-left'}`}>
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                  <Brain className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                    {insightTitle}
+                  </h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    AI-Generated Insights
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => { 
+                  setIsInsightOpen(false); 
+                  setInsightSummary(''); 
+                  setCopiedInsight(false);
+                  setShowTranslated(false);
+                  setTranslatedInsight('');
+                }}
+                className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+              {insightGenerating ? (
+                <div className="flex items-center justify-center py-12">
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+                      <Brain className="w-8 h-8 text-white" />
+                    </div>
+                    <p className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                      Generating AI Insights...
+                    </p>
+                    <p className="text-gray-500 dark:text-gray-400">
+                      Analyzing student performance data
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <div className="prose prose-gray dark:prose-invert max-w-none">
+                  <div className="relative">
+                    <div className="whitespace-pre-wrap text-gray-900 dark:text-gray-100 leading-relaxed">
+                      {showTranslated && translatedInsight ? translatedInsight : insightSummary}
+                    </div>
+                    {/* Copy Button */}
+                    <button
+                      onClick={copyInsightToClipboard}
+                      className={`absolute top-2 right-2 p-2 rounded-lg transition-all duration-200 ${
+                        copiedInsight 
+                          ? 'bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-400' 
+                          : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                      }`}
+                      title={copiedInsight ? t('instructor.copyButton.copied', 'Copied!') : t('instructor.copyButton.copyToClipboard', 'Copy to clipboard')}
+                    >
+                      {copiedInsight ? (
+                        <Check className="w-4 h-4" />
+                      ) : (
+                        <Copy className="w-4 h-4" />
+                      )}
+                    </button>
+                    
+                    {/* Translate Button */}
+                    <button
+                      onClick={toggleTranslation}
+                      disabled={isTranslating}
+                      className={`absolute top-2 right-12 p-2 rounded-lg transition-all duration-200 ${
+                        isTranslating 
+                          ? 'bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 cursor-not-allowed' 
+                          : showTranslated
+                          ? 'bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-400'
+                          : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                      }`}
+                      title={isTranslating ? t('instructor.translateButton.translating', 'Translating...') : showTranslated ? t('instructor.translateButton.showOriginal', 'Show original') : t('instructor.translateButton.translateToArabic', 'Translate to Arabic')}
+                    >
+                      {isTranslating ? (
+                        <div className="w-4 h-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                      ) : (
+                        <Languages className="w-4 h-4" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="flex items-center justify-between p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+              <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+                <Sparkles className="w-4 h-4" />
+                <span>Powered by AI</span>
+              </div>
+              <div className="flex space-x-3">
+                <button
+                  onClick={copyInsightToClipboard}
+                  className={`px-4 py-2 rounded-lg transition-all duration-200 flex items-center space-x-2 ${
+                    copiedInsight 
+                      ? 'bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-400 border border-green-300 dark:border-green-700' 
+                      : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 border border-gray-300 dark:border-gray-600'
+                  }`}
+                >
+                  {copiedInsight ? (
+                    <>
+                      <Check className="w-4 h-4" />
+                      <span>{t('instructor.copyButton.copied', 'Copied!')}</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-4 h-4" />
+                      <span>{t('instructor.copyButton.copy', 'Copy')}</span>
+                    </>
+                  )}
+                </button>
+                
+                <button
+                  onClick={toggleTranslation}
+                  disabled={isTranslating}
+                  className={`px-4 py-2 rounded-lg transition-all duration-200 flex items-center space-x-2 ${
+                    isTranslating 
+                      ? 'bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 border border-blue-300 dark:border-blue-700 cursor-not-allowed' 
+                      : showTranslated
+                      ? 'bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-400 border border-purple-300 dark:border-purple-700'
+                      : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 border border-gray-300 dark:border-gray-600'
+                  }`}
+                >
+                  {isTranslating ? (
+                    <>
+                      <div className="w-4 h-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                      <span>{t('instructor.translateButton.translating', 'Translating...')}</span>
+                    </>
+                  ) : (
+                    <>
+                      <Languages className="w-4 h-4" />
+                      <span>{showTranslated ? t('instructor.translateButton.showOriginal', 'Show Original') : t('instructor.translateButton.translateToArabic', 'Translate')}</span>
+                    </>
+                  )}
+                </button>
+                <button
+                  onClick={() => { 
+                    setIsInsightOpen(false); 
+                    setInsightSummary(''); 
+                    setCopiedInsight(false);
+                    setShowTranslated(false);
+                    setTranslatedInsight('');
+                  }}
+                  className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-900 dark:text-gray-100 transition-colors"
+                >
+                  Close
+                </button>
+                {proLockInsight && (
+                  <button
+                    onClick={() => {
+                      // Handle PRO upgrade
+                      alert('Upgrade to PRO for unlimited AI insights!');
+                    }}
+                    className="px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200"
+                  >
+                    Upgrade to PRO
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Success Modal */}
+      {showSuccessModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className={`bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md mx-4 p-6 relative animate-fadeIn ${currentLanguage === 'ar' ? 'text-right' : 'text-left'}`}>
+            <div className="text-center">
+              {/* Success Icon */}
+              <div className="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400" />
+              </div>
+              
+              {/* Success Message */}
+              <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                {t('instructor.studentsManagement.successModal.title')}
+              </h3>
+              <p className="text-gray-500 dark:text-gray-400 mb-6">
+                {t('instructor.studentsManagement.successModal.message', { course: selectedCourse })}
+              </p>
+              
+              {/* Action Buttons */}
+              <div className="flex justify-center space-x-3">
+                <button
+                  onClick={() => setShowSuccessModal(false)}
+                  className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800 transition-colors"
+                >
+                  {t('instructor.studentsManagement.successModal.continue')}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Error Modal */}
+      {showErrorModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className={`bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md mx-4 p-6 relative animate-fadeIn ${currentLanguage === 'ar' ? 'text-right' : 'text-left'}`}>
+            <div className="text-center">
+              {/* Error Icon */}
+              <div className="w-16 h-16 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                <X className="w-8 h-8 text-red-600 dark:text-red-400" />
+              </div>
+              
+              {/* Error Message */}
+              <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                {t('common.error', 'Error')}
+              </h3>
+              <p className="text-gray-500 dark:text-gray-400 mb-6">
+                {errorMessage}
+              </p>
+              
+              {/* Action Buttons */}
+              <div className="flex justify-center space-x-3">
+                <button
+                  onClick={() => setShowErrorModal(false)}
+                  className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 transition-colors"
+                >
+                  {t('common.close', 'Close')}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 } 
