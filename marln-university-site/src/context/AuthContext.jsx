@@ -13,6 +13,14 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setRole(null);
     localStorage.removeItem('role');
+    
+    // Clear Sage AI limits on logout
+    try {
+      localStorage.removeItem('sageAIRequests');
+      console.log('🗑️ Sage AI limits cleared on logout');
+    } catch (error) {
+      console.warn('⚠️ Failed to clear Sage AI limits on logout:', error);
+    }
   };
 
   return (

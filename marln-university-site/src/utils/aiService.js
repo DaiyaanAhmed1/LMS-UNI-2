@@ -34,6 +34,9 @@ class AIService {
     };
     this.userRequests = new Map(); // Track user requests
     this.sageAIRequests = new Map(); // Track Sage AI specific requests
+    
+    // Initialize Sage AI requests from localStorage
+    this.initializeSageAIFromStorage();
   }
 
   // Check if user has exceeded rate limit
@@ -75,6 +78,31 @@ class AIService {
     return Math.max(0, limit.requests - recentRequests.length);
   }
 
+  // Initialize Sage AI requests from localStorage
+  initializeSageAIFromStorage() {
+    try {
+      const stored = localStorage.getItem('sageAIRequests');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        this.sageAIRequests = new Map(Object.entries(parsed));
+        console.log('📱 Loaded Sage AI requests from localStorage:', parsed);
+      }
+    } catch (error) {
+      console.warn('⚠️ Failed to load Sage AI requests from localStorage:', error);
+    }
+  }
+
+  // Save Sage AI requests to localStorage
+  saveSageAIToStorage() {
+    try {
+      const data = Object.fromEntries(this.sageAIRequests);
+      localStorage.setItem('sageAIRequests', JSON.stringify(data));
+      console.log('💾 Saved Sage AI requests to localStorage:', data);
+    } catch (error) {
+      console.warn('⚠️ Failed to save Sage AI requests to localStorage:', error);
+    }
+  }
+
   // Check Sage AI specific limit
   checkSageAILimit(userId, userType = 'free') {
     const limit = this.sageAILimits[userType];
@@ -94,6 +122,10 @@ class AIService {
     
     // Increment usage
     this.sageAIRequests.set(userId, usedRequests + 1);
+    
+    // Save to localStorage after incrementing
+    this.saveSageAIToStorage();
+    
     console.log(`✅ Sage AI request allowed: ${usedRequests + 1}/${limit}`);
     return true;
   }
@@ -422,13 +454,25 @@ class AIService {
   resetAllRateLimits() {
     this.userRequests.clear();
     this.sageAIRequests.clear();
-    console.log('All rate limits reset');
+    // Also clear from localStorage
+    try {
+      localStorage.removeItem('sageAIRequests');
+      console.log('🗑️ All rate limits reset and cleared from localStorage');
+    } catch (error) {
+      console.warn('⚠️ Failed to clear Sage AI requests from localStorage:', error);
+    }
   }
 
   // Reset Sage AI limits specifically
   resetSageAILimits() {
     this.sageAIRequests.clear();
-    console.log('Sage AI limits reset');
+    // Also clear from localStorage
+    try {
+      localStorage.removeItem('sageAIRequests');
+      console.log('🗑️ Sage AI limits reset and cleared from localStorage');
+    } catch (error) {
+      console.warn('⚠️ Failed to clear Sage AI requests from localStorage:', error);
+    }
   }
 
   // Debug function to test Sage AI response
