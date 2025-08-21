@@ -75,15 +75,39 @@ function GlobalAccessibilityStyles() {
     const root = document.documentElement;
     // Font size
     root.style.fontSize = fontSize === 'small' ? '14px' : fontSize === 'large' ? '20px' : '16px';
-    // Font family
-    root.style.fontFamily = fontFamily === 'serif' ? 'serif' : 'inherit';
+    // Font family - use proper font stacks instead of generic 'serif'
+    root.style.fontFamily = fontFamily === 'poppins' 
+      ? '"Poppins", system-ui, Avenir, Helvetica, Arial, sans-serif' 
+      : fontFamily === 'dyslexic'
+      ? '"Comic Sans MS", "Comic Sans", cursive'
+      : 'Helvetica, Arial, sans-serif';
     // Color theme
-    root.style.backgroundColor =
-      colorTheme === 'high-contrast' ? '#000' :
-      colorTheme === 'yellow' ? '#FFD600' :
-      colorTheme === 'blue' ? '#1976D2' : '#f3f4f6';
-    root.style.color =
-      colorTheme === 'high-contrast' ? '#fff' : '#222';
+    const backgroundColor = colorTheme === 'high-contrast' ? '#000' :
+                          colorTheme === 'yellow' ? '#FFD600' :
+                          colorTheme === 'blue' ? '#1976D2' : '#f3f4f6';
+    const textColor = colorTheme === 'high-contrast' ? '#fff' : '#222';
+    
+    // Set data attribute for CSS targeting
+    root.setAttribute('data-color-theme', colorTheme);
+    document.body.setAttribute('data-color-theme', colorTheme);
+    
+    // Apply to root element with !important
+    root.style.setProperty('background-color', backgroundColor, 'important');
+    root.style.setProperty('color', textColor, 'important');
+    
+    // Also apply to body element to ensure it works
+    document.body.style.setProperty('background-color', backgroundColor, 'important');
+    document.body.style.setProperty('color', textColor, 'important');
+    
+    // Apply to main content areas
+    const mainElements = document.querySelectorAll('main, .main, #root, #app');
+    mainElements.forEach(el => {
+      el.style.setProperty('background-color', backgroundColor, 'important');
+      el.style.setProperty('color', textColor, 'important');
+    });
+    
+    // Debug logging
+    console.log('Color theme changed:', { colorTheme, backgroundColor, textColor });
   }, [fontSize, fontFamily, colorTheme]);
   return null;
 }

@@ -118,7 +118,7 @@ export default function InstructorProfile() {
               <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-blue-700 dark:text-blue-400 hover:underline"><Linkedin size={18}/> {t('instructor.profile.social.linkedin')}</a>
               <a href={profile.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-gray-800 dark:text-gray-100 hover:underline"><Github size={18}/> {t('instructor.profile.social.github')}</a>
               <a href="/admin/data-retention" className="mt-2 px-3 py-2 bg-blue-50 dark:bg-blue-900 text-blue-700 dark:text-blue-400 rounded-md text-sm font-semibold text-center hover:underline">{t('instructor.profile.viewDataRetention')}</a>
-              <label className="flex items-center gap-2 mt-4 cursor-pointer select-none text-sm">
+              <label className="flex items-center gap-2 mt-4 cursor-pointer select-none text-sm text-gray-700 dark:text-gray-200">
                 <input type="checkbox" checked={showBar} onChange={e => setShowBar(e.target.checked)} className="accent-blue-600" />
                 {t('instructor.profile.accessibility')}
               </label>

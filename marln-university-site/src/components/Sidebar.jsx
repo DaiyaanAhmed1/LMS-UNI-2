@@ -22,7 +22,8 @@ import {
   Bot,
   HelpCircle,
   Lock,
-  MessageCircle
+  User,
+  Accessibility
 } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -31,7 +32,110 @@ import { useTheme } from '../context/ThemeContext';
 import LanguageSwitcher from './LanguageSwitcher';
 import { useTranslation } from 'react-i18next';
 import { useLanguage } from '../context/LanguageContext';
+import { useAccessibility } from '../context/AccessibilityContext';
 import logo from '../assets/marln-logo.png';
+
+// CSS for light flaring animation
+const lightFlareStyle = {
+  position: 'relative',
+  overflow: 'hidden',
+};
+
+const lightFlareAnimation = `
+  @keyframes lightFlare {
+    0% {
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transform: translateX(-100%);
+      box-shadow: 0 0 0 rgba(255, 255, 255, 0);
+    }
+    50% {
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      transform: translateX(0%);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    }
+    100% {
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transform: translateX(100%);
+      box-shadow: 0 0 0 rgba(255, 255, 255, 0);
+    }
+  }
+  
+  @keyframes goldenGlow {
+    0% {
+      color: #FFD700;
+      text-shadow: 0 0 1px rgba(255, 215, 0, 0.1);
+    }
+    50% {
+      color: #FFA500;
+      text-shadow: 0 0 3px rgba(255, 215, 0, 0.2), 0 0 5px rgba(255, 165, 0, 0.1);
+    }
+    100% {
+      color: #FFD700;
+      text-shadow: 0 0 1px rgba(255, 215, 0, 0.1);
+    }
+  }
+  
+  @keyframes accessibilityBounce {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+  }
+  
+  @keyframes accessibilityGlow {
+    0%, 100% {
+      box-shadow: 0 0 5px rgba(59, 130, 246, 0.3);
+    }
+    50% {
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.6), 0 0 25px rgba(59, 130, 246, 0.3);
+    }
+  }
+`;
+
+const LightFlareButton = ({ children, ...props }) => {
+  const [isAnimating, setIsAnimating] = useState(false);
+  
+  const handleMouseEnter = () => {
+    setIsAnimating(true);
+  };
+  
+  const handleMouseLeave = () => {
+    setIsAnimating(false);
+  };
+  
+  return (
+    <button
+      {...props}
+      style={{
+        ...props.style,
+        ...lightFlareStyle,
+      }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      {children}
+      {isAnimating && (
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent)',
+            animation: 'lightFlare 1.5s ease-in-out',
+            pointerEvents: 'none',
+            zIndex: 1,
+            borderRadius: 'inherit',
+          }}
+        />
+      )}
+      <style>{lightFlareAnimation}</style>
+    </button>
+  );
+};
 
 const adminMenuItems = [
   { id: 'dashboard', labelKey: 'sidebar.menu.admin.dashboard', icon: LayoutDashboard, path: '/admin/dashboard' },
@@ -58,6 +162,7 @@ const instructorMenuItems = [
   { id: 'materials', labelKey: 'sidebar.menu.instructor.materials', icon: FileText, path: '/instructor/materials' },
   { id: 'messages', labelKey: 'sidebar.menu.instructor.messages', icon: MessageSquare, path: '/instructor/messages' },
   { id: 'notifications', labelKey: 'sidebar.menu.instructor.notifications', icon: Bell, path: '/instructor/notifications' },
+  { id: 'talk-bright', labelKey: 'sidebar.menu.student.talk-bright', icon: Sun, path: 'https://fanciful-manatee-e9960b.netlify.app/', isExternal: true, isAllCaps: true },
 ];
 
 const studentMenuItems = [
@@ -70,6 +175,8 @@ const studentMenuItems = [
   { id: 'messages', labelKey: 'sidebar.menu.student.messages', icon: MessageSquare, path: '/student/messages' },
   { id: 'notifications', labelKey: 'sidebar.menu.student.notifications', icon: Bell, path: '/student/notifications' },
   { id: 'ecollab', labelKey: 'sidebar.menu.student.ecollab', icon: BookMarked, path: '/student/ecollab' },
+  { id: 'assessments', labelKey: 'sidebar.menu.student.assessments', icon: BarChart3, path: null, isExternal: false, isAllCaps: true },
+  { id: 'talk-bright', labelKey: 'sidebar.menu.student.talk-bright', icon: Sun, path: 'https://fanciful-manatee-e9960b.netlify.app/', isExternal: true, isAllCaps: true },
 ];
 
 export default function Sidebar({ role: propRole }) {
@@ -79,6 +186,7 @@ export default function Sidebar({ role: propRole }) {
   const navigate = useNavigate();
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
+  const { showBar, setShowBar } = useAccessibility();
   const sidebarRef = useRef(null);
 
   // Use the role from props if provided, otherwise use the role from auth context
@@ -181,38 +289,96 @@ export default function Sidebar({ role: propRole }) {
         onClick={() => navigate(getProfilePath())}
         aria-label={t('sidebar.profile.ariaEdit')}
       >
-        <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 rounded-full bg-blue-500 dark:bg-blue-700 flex items-center justify-center text-white text-sm font-bold">
-            {getUserDisplayName().split(' ').map(word => word[0]).join('')}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 rounded-full bg-blue-500 dark:bg-blue-700 flex items-center justify-center text-white text-sm font-bold">
+              {getUserDisplayName().split(' ').map(word => word[0]).join('')}
+            </div>
+            <div>
+              <p className="font-medium">{getUserDisplayName()}</p>
+              <p className="text-sm text-[#4a6baa] dark:text-blue-300">{t(`sidebar.roles.${role}`)}</p>
+            </div>
           </div>
-          <div>
-            <p className="font-medium">{getUserDisplayName()}</p>
-            <p className="text-sm text-[#4a6baa] dark:text-blue-300">{t(`sidebar.roles.${role}`)}</p>
-          </div>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowBar(!showBar);
+            }}
+            className={`p-2 rounded-lg transition-all duration-300 hover:scale-110 relative ${
+              showBar 
+                ? 'bg-blue-500/20 dark:bg-blue-400/20 hover:bg-blue-500/30 dark:hover:bg-blue-400/30' 
+                : 'bg-gray-500/10 dark:bg-gray-400/10 hover:bg-gray-500/20 dark:hover:bg-gray-400/20'
+            }`}
+            title={showBar ? t('sidebar.accessibility.hide') : t('sidebar.accessibility.show')}
+            aria-label={showBar ? t('sidebar.accessibility.hide') : t('sidebar.accessibility.show')}
+          >
+            {showBar ? (
+              <Accessibility 
+                size={18} 
+                className={`transition-all duration-300 text-blue-400 dark:text-blue-300 drop-shadow-[0_0_8px_rgba(96,165,250,0.5)]`}
+              />
+            ) : (
+              <User 
+                size={18} 
+                className={`transition-all duration-300 text-gray-400 dark:text-gray-500 hover:text-blue-400 dark:hover:text-blue-300 animate-pulse`}
+                style={{
+                  animation: 'accessibilityBounce 2s ease-in-out infinite'
+                }}
+              />
+            )}
+            <style>{lightFlareAnimation}</style>
+          </button>
         </div>
       </button>
 
       {/* Menu Items */}
       <div ref={sidebarRef} className="flex-1 overflow-y-auto py-4">
-        {(role === 'student' ? studentMenuItems : role === 'instructor' ? instructorMenuItems : adminMenuItems).map(item => (
-          <button
-            key={item.id}
-            onClick={() => {
-              // Only scroll to top if navigating to a different page
-              if (location.pathname !== item.path) {
-                navigate(item.path);
-                // Scroll to top when navigating to a new page
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }
-            }}
-            className={`w-full px-4 py-3 flex items-center space-x-3 hover:bg-[#0a1f4d] dark:hover:bg-gray-800 transition-colors ${location.pathname === item.path ? 'bg-[#0a1f4d] dark:bg-gray-800' : ''}`}
-            data-tour={`sidebar-link-${item.id}`}
-            aria-current={location.pathname === item.path ? 'page' : undefined}
-          >
-            <item.icon size={20} />
-            <span>{t(item.labelKey)}</span>
-          </button>
-        ))}
+        {(role === 'student' ? studentMenuItems : role === 'instructor' ? instructorMenuItems : adminMenuItems).map(item => {
+          const ButtonComponent = (item.id === 'assessments' || item.id === 'talk-bright') ? LightFlareButton : 'button';
+          
+          return (
+            <ButtonComponent
+              key={item.id}
+              onClick={() => {
+                if (item.isExternal) {
+                  // Open external link in new tab
+                  window.open(item.path, '_blank', 'noopener,noreferrer');
+                } else if (item.path) {
+                  // Only scroll to top if navigating to a different page
+                  if (location.pathname !== item.path) {
+                    navigate(item.path);
+                    // Scroll to top when navigating to a new page
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }
+                } else {
+                  // Dummy button - no action
+                  console.log(`${item.id} button clicked - no functionality implemented`);
+                }
+              }}
+              className={`w-full px-4 py-3 flex items-center space-x-3 hover:bg-[#0a1f4d] dark:hover:bg-gray-800 transition-colors ${
+                item.path && location.pathname === item.path ? 'bg-[#0a1f4d] dark:bg-gray-800' : ''
+              } ${(item.id === 'assessments' || item.id === 'talk-bright') ? 'bg-[#1a2a5f] dark:bg-gray-800/50' : ''}`}
+              data-tour={`sidebar-link-${item.id}`}
+              aria-current={item.path && location.pathname === item.path ? 'page' : undefined}
+            >
+              <item.icon 
+                size={20} 
+                style={{
+                  animation: (item.id === 'assessments' || item.id === 'talk-bright') ? 'goldenGlow 3s ease-in-out infinite' : 'none',
+                  filter: (item.id === 'assessments' || item.id === 'talk-bright') ? 'drop-shadow(0 0 1px rgba(255, 215, 0, 0.2))' : 'none'
+                }}
+              />
+              <span style={{ 
+                textTransform: item.isAllCaps ? 'uppercase' : 'none',
+                animation: (item.id === 'assessments' || item.id === 'talk-bright') ? 'goldenGlow 3s ease-in-out infinite' : 'none',
+                fontWeight: (item.id === 'assessments' || item.id === 'talk-bright') ? 'bold' : 'normal'
+              }}>{t(item.labelKey)}</span>
+              {(item.isExternal || item.id === 'assessments') && (
+                <span className="ml-auto text-xs opacity-70">↗</span>
+              )}
+            </ButtonComponent>
+          );
+        })}
       </div>
 
       {/* Sage AI Button */}
@@ -245,20 +411,6 @@ export default function Sidebar({ role: propRole }) {
         {role === 'admin' ? <Lock size={20} /> : <Bot size={20} />}
         <span>{t(`sidebar.menu.${role}.sage-ai`)}</span>
       </button>
-
-      {/* Talk Bright Button - Only for Students */}
-      {role === 'student' && (
-        <button
-          onClick={() => {
-            window.open('https://fanciful-manatee-e9960b.netlify.app', '_blank');
-          }}
-          className="w-full px-4 py-3 flex items-center space-x-3 hover:bg-[#0a1f4d] dark:hover:bg-gray-800 transition-colors border-t border-[#0a1f4d] dark:border-gray-800"
-          title="Open Talk Bright in new tab"
-        >
-          <MessageCircle size={20} />
-          <span>{t('sidebar.menu.student.talk-bright')}</span>
-        </button>
-      )}
 
       {/* Language Switcher */}
       <div className="border-t border-[#0a1f4d] dark:border-gray-800">

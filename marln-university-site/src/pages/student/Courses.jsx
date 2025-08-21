@@ -447,7 +447,7 @@ function Courses() {
 
                 {/* Action Buttons - Always Show */}
                 <div className="relative mb-4" style={{ zIndex: 10 }}>
-                  <div className={`space-y-3 ${selectedCourse.title === 'Web Development' ? 'blur-sm' : ''}`}>
+                  <div className={`space-y-3 ${selectedCourse.title === 'Web Development' ? 'blur-sm pointer-events-none' : ''}`}>
                     <button
                       type="button"
                       onClick={() => {
@@ -524,7 +524,7 @@ function Courses() {
                     <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-3">
                       {t('student.courses.modal.quickActions.title', 'Quick Actions')}
                     </h3>
-                    <div className={`grid grid-cols-2 md:grid-cols-4 gap-2 ${selectedCourse.title === 'Web Development' ? 'blur-sm' : ''}`}>
+                    <div className={`grid grid-cols-2 md:grid-cols-4 gap-2 ${selectedCourse.title === 'Web Development' ? 'blur-sm pointer-events-none' : ''}`}>
                       <button
                         onClick={() => {
                           const courseToOpen = { id: selectedCourse.id, title: selectedCourse.title };
@@ -584,7 +584,7 @@ function Courses() {
                       {t('student.courses.modal.weeklyContent')}
                     </h3>
                     <div className="relative" data-tour="weekly-content">
-                      <div className={`space-y-3 ${selectedCourse.title === 'Web Development' ? 'blur-sm' : ''}`}>
+                      <div className={`space-y-3 ${selectedCourse.title === 'Web Development' ? 'blur-sm pointer-events-none' : ''}`}>
                         {courseContents[selectedCourse.title].weeks.map((week) => (
                           <div key={week.week} className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-600 hover:shadow-md transition-all duration-200">
                             <div className="flex items-center justify-between mb-2">

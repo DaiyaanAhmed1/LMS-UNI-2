@@ -113,6 +113,51 @@ const MarkdownRenderer = ({ content, isTyping = false }) => {
     <div className={`prose dark:prose-invert max-w-none markdown-content ${isRTL ? 'text-right' : 'text-left'}`} dir={isRTL ? 'rtl' : 'ltr'}>
       <ReactMarkdown
         components={{
+          p: ({node, children, ...props}) => (
+            <p className="text-gray-900 dark:text-gray-100 mb-4 leading-relaxed" {...props}>
+              {children}
+            </p>
+          ),
+          h1: ({node, children, ...props}) => (
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4 mt-6" {...props}>
+              {children}
+            </h1>
+          ),
+          h2: ({node, children, ...props}) => (
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3 mt-5" {...props}>
+              {children}
+            </h2>
+          ),
+          h3: ({node, children, ...props}) => (
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2 mt-4" {...props}>
+              {children}
+            </h3>
+          ),
+          h4: ({node, children, ...props}) => (
+            <h4 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-2 mt-3" {...props}>
+              {children}
+            </h4>
+          ),
+          h5: ({node, children, ...props}) => (
+            <h5 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2 mt-3" {...props}>
+              {children}
+            </h5>
+          ),
+          h6: ({node, children, ...props}) => (
+            <h6 className="text-xs font-semibold text-gray-900 dark:text-gray-100 mb-2 mt-3" {...props}>
+              {children}
+            </h6>
+          ),
+          strong: ({node, children, ...props}) => (
+            <strong className="font-semibold text-gray-900 dark:text-gray-100" {...props}>
+              {children}
+            </strong>
+          ),
+          em: ({node, children, ...props}) => (
+            <em className="italic text-gray-900 dark:text-gray-100" {...props}>
+              {children}
+            </em>
+          ),
           table: ({node, ...props}) => (
             <div className="overflow-x-auto my-4">
               <table className="min-w-full border border-gray-300 dark:border-gray-600 rounded-lg" {...props} />
@@ -134,12 +179,12 @@ const MarkdownRenderer = ({ content, isTyping = false }) => {
             const match = /language-(\w+)/.exec(className || '');
             return !inline ? (
               <pre className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg my-4 overflow-x-auto">
-                <code className={className} {...props}>
+                <code className={`${className} text-gray-900 dark:text-gray-100`} {...props}>
                   {children}
                 </code>
               </pre>
             ) : (
-              <code className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-sm font-mono" {...props}>
+              <code className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-sm font-mono text-gray-900 dark:text-gray-100" {...props}>
                 {children}
               </code>
             );
@@ -863,7 +908,7 @@ I'd love to help you further with your studies! However, to continue our convers
                     disabled={isLoading || isTyping}
                     className={`ml-2 p-1 rounded transition-colors ${
                       isLoading || isTyping
-                        ? 'text-gray-400 dark:text-gray-600 opacity-50 cursor-not-allowed'
+                        ? 'text-gray-400 dark:text-gray-500 opacity-50 cursor-not-allowed'
                         : 'text-orange-600 hover:text-orange-800 dark:text-orange-400 dark:hover:text-orange-200'
                     }`}
                     title={
@@ -888,7 +933,7 @@ I'd love to help you further with your studies! However, to continue our convers
               disabled={isLoading || isTyping}
               className={`p-2 rounded-lg transition-colors ${
                 isLoading || isTyping
-                  ? 'text-gray-300 dark:text-gray-600 opacity-50 cursor-not-allowed'
+                  ? 'text-gray-300 dark:text-gray-500 opacity-50 cursor-not-allowed'
                   : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
               }`}
               title={
@@ -910,7 +955,7 @@ I'd love to help you further with your studies! However, to continue our convers
               disabled={isLoading || isTyping}
               className={`p-2 rounded-lg transition-colors ${
                 isLoading || isTyping
-                  ? 'text-gray-300 dark:text-gray-600 opacity-50 cursor-not-allowed'
+                  ? 'text-gray-300 dark:text-gray-500 opacity-50 cursor-not-allowed'
                   : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
               }`}
               title={
@@ -936,7 +981,7 @@ I'd love to help you further with your studies! However, to continue our convers
               disabled={isLoading || isTyping}
               className={`p-2 rounded-lg transition-colors ${
                 isLoading || isTyping
-                  ? 'text-gray-300 dark:text-gray-600 opacity-50 cursor-not-allowed'
+                  ? 'text-gray-300 dark:text-gray-500 opacity-50 cursor-not-allowed'
                   : forceArabicResponse 
                     ? 'bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-800' 
                     : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
@@ -1111,7 +1156,7 @@ I'd love to help you further with your studies! However, to continue our convers
                   disabled={isLoading || isTyping}
                   className={`p-2 rounded-lg transition-colors ${
                     isLoading || isTyping
-                      ? 'text-gray-300 dark:text-gray-600 opacity-50 cursor-not-allowed'
+                      ? 'text-gray-300 dark:text-gray-500 opacity-50 cursor-not-allowed'
                       : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600'
                   }`}
                   title={
@@ -1175,7 +1220,7 @@ I'd love to help you further with your studies! However, to continue our convers
                     disabled={isLoading || isTyping}
                     className={`p-1 rounded transition-colors ${
                       isLoading || isTyping
-                        ? 'text-gray-300 dark:text-gray-600 opacity-50 cursor-not-allowed'
+                        ? 'text-gray-300 dark:text-gray-500 opacity-50 cursor-not-allowed'
                         : 'text-gray-400 hover:text-red-600 dark:hover:text-red-400'
                     }`}
                     title={
