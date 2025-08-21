@@ -337,26 +337,7 @@ body.react-joyride-active {
   overflow: hidden !important;
 }
 
-/* Accessibility Color Themes - Override Tailwind */
-[data-color-theme="high-contrast"] {
-  background-color: #000 !important;
-  color: #fff !important;
-}
 
-[data-color-theme="yellow"] {
-  background-color: #FFD600 !important;
-  color: #222 !important;
-}
-
-[data-color-theme="blue"] {
-  background-color: #1976D2 !important;
-  color: #222 !important;
-}
-
-[data-color-theme="default"] {
-  background-color: #f3f4f6 !important;
-  color: #222 !important;
-}
 
 
 
