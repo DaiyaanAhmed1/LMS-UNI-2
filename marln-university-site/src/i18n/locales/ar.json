@@ -3054,7 +3054,8 @@
         "messages": "الرسائل",
         "notifications": "الإشعارات",
         "ecollab": "التعاون الإلكتروني",
-        "sage-ai": "سيدج AI"
+        "sage-ai": "سيدج AI",
+        "talk-bright": "تحدث ساطع"
       }
     },
     "theme": { "dark": "الوضع الداكن", "light": "الوضع الفاتح", "toggleAria": "تبديل الوضع الداكن/الفاتح" },

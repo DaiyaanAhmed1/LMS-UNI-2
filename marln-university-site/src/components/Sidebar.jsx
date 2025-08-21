@@ -21,7 +21,8 @@ import {
   Moon,
   Bot,
   HelpCircle,
-  Lock
+  Lock,
+  MessageCircle
 } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -244,6 +245,20 @@ export default function Sidebar({ role: propRole }) {
         {role === 'admin' ? <Lock size={20} /> : <Bot size={20} />}
         <span>{t(`sidebar.menu.${role}.sage-ai`)}</span>
       </button>
+
+      {/* Talk Bright Button - Only for Students */}
+      {role === 'student' && (
+        <button
+          onClick={() => {
+            window.open('https://fanciful-manatee-e9960b.netlify.app', '_blank');
+          }}
+          className="w-full px-4 py-3 flex items-center space-x-3 hover:bg-[#0a1f4d] dark:hover:bg-gray-800 transition-colors border-t border-[#0a1f4d] dark:border-gray-800"
+          title="Open Talk Bright in new tab"
+        >
+          <MessageCircle size={20} />
+          <span>{t('sidebar.menu.student.talk-bright')}</span>
+        </button>
+      )}
 
       {/* Language Switcher */}
       <div className="border-t border-[#0a1f4d] dark:border-gray-800">

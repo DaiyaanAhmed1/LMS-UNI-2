@@ -2955,7 +2955,8 @@
         "messages": "Messages",
         "notifications": "Notifications",
         "ecollab": "eCollab",
-        "sage-ai": "Sage AI"
+        "sage-ai": "Sage AI",
+        "talk-bright": "Talk Bright"
       }
     },
     "theme": { "dark": "Dark Theme", "light": "Light Theme", "toggleAria": "Toggle Dark/Light Theme" },
