@@ -162,6 +162,7 @@ const instructorMenuItems = [
   { id: 'materials', labelKey: 'sidebar.menu.instructor.materials', icon: FileText, path: '/instructor/materials' },
   { id: 'messages', labelKey: 'sidebar.menu.instructor.messages', icon: MessageSquare, path: '/instructor/messages' },
   { id: 'notifications', labelKey: 'sidebar.menu.instructor.notifications', icon: Bell, path: '/instructor/notifications' },
+  { id: 'assessments', labelKey: 'sidebar.menu.student.assessments', icon: BarChart3, path: 'https://lmsassessments.netlify.app/', isExternal: true, isAllCaps: true },
   { id: 'talk-bright', labelKey: 'sidebar.menu.student.talk-bright', icon: Sun, path: 'https://fanciful-manatee-e9960b.netlify.app/', isExternal: true, isAllCaps: true },
 ];
 
@@ -175,7 +176,7 @@ const studentMenuItems = [
   { id: 'messages', labelKey: 'sidebar.menu.student.messages', icon: MessageSquare, path: '/student/messages' },
   { id: 'notifications', labelKey: 'sidebar.menu.student.notifications', icon: Bell, path: '/student/notifications' },
   { id: 'ecollab', labelKey: 'sidebar.menu.student.ecollab', icon: BookMarked, path: '/student/ecollab' },
-  { id: 'assessments', labelKey: 'sidebar.menu.student.assessments', icon: BarChart3, path: null, isExternal: false, isAllCaps: true },
+  { id: 'assessments', labelKey: 'sidebar.menu.student.assessments', icon: BarChart3, path: 'https://lmsassessments.netlify.app/', isExternal: true, isAllCaps: true },
   { id: 'talk-bright', labelKey: 'sidebar.menu.student.talk-bright', icon: Sun, path: 'https://fanciful-manatee-e9960b.netlify.app/', isExternal: true, isAllCaps: true },
 ];
 
