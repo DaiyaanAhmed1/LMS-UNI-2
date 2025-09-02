@@ -1,11 +1,68 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Sidebar from '../../components/Sidebar';
 import { instructors as initialInstructors, departments } from '../../data/instructors';
 import { Plus, Edit, Trash2, X, Users, BookOpen, BarChart3 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useTour } from '../../context/TourContext.jsx';
 
 export default function InstructorManagement() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const { startTour } = useTour();
+
+  useEffect(() => {
+    const onLaunch = () => {
+      const launch = localStorage.getItem('tour:launch');
+      if (launch === 'admin-full' || launch === 'admin-resume') {
+        localStorage.removeItem('tour:launch');
+        setTimeout(() => startAdminInstructorsTour(), 200);
+      }
+    };
+    window.addEventListener('tour:launch', onLaunch);
+    return () => window.removeEventListener('tour:launch', onLaunch);
+  }, []);
+
+  const startAdminInstructorsTour = () => {
+    const isRTL = i18n.dir() === 'rtl';
+    const pr = (ltr, rtl) => (isRTL ? rtl : ltr);
+    const steps = [
+      {
+        target: '[data-tour="admin-instructors-header"]',
+        title: t('admin.tour.instructors.header.title', 'Instructor Management Overview'),
+        content: t('admin.tour.instructors.header.desc', 'Manage all instructor accounts, departments, and teaching assignments. Monitor their engagement and course load.'),
+        placement: pr('bottom', 'top'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-instructors-add"]',
+        title: t('admin.tour.instructors.add.title', 'Add New Instructors'),
+        content: t('admin.tour.instructors.add.desc', 'Create new instructor accounts with department assignments. Each instructor gets access to course management tools.'),
+        placement: pr('bottom', 'top'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-instructors-table"]',
+        title: t('admin.tour.instructors.table.title', 'Instructor Records'),
+        content: t('admin.tour.instructors.table.desc', 'View instructor details including courses taught, assigned batches, and engagement metrics. Use action buttons to edit or delete accounts.'),
+        placement: pr('top', 'bottom'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-instructors-metrics"]',
+        title: t('admin.tour.instructors.metrics.title', 'Performance Metrics'),
+        content: t('admin.tour.instructors.metrics.desc', 'Track instructor performance through course counts, batch assignments, and engagement percentages. Monitor workload distribution across departments.'),
+        placement: pr('top', 'bottom'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-instructors-actions"]',
+        title: t('admin.tour.instructors.actions.title', 'Account Management'),
+        content: t('admin.tour.instructors.actions.desc', 'Edit instructor information, update department assignments, or remove accounts. Changes affect course access and teaching schedules.'),
+        placement: pr('top', 'bottom'),
+        disableBeacon: true
+      }
+    ].filter(s => document.querySelector(s.target));
+    if (steps.length) startTour('admin:instructors:v1', steps);
+  };
   const [instructors, setInstructors] = useState(initialInstructors);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -46,26 +103,26 @@ export default function InstructorManagement() {
       <Sidebar role="admin" />
       <div className="flex-1 overflow-auto">
         <div className="p-6">
-          <div className="flex justify-between items-center mb-6">
+          <div data-tour="admin-instructors-header" className="flex justify-between items-center mb-6">
             <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">{t('admin.instructorManagement.title', 'Instructor Management')}</h1>
-            <button onClick={() => setShowAddModal(true)} className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors">
+            <button data-tour="admin-instructors-add" onClick={() => setShowAddModal(true)} className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors">
               <Plus size={20} />
               <span>{t('admin.instructorManagement.addNew', 'Add New')}</span>
             </button>
           </div>
 
           {/* Instructor List */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+          <div data-tour="admin-instructors-table" className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
             <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
               <thead className="bg-gray-50 dark:bg-gray-900">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.instructorManagement.table.name', 'Name')}</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.instructorManagement.table.email', 'Email')}</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.instructorManagement.table.department', 'Department')}</th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.instructorManagement.table.courses', 'Courses')}</th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.instructorManagement.table.batches', 'Batches')}</th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.instructorManagement.table.engagement', 'Engagement')}</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.instructorManagement.table.actions', 'Actions')}</th>
+                  <th data-tour="admin-instructors-metrics" className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.instructorManagement.table.courses', 'Courses')}</th>
+                  <th data-tour="admin-instructors-metrics" className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.instructorManagement.table.batches', 'Batches')}</th>
+                  <th data-tour="admin-instructors-metrics" className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.instructorManagement.table.engagement', 'Engagement')}</th>
+                  <th data-tour="admin-instructors-actions" className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.instructorManagement.table.actions', 'Actions')}</th>
                 </tr>
               </thead>
               <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">

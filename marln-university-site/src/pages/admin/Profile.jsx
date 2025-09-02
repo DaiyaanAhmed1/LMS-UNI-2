@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Sidebar from '../../components/Sidebar';
 import { UserCircle, Camera, Mail, Phone, Briefcase, Building2, Calendar, Globe, MapPin, Key, Linkedin, Github, Activity, CheckCircle, BarChart2 } from 'lucide-react';
 import { useAccessibility } from '../../context/AccessibilityContext';
 import { useTranslation } from 'react-i18next';
+import { useTour } from '../../context/TourContext.jsx';
 
 const mockProfile = {
   name: 'Alex Johnson',
@@ -22,8 +23,64 @@ const mockProfile = {
 };
 
 export default function Profile() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const { startTour } = useTour();
   const [profile, setProfile] = useState(mockProfile);
+
+  useEffect(() => {
+    const onLaunch = () => {
+      const launch = localStorage.getItem('tour:launch');
+      if (launch === 'admin-full' || launch === 'admin-resume') {
+        localStorage.removeItem('tour:launch');
+        setTimeout(() => startAdminProfileTour(), 200);
+      }
+    };
+    window.addEventListener('tour:launch', onLaunch);
+    return () => window.removeEventListener('tour:launch', onLaunch);
+  }, []);
+
+  const startAdminProfileTour = () => {
+    const isRTL = i18n.dir() === 'rtl';
+    const pr = (ltr, rtl) => (isRTL ? rtl : ltr);
+    const steps = [
+      {
+        target: '[data-tour="admin-profile-header"]',
+        title: t('admin.tour.profile.header.title', 'Profile Overview'),
+        content: t('admin.tour.profile.header.desc', 'Manage your personal information, contact details, and professional profile. Update your photo, personal data, and view your activity statistics.'),
+        placement: pr('bottom', 'top'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-profile-photo"]',
+        title: t('admin.tour.profile.photo.title', 'Profile Photo Management'),
+        content: t('admin.tour.profile.photo.desc', 'Upload and manage your profile picture. Click the camera icon to change your photo. Your initials will be displayed if no photo is uploaded.'),
+        placement: pr('right', 'left'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-profile-info"]',
+        title: t('admin.tour.profile.info.title', 'Personal Information'),
+        content: t('admin.tour.profile.info.desc', 'View and edit your contact details, department, role, and personal information. All changes are saved automatically to maintain your profile accuracy.'),
+        placement: pr('top', 'bottom'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-profile-password"]',
+        title: t('admin.tour.profile.password.title', 'Password Management'),
+        content: t('admin.tour.profile.password.desc', 'Change your login password securely. Enter your new password twice to confirm. Ensure your account remains secure with regular password updates.'),
+        placement: pr('top', 'bottom'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-profile-activity"]',
+        title: t('admin.tour.profile.activity.title', 'Activity & Statistics'),
+        content: t('admin.tour.profile.activity.desc', 'Monitor your system activity, last login time, courses enrolled, bills paid, and monthly performance metrics. Track your engagement and contribution to the university.'),
+        placement: pr('top', 'bottom'),
+        disableBeacon: true
+      }
+    ].filter(s => document.querySelector(s.target));
+    if (steps.length) startTour('admin:profile:v1', steps);
+  };
   const [pic, setPic] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -65,8 +122,8 @@ export default function Profile() {
       <div className="flex-1 overflow-auto p-8">
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Profile Card */}
-          <div className="col-span-1 bg-white dark:bg-gray-800 rounded-xl shadow p-6 flex flex-col items-center">
-            <div className="relative mb-4">
+          <div data-tour="admin-profile-header" className="col-span-1 bg-white dark:bg-gray-800 rounded-xl shadow p-6 flex flex-col items-center">
+            <div data-tour="admin-profile-photo" className="relative mb-4">
               {pic || profile.profilePic ? (
                 <img src={pic || profile.profilePic} alt="Profile" className="w-28 h-28 rounded-full object-cover border-4 border-blue-600" />
               ) : (
@@ -107,7 +164,7 @@ export default function Profile() {
           {/* Edit Form & Widgets */}
           <div className="col-span-2 flex flex-col gap-8">
             {/* Edit Form */}
-            <form className="bg-white dark:bg-gray-800 rounded-xl shadow p-6 grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+            <form data-tour="admin-profile-info" className="bg-white dark:bg-gray-800 rounded-xl shadow p-6 grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">{t('admin.profile.form.fullName')}</label>
                 <input type="text" name="name" value={profile.name} onChange={handleChange} className="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 dark:bg-gray-900 dark:text-gray-100" required />
@@ -121,7 +178,7 @@ export default function Profile() {
                 <input type="tel" name="phone" value={profile.phone} onChange={handleChange} className="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 dark:bg-gray-900 dark:text-gray-100" required />
               </div>
               <div>
-                <label className="block text_sm font-medium text-gray-700 dark:text-gray-300">{t('admin.profile.form.department')}</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">{t('admin.profile.form.department')}</label>
                 <input type="text" name="department" value={profile.department} onChange={handleChange} className="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 dark:bg-gray-900 dark:text-gray-100" />
               </div>
               <div>
@@ -157,7 +214,7 @@ export default function Profile() {
             {/* Password Change & Stats */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Password Change */}
-              <form onSubmit={handlePasswordChange} className="bg-white dark:bg-gray-800 rounded-xl shadow p-6 flex flex-col gap-4">
+              <form data-tour="admin-profile-password" onSubmit={handlePasswordChange} className="bg-white dark:bg-gray-800 rounded-xl shadow p-6 flex flex-col gap-4">
                 <div className="flex items-center gap-2 mb-2 text-blue-700 dark:text-blue-400 font-semibold"><Key size={18}/> {t('admin.profile.password.changeTitle')}</div>
                 <input type="password" placeholder={t('admin.profile.password.new')} value={password} onChange={e => setPassword(e.target.value)} className="border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 dark:bg-gray-900 dark:text-gray-100" />
                 <input type="password" placeholder={t('admin.profile.password.confirm')} value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} className="border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 dark:bg-gray-900 dark:text-gray-100" />
@@ -165,7 +222,7 @@ export default function Profile() {
               </form>
 
               {/* Quick Stats & Activity */}
-              <div className="bg-white dark:bg_gray-800 rounded-xl shadow p-6 flex flex-col gap-4">
+              <div data-tour="admin-profile-activity" className="bg-white dark:bg-gray-800 rounded-xl shadow p-6 flex flex-col gap-4">
                 <div className="flex items-center gap-2 text-gray-700 dark:text-gray-200 font-semibold mb-2"><Activity size={18}/> {t('admin.profile.activity.title')}</div>
                 <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-300"><CheckCircle size={16}/> {t('admin.profile.activity.lastLogin')}: <span className="font-medium text-gray-700 dark:text-gray-100">{profile.lastLogin}</span></div>
                 <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-300"><BarChart2 size={16}/> {t('admin.profile.activity.coursesEnrolled')}: <span className="font-medium text-blue-700 dark:text-blue-400">{profile.stats.courses}</span></div>

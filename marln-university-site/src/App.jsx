@@ -52,6 +52,7 @@ import { AccessibilityProvider, useAccessibility } from './context/Accessibility
 import AccessibilityBar from './components/AccessibilityBar.jsx';
 import React from 'react';
 import DataRetentionPolicy from './pages/admin/DataRetentionPolicy.jsx';
+import AdminSageAI from './pages/admin/SageAI.jsx';
 import InstructorSageAI from './pages/instructor/SageAI.jsx';
 import Insights from './pages/instructor/Insights.jsx';
 import Events from './pages/instructor/Events.jsx';
@@ -138,6 +139,7 @@ function App() {
                     <Route path="/admin/notifications" element={<Notifications />} />
                     <Route path="/admin/reports" element={<Reports />} />
                     <Route path="/admin/users" element={<UserManagement />} />
+                    <Route path="/admin/sage-ai" element={<AdminSageAI />} />
                     <Route path="/admin/settings" element={<SystemSettings />} />
                     <Route path="/admin/profile" element={<Profile />} />
                     <Route path="/admin/departments" element={<DepartmentDashboard />} />

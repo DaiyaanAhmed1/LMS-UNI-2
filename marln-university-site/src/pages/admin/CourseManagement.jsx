@@ -3,9 +3,66 @@ import Sidebar from '../../components/Sidebar';
 import { courses as initialCourses, predefinedCourses } from '../../data/courses';
 import { Plus, Edit, Eye, X, Download } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useTour } from '../../context/TourContext.jsx';
 
 export default function CourseManagement() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const { startTour } = useTour();
+
+  useEffect(() => {
+    const onLaunch = () => {
+      const launch = localStorage.getItem('tour:launch');
+      if (launch === 'admin-full' || launch === 'admin-resume') {
+        localStorage.removeItem('tour:launch');
+        setTimeout(() => startAdminCoursesTour(), 200);
+      }
+    };
+    window.addEventListener('tour:launch', onLaunch);
+    return () => window.removeEventListener('tour:launch', onLaunch);
+  }, []);
+
+  const startAdminCoursesTour = () => {
+    const isRTL = i18n.dir() === 'rtl';
+    const pr = (ltr, rtl) => (isRTL ? rtl : ltr);
+    const steps = [
+      {
+        target: '[data-tour="admin-courses-header"]',
+        title: t('admin.tour.courses.header.title', 'Course Management Overview'),
+        content: t('admin.tour.courses.header.desc', 'Manage the complete course catalog, create new courses, and organize the curriculum. This is where you define what students will learn.'),
+        placement: pr('bottom', 'top'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-courses-filters"]',
+        title: t('admin.tour.courses.filters.title', 'Search & Filter Tools'),
+        content: t('admin.tour.courses.filters.desc', 'Filter courses by academic level (Undergraduate, Masters) and search by name, code, or level. Reset to default courses or add new ones.'),
+        placement: pr('bottom', 'top'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-courses-table"]',
+        title: t('admin.tour.courses.table.title', 'Course Directory'),
+        content: t('admin.tour.courses.table.desc', 'View all courses with their codes, credits, hours, and source information. Use action buttons to view details, edit, or manage course content.'),
+        placement: pr('top', 'bottom'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-courses-predefined"]',
+        title: t('admin.tour.courses.predefined.title', 'Predefined Course Library'),
+        content: t('admin.tour.courses.predefined.desc', 'Access a library of pre-built courses from MarLn. Add these to your university catalog with one click. Perfect for quickly expanding your course offerings.'),
+        placement: pr('top', 'bottom'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-courses-actions"]',
+        title: t('admin.tour.courses.actions.title', 'Course Operations'),
+        content: t('admin.tour.courses.actions.desc', 'Create new courses from scratch, edit existing ones, or view detailed information. Each course can be customized with credits, hours, and descriptions.'),
+        placement: pr('top', 'bottom'),
+        disableBeacon: true
+      }
+    ].filter(s => document.querySelector(s.target));
+    if (steps.length) startTour('admin:courses:v1', steps);
+  };
   const [courses, setCourses] = useState(() => {
     const stored = localStorage.getItem('courses');
     return stored ? JSON.parse(stored) : initialCourses;
@@ -52,9 +109,9 @@ export default function CourseManagement() {
       <Sidebar role="admin" />
       <div className="flex-1 overflow-auto">
         <div className="p-6">
-          <div className="flex justify-between items-center mb-6">
+          <div data-tour="admin-courses-header" className="flex justify-between items-center mb-6">
             <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">{t('admin.courseManagement.title', 'Course Management')}</h1>
-            <div className="flex gap-2">
+            <div data-tour="admin-courses-filters" className="flex gap-2">
               <select value={levelFilter} onChange={e => setLevelFilter(e.target.value)} className="border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 mr-2 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100">
                 <option value="all">{t('admin.courseManagement.filters.allLevels', 'All Levels')}</option>
                 <option value="undergraduate">{t('admin.courseManagement.filters.undergraduate', 'Undergraduate')}</option>
@@ -72,7 +129,7 @@ export default function CourseManagement() {
           </div>
 
           {/* Course List */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden mb-8">
+          <div data-tour="admin-courses-table" className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden mb-8">
             <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
               <thead className="bg-gray-50 dark:bg-gray-900">
                 <tr>
@@ -81,7 +138,7 @@ export default function CourseManagement() {
                   <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.courseManagement.table.credits', 'Credits')}</th>
                   <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.courseManagement.table.hours', 'Hours')}</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.courseManagement.table.source', 'Source')}</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.courseManagement.table.actions', 'Actions')}</th>
+                  <th data-tour="admin-courses-actions" className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.courseManagement.table.actions', 'Actions')}</th>
                 </tr>
               </thead>
               <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -103,7 +160,7 @@ export default function CourseManagement() {
           </div>
 
           {/* Predefined Courses */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-8">
+          <div data-tour="admin-courses-predefined" className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-8">
             <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4">{t('admin.courseManagement.predefined.title', 'Predefined Courses')}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {predefinedCourses.map((predef) => (

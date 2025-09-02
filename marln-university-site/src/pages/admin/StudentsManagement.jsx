@@ -5,6 +5,7 @@ import { students as initialStudents, programs, years } from '../../data/student
 import * as XLSX from 'xlsx';
 import users from '../../data/user';
 import { useTranslation } from 'react-i18next';
+import { useTour } from '../../context/TourContext.jsx';
 
 // Mock data for student results
 const mockResults = {
@@ -25,7 +26,63 @@ const mockResults = {
 };
 
 export default function StudentsManagement() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const { startTour } = useTour();
+
+  useEffect(() => {
+    const onLaunch = () => {
+      const launch = localStorage.getItem('tour:launch');
+      if (launch === 'admin-full' || launch === 'admin-resume') {
+        localStorage.removeItem('tour:launch');
+        setTimeout(() => startAdminStudentsTour(), 200);
+      }
+    };
+    window.addEventListener('tour:launch', onLaunch);
+    return () => window.removeEventListener('tour:launch', onLaunch);
+  }, []);
+
+  const startAdminStudentsTour = () => {
+    const isRTL = i18n.dir() === 'rtl';
+    const pr = (ltr, rtl) => (isRTL ? rtl : ltr);
+    const steps = [
+      {
+        target: '[data-tour="admin-students-header"]',
+        title: t('admin.tour.students.header.title', 'Student Management Overview'),
+        content: t('admin.tour.students.header.desc', 'This is your central hub for managing all student records, enrollments, and academic information.'),
+        placement: pr('bottom', 'top'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-students-actions"]',
+        title: t('admin.tour.students.actions.title', 'Quick Actions'),
+        content: t('admin.tour.students.actions.desc', 'Add new students individually or upload multiple students via Excel file. Export data for reporting and analysis.'),
+        placement: pr('bottom', 'top'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-students-search"]',
+        title: t('admin.tour.students.search.title', 'Search & Filter'),
+        content: t('admin.tour.students.search.desc', 'Quickly find students by name or email. Filter by status (Active, Inactive, Graduated) to focus on specific groups.'),
+        placement: pr('bottom', 'top'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-students-table"]',
+        title: t('admin.tour.students.table.title', 'Student Records Table'),
+        content: t('admin.tour.students.table.desc', 'View all student information including program, year, status, and enrollment date. Click the action menu for each student to edit, delete, or view results.'),
+        placement: pr('top', 'bottom'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-students-pagination"]',
+        title: t('admin.tour.students.pagination.title', 'Navigation & Export'),
+        content: t('admin.tour.students.pagination.desc', 'Navigate through student records and export filtered data to Excel for external analysis and reporting.'),
+        placement: pr('top', 'bottom'),
+        disableBeacon: true
+      }
+    ].filter(s => document.querySelector(s.target));
+    if (steps.length) startTour('admin:students:v1', steps);
+  };
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [students, setStudents] = useState(() => {
@@ -251,9 +308,9 @@ export default function StudentsManagement() {
 
       {/* Main Content */}
       <div className="flex-1 overflow-auto p-6">
-        <div className="flex justify-between items-center mb-6">
+        <div data-tour="admin-students-header" className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">{t('admin.studentsManagement.title', 'Student Management')}</h1>
-          <div className="flex space-x-4">
+          <div data-tour="admin-students-actions" className="flex space-x-4">
             <button 
               onClick={() => setShowUploadModal(true)}
               className="bg-green-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-green-700 transition-colors dark:bg-green-700 dark:hover:bg-green-800"
@@ -272,7 +329,7 @@ export default function StudentsManagement() {
         </div>
 
         {/* Search and Filter Bar */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 mb-6">
+        <div data-tour="admin-students-search" className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 mb-6">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
               <div className="relative">
@@ -310,7 +367,7 @@ export default function StudentsManagement() {
         </div>
 
         {/* Students Table */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+        <div data-tour="admin-students-table" className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
           <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
             <thead className="bg-gray-50 dark:bg-gray-900">
               <tr>
@@ -393,7 +450,7 @@ export default function StudentsManagement() {
         </div>
 
         {/* Pagination */}
-        <div className="flex items-center justify-between p-4 text-sm text-gray-600 dark:text-gray-300">
+        <div data-tour="admin-students-pagination" className="flex items-center justify-between p-4 text-sm text-gray-600 dark:text-gray-300">
 					<div>{t('admin.studentsManagement.pagination.summary', { from: 1, to: filteredStudents.length, total: filteredStudents.length, defaultValue: `Showing 1 to ${filteredStudents.length} of ${filteredStudents.length} entries` })}</div>
 					<div className="space-x-2">
 						<button className="px-3 py-1 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">{t('admin.studentsManagement.pagination.previous', 'Previous')}</button>

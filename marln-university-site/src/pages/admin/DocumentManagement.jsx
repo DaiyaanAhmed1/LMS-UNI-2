@@ -3,9 +3,66 @@ import Sidebar from '../../components/Sidebar';
 import { documents as initialDocuments, categories } from '../../data/documents';
 import { Plus, Trash2, Download, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useTour } from '../../context/TourContext.jsx';
 
 export default function DocumentManagement() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const { startTour } = useTour();
+
+  useEffect(() => {
+    const onLaunch = () => {
+      const launch = localStorage.getItem('tour:launch');
+      if (launch === 'admin-full' || launch === 'admin-resume') {
+        localStorage.removeItem('tour:launch');
+        setTimeout(() => startAdminDocumentsTour(), 200);
+      }
+    };
+    window.addEventListener('tour:launch', onLaunch);
+    return () => window.removeEventListener('tour:launch', onLaunch);
+  }, []);
+
+  const startAdminDocumentsTour = () => {
+    const isRTL = i18n.dir() === 'rtl';
+    const pr = (ltr, rtl) => (isRTL ? rtl : ltr);
+    const steps = [
+      {
+        target: '[data-tour="admin-documents-header"]',
+        title: t('admin.tour.documents.header.title', 'Document Management Overview'),
+        content: t('admin.tour.documents.header.desc', 'Manage all university documents, policies, and resources. Upload new documents, organize them by category, and maintain a centralized document repository.'),
+        placement: pr('bottom', 'top'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-documents-upload"]',
+        title: t('admin.tour.documents.upload.title', 'Document Upload'),
+        content: t('admin.tour.documents.upload.desc', 'Add new documents to the system. Upload files with titles, categories, and descriptions. All documents are automatically organized and searchable.'),
+        placement: pr('bottom', 'top'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-documents-table"]',
+        title: t('admin.tour.documents.table.title', 'Document Directory'),
+        content: t('admin.tour.documents.table.desc', 'View all uploaded documents with their metadata. See who uploaded each document, when it was added, and access download or delete options.'),
+        placement: pr('top', 'bottom'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-documents-actions"]',
+        title: t('admin.tour.documents.actions.title', 'Document Operations'),
+        content: t('admin.tour.documents.actions.desc', 'Download documents for review or distribution. Delete outdated or incorrect documents. Each action is logged for audit purposes.'),
+        placement: pr('top', 'bottom'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-documents-categories"]',
+        title: t('admin.tour.documents.categories.title', 'Document Organization'),
+        content: t('admin.tour.documents.categories.desc', 'Documents are automatically categorized for easy navigation. Students and instructors can quickly find relevant materials by category.'),
+        placement: pr('top', 'bottom'),
+        disableBeacon: true
+      }
+    ].filter(s => document.querySelector(s.target));
+    if (steps.length) startTour('admin:documents:v1', steps);
+  };
   const [documents, setDocuments] = useState(() => {
     const stored = localStorage.getItem('documents');
     return stored ? JSON.parse(stored) : initialDocuments;
@@ -43,25 +100,25 @@ export default function DocumentManagement() {
       <Sidebar role="admin" />
       <div className="flex-1 overflow-auto">
         <div className="p-6">
-          <div className="flex justify-between items-center mb-6">
+          <div data-tour="admin-documents-header" className="flex justify-between items-center mb-6">
             <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">{t('admin.documentManagement.title', 'Document Management')}</h1>
-            <button onClick={() => setShowUploadModal(true)} className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors">
+            <button data-tour="admin-documents-upload" onClick={() => setShowUploadModal(true)} className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors">
               <Plus size={20} />
               <span>{t('admin.documentManagement.uploadButton', 'Upload Document')}</span>
             </button>
           </div>
 
           {/* Document List */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+          <div data-tour="admin-documents-table" className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
             <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
               <thead className="bg-gray-50 dark:bg-gray-900">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.documentManagement.table.title', 'Title')}</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.documentManagement.table.category', 'Category')}</th>
+                  <th data-tour="admin-documents-categories" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.documentManagement.table.category', 'Category')}</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.documentManagement.table.uploadedBy', 'Uploaded By')}</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.documentManagement.table.uploadDate', 'Upload Date')}</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.documentManagement.table.file', 'File')}</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.documentManagement.table.actions', 'Actions')}</th>
+                  <th data-tour="admin-documents-actions" className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.documentManagement.table.actions', 'Actions')}</th>
                 </tr>
               </thead>
               <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">

@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Sidebar from '../../components/Sidebar';
 import { Users2, Edit, Lock, X, ArrowUpCircle, Ban, CheckCircle, Archive, RotateCcw } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useTour } from '../../context/TourContext.jsx';
 
 const mockUsers = [
   { id: 1, name: 'Alice Smith', email: 'alice@university.edu', role: 'student', status: 'active', program: 'Computer Science', credentialsCreated: true },
@@ -22,8 +23,64 @@ const mockDeletedUsers = [
 const programs = ['Computer Science', 'Mathematics', 'Physics', 'Chemistry', 'Biology'];
 
 export default function UserManagement() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const { startTour } = useTour();
   const [users, setUsers] = useState(mockUsers);
+
+  useEffect(() => {
+    const onLaunch = () => {
+      const launch = localStorage.getItem('tour:launch');
+      if (launch === 'admin-full' || launch === 'admin-resume') {
+        localStorage.removeItem('tour:launch');
+        setTimeout(() => startAdminUsersTour(), 200);
+      }
+    };
+    window.addEventListener('tour:launch', onLaunch);
+    return () => window.removeEventListener('tour:launch', onLaunch);
+  }, []);
+
+  const startAdminUsersTour = () => {
+    const isRTL = i18n.dir() === 'rtl';
+    const pr = (ltr, rtl) => (isRTL ? rtl : ltr);
+    const steps = [
+      {
+        target: '[data-tour="admin-users-header"]',
+        title: t('admin.tour.users.header.title', 'User Management Overview'),
+        content: t('admin.tour.users.header.desc', 'Manage all university users including students, instructors, and administrators. Control access, manage credentials, and monitor user status across the system.'),
+        placement: pr('bottom', 'top'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-users-tabs"]',
+        title: t('admin.tour.users.tabs.title', 'User Categories'),
+        content: t('admin.tour.users.tabs.desc', 'Switch between active users and deleted users. View user counts and manage different user states. Restore deleted users when needed.'),
+        placement: pr('bottom', 'top'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-users-table"]',
+        title: t('admin.tour.users.table.title', 'User Directory'),
+        content: t('admin.tour.users.table.desc', 'View comprehensive user information including names, emails, roles, status, programs, and credential status. Monitor user activity and program assignments.'),
+        placement: pr('top', 'bottom'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-users-actions"]',
+        title: t('admin.tour.users.actions.title', 'User Management Actions'),
+        content: t('admin.tour.users.actions.desc', 'Perform various user operations: reset passwords, suspend/unsuspend accounts, upgrade student programs, create credentials, and delete users.'),
+        placement: pr('top', 'bottom'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-users-credentials"]',
+        title: t('admin.tour.users.credentials.title', 'Credential Management'),
+        content: t('admin.tour.users.credentials.desc', 'Create login credentials for new users, send them via email, and set password change requirements. Manage user authentication and access control.'),
+        placement: pr('top', 'bottom'),
+        disableBeacon: true
+      }
+    ].filter(s => document.querySelector(s.target));
+    if (steps.length) startTour('admin:users:v1', steps);
+  };
   const [deletedUsers, setDeletedUsers] = useState(mockDeletedUsers);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [upgradeUser, setUpgradeUser] = useState(null);
@@ -118,12 +175,12 @@ export default function UserManagement() {
       <Sidebar role="admin" />
       <div className="flex-1 overflow-auto">
         <div className="p-6">
-          <div className="flex justify-between items-center mb-6">
+          <div data-tour="admin-users-header" className="flex justify-between items-center mb-6">
             <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">{t('admin.userManagement.title', 'User Management')}</h1>
           </div>
 
           {/* Tabs */}
-          <div className="mb-6 border-b border-gray-200 dark:border-gray-700">
+          <div data-tour="admin-users-tabs" className="mb-6 border-b border-gray-200 dark:border-gray-700">
             <nav className="-mb-px flex space-x-8">
               <button
                 onClick={() => setActiveTab('active')}
@@ -162,7 +219,7 @@ export default function UserManagement() {
 
           {/* Active Users Table */}
           {activeTab === 'active' && (
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+            <div data-tour="admin-users-table" className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
               <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                 <thead className="bg-gray-50 dark:bg-gray-900">
                   <tr>
@@ -171,8 +228,8 @@ export default function UserManagement() {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.userManagement.headers.role', 'Role')}</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.userManagement.headers.status', 'Status')}</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.userManagement.headers.program', 'Program')}</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.userManagement.headers.credentials', 'Credentials')}</th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.userManagement.headers.actions', 'Actions')}</th>
+                    <th data-tour="admin-users-credentials" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.userManagement.headers.credentials', 'Credentials')}</th>
+                    <th data-tour="admin-users-actions" className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.userManagement.headers.actions', 'Actions')}</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">

@@ -4,9 +4,66 @@ import { programs as initialPrograms } from '../../data/programs';
 import { courses as initialCourses } from '../../data/courses';
 import { Plus, Edit, Eye, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useTour } from '../../context/TourContext.jsx';
 
 export default function ProgramManagement() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const { startTour } = useTour();
+
+  useEffect(() => {
+    const onLaunch = () => {
+      const launch = localStorage.getItem('tour:launch');
+      if (launch === 'admin-full' || launch === 'admin-resume') {
+        localStorage.removeItem('tour:launch');
+        setTimeout(() => startAdminProgramsTour(), 200);
+      }
+    };
+    window.addEventListener('tour:launch', onLaunch);
+    return () => window.removeEventListener('tour:launch', onLaunch);
+  }, []);
+
+  const startAdminProgramsTour = () => {
+    const isRTL = i18n.dir() === 'rtl';
+    const pr = (ltr, rtl) => (isRTL ? rtl : ltr);
+    const steps = [
+      {
+        target: '[data-tour="admin-programs-header"]',
+        title: t('admin.tour.programs.header.title', 'Program Management Overview'),
+        content: t('admin.tour.programs.header.desc', 'Create and manage academic programs, define their structure, duration, and course requirements. This is the foundation for student enrollment and course planning.'),
+        placement: pr('bottom', 'top'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-programs-add"]',
+        title: t('admin.tour.programs.add.title', 'Create New Programs'),
+        content: t('admin.tour.programs.add.desc', 'Add new academic programs with customizable duration, specialization areas, and term-based structure. Each program can have multiple terms with assigned courses.'),
+        placement: pr('bottom', 'top'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-programs-table"]',
+        title: t('admin.tour.programs.table.title', 'Program Directory'),
+        content: t('admin.tour.programs.table.desc', 'View all academic programs with their key details. Use the action buttons to view detailed structure, edit program information, or manage course assignments.'),
+        placement: pr('top', 'bottom'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-programs-structure"]',
+        title: t('admin.tour.programs.structure.title', 'Program Structure'),
+        content: t('admin.tour.programs.structure.desc', 'Each program is organized into terms or semesters. View the complete structure, manage course assignments per term, and ensure proper academic progression.'),
+        placement: pr('top', 'bottom'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-programs-courses"]',
+        title: t('admin.tour.programs.courses.title', 'Course Management'),
+        content: t('admin.tour.programs.courses.desc', 'Assign courses to specific terms within programs. Manage the curriculum flow, ensure prerequisites are met, and maintain academic standards across all programs.'),
+        placement: pr('top', 'bottom'),
+        disableBeacon: true
+      }
+    ].filter(s => document.querySelector(s.target));
+    if (steps.length) startTour('admin:programs:v1', steps);
+  };
   // Load programs from localStorage or static file
   const [programs, setPrograms] = useState(() => {
     const stored = localStorage.getItem('programs');
@@ -101,9 +158,10 @@ export default function ProgramManagement() {
       <Sidebar role="admin" />
       <div className="flex-1 overflow-auto">
         <div className="p-6">
-          <div className="flex justify-between items-center mb-6">
+          <div data-tour="admin-programs-header" className="flex justify-between items-center mb-6">
             <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">{t('admin.programManagement.title', 'Program Management')}</h1>
             <button
+              data-tour="admin-programs-add"
               onClick={() => setShowAddModal(true)}
               className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
             >
@@ -113,7 +171,7 @@ export default function ProgramManagement() {
           </div>
 
           {/* Program List */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+          <div data-tour="admin-programs-table" className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
             <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
               <thead className="bg-gray-50 dark:bg-gray-900">
                 <tr>
@@ -203,7 +261,7 @@ export default function ProgramManagement() {
 
       {/* View Program Modal */}
       {showViewModal && selectedProgram && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div data-tour="admin-programs-structure" className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">{selectedProgram.name}{t('admin.programManagement.viewModal.titleSuffix', ' - Details')}</h2>
@@ -230,7 +288,7 @@ export default function ProgramManagement() {
         const latestProgram = programs.find(p => p.id === selectedProgram.id);
         const latestTerm = latestProgram?.terms[selectedTermIdx];
         return (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div data-tour="admin-programs-courses" className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">{t('admin.programManagement.manageCoursesModal.title', { program: latestProgram.name, term: latestTerm.term, defaultValue: `${latestProgram.name} - Term ${latestTerm.term}` })}</h2>

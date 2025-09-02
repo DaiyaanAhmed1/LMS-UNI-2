@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Sidebar from '../../components/Sidebar';
 import { Plus, Send, X, Mail, User, Users, CheckCircle, MessageSquare } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useTour } from '../../context/TourContext.jsx';
 
 // Example initial queries
 const initialQueries = [
@@ -33,7 +34,63 @@ const recipientOptions = [
 ];
 
 export default function Notifications() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const { startTour } = useTour();
+
+  useEffect(() => {
+    const onLaunch = () => {
+      const launch = localStorage.getItem('tour:launch');
+      if (launch === 'admin-full' || launch === 'admin-resume') {
+        localStorage.removeItem('tour:launch');
+        setTimeout(() => startAdminNotificationsTour(), 200);
+      }
+    };
+    window.addEventListener('tour:launch', onLaunch);
+    return () => window.removeEventListener('tour:launch', onLaunch);
+  }, []);
+
+  const startAdminNotificationsTour = () => {
+    const isRTL = i18n.dir() === 'rtl';
+    const pr = (ltr, rtl) => (isRTL ? rtl : ltr);
+    const steps = [
+      {
+        target: '[data-tour="admin-notifications-header"]',
+        title: t('admin.tour.notifications.header.title', 'Notifications & Queries Overview'),
+        content: t('admin.tour.notifications.header.desc', 'Manage all university communications, respond to student and instructor queries, and send announcements to the entire community.'),
+        placement: pr('bottom', 'top'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-notifications-send"]',
+        title: t('admin.tour.notifications.send.title', 'Send Notifications'),
+        content: t('admin.tour.notifications.send.desc', 'Create and send notifications to all users, specific groups, or individual recipients. Keep everyone informed about important updates and announcements.'),
+        placement: pr('bottom', 'top'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-notifications-queries"]',
+        title: t('admin.tour.notifications.queries.title', 'Query Management'),
+        content: t('admin.tour.notifications.queries.desc', 'View and respond to questions from students and instructors. Track query status and maintain open communication channels with the university community.'),
+        placement: pr('top', 'bottom'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-notifications-sent"]',
+        title: t('admin.tour.notifications.sent.title', 'Notification History'),
+        content: t('admin.tour.notifications.sent.desc', 'Review all sent notifications with recipient information and dates. Track communication history and ensure important messages were delivered.'),
+        placement: pr('top', 'bottom'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-notifications-actions"]',
+        title: t('admin.tour.notifications.actions.title', 'Communication Actions'),
+        content: t('admin.tour.notifications.actions.desc', 'Reply to queries, send notifications, and manage all university communications from one centralized location.'),
+        placement: pr('top', 'bottom'),
+        disableBeacon: true
+      }
+    ].filter(s => document.querySelector(s.target));
+    if (steps.length) startTour('admin:notifications:v1', steps);
+  };
   // Queries state
   const [queries, setQueries] = useState(() => {
     const stored = localStorage.getItem('queries');
@@ -100,9 +157,10 @@ export default function Notifications() {
       <Sidebar role="admin" />
       <div className="flex-1 overflow-auto">
         <div className="p-6">
-          <div className="flex justify-between items-center mb-6">
+          <div data-tour="admin-notifications-header" className="flex justify-between items-center mb-6">
             <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">{t('admin.notifications.title', 'Notifications & Queries')}</h1>
             <button
+              data-tour="admin-notifications-send"
               onClick={openNotifModal}
               className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
             >
@@ -112,7 +170,7 @@ export default function Notifications() {
           </div>
 
           {/* Queries Section */}
-          <div className="mb-10">
+          <div data-tour="admin-notifications-queries" className="mb-10">
             <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4 flex items-center gap-2"><MessageSquare size={20}/> {t('admin.notifications.queries.title', 'Queries')}</h2>
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
               <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
@@ -123,7 +181,7 @@ export default function Notifications() {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.notifications.queries.table.message', 'Message')}</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.notifications.queries.table.date', 'Date')}</th>
                     <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.notifications.queries.table.status', 'Status')}</th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.notifications.queries.table.actions', 'Actions')}</th>
+                    <th data-tour="admin-notifications-actions" className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.notifications.queries.table.actions', 'Actions')}</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -157,7 +215,7 @@ export default function Notifications() {
           </div>
 
           {/* Notifications Sent Section */}
-          <div className="mb-10">
+          <div data-tour="admin-notifications-sent" className="mb-10">
             <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4 flex items-center gap-2"><Send size={20}/> {t('admin.notifications.sent.title', 'Notifications Sent')}</h2>
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
               <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">

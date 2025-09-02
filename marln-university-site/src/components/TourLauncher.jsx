@@ -45,11 +45,29 @@ export default function TourLauncher() {
 		'/instructor/profile'
 	];
 
+	// Admin full tour sequence
+	const adminFullSequence = [
+		'/admin/dashboard',
+		'/admin/students',
+		'/admin/instructors',
+		'/admin/programs',
+		'/admin/courses',
+		'/admin/documents',
+		'/admin/calendar',
+		'/admin/notifications',
+		'/admin/reports',
+		'/admin/users',
+		'/admin/settings',
+		'/admin/profile'
+	];
+
 	const isInstructor = location.pathname.startsWith('/instructor');
+	const isAdmin = location.pathname.startsWith('/admin');
 
 	const allowedPaths = new Set([...
 		studentFullSequence,
-		...instructorFullSequence
+		...instructorFullSequence,
+		...adminFullSequence
 	]);
 
 	const getFullSequence = () => {
@@ -57,22 +75,52 @@ export default function TourLauncher() {
 			const stored = JSON.parse(localStorage.getItem('tour:full:sequence') || '[]');
 			const cleaned = (Array.isArray(stored) ? stored : []).filter(p => allowedPaths.has(p));
 			if (cleaned.length) return cleaned;
-			return isInstructor ? instructorFullSequence : studentFullSequence;
-		} catch { return isInstructor ? instructorFullSequence : studentFullSequence; }
+			if (isAdmin) return adminFullSequence;
+			if (isInstructor) return instructorFullSequence;
+			return studentFullSequence;
+		} catch { 
+			if (isAdmin) return adminFullSequence;
+			if (isInstructor) return instructorFullSequence;
+			return studentFullSequence;
+		}
 	};
 
 	const restartFull = () => {
-		const full = isInstructor ? instructorFullSequence : studentFullSequence;
+		let full, launchEvent, dash;
+		if (isAdmin) {
+			full = adminFullSequence;
+			launchEvent = 'admin-full';
+			dash = '/admin/dashboard';
+		} else if (isInstructor) {
+			full = instructorFullSequence;
+			launchEvent = 'instructor-full';
+			dash = '/instructor/dashboard';
+		} else {
+			full = studentFullSequence;
+			launchEvent = 'student-full';
+			dash = '/student/dashboard';
+		}
+		
+		// Filter out the current page to avoid restarting the same page
+		const currentPath = location.pathname;
+		const filteredQueue = full.filter(page => page !== currentPath);
+		
 		localStorage.setItem('tour:mode', 'full');
 		localStorage.setItem('tour:full:sequence', JSON.stringify(full));
-		localStorage.setItem('tour:queue', JSON.stringify(full));
-		localStorage.setItem('tour:launch', isInstructor ? 'instructor-full' : 'student-full');
+		localStorage.setItem('tour:queue', JSON.stringify(filteredQueue));
+		localStorage.setItem('tour:launch', launchEvent);
 		setOpen(false);
-		// Navigate to correct dashboard first
-		const dash = isInstructor ? '/instructor/dashboard' : '/student/dashboard';
+		
+		// Always navigate to dashboard first, then start tour automatically
 		if (location.pathname !== dash) {
+			console.log('TourLauncher: Navigating to dashboard first, then starting tour');
 			navigate(dash);
+			// Wait for navigation to complete, then start tour
+			setTimeout(() => {
+				window.dispatchEvent(new CustomEvent('tour:launch'));
+			}, 500);
 		} else {
+			console.log('TourLauncher: Already on dashboard, starting tour immediately');
 			window.dispatchEvent(new CustomEvent('tour:launch'));
 		}
 	};
@@ -82,8 +130,21 @@ export default function TourLauncher() {
 		if (!localStorage.getItem('tour:full:sequence')) localStorage.setItem('tour:full:sequence', JSON.stringify(full));
 		localStorage.setItem('tour:mode', 'single');
 		localStorage.setItem('tour:queue', JSON.stringify([]));
-		localStorage.setItem('tour:launch', isInstructor ? 'instructor-resume' : 'student-resume');
+		
+		let launchEvent;
+		if (isAdmin) {
+			launchEvent = 'admin-resume';
+		} else if (isInstructor) {
+			launchEvent = 'instructor-resume';
+		} else {
+			launchEvent = 'student-resume';
+		}
+		
+		localStorage.setItem('tour:launch', launchEvent);
 		setOpen(false);
+		
+		// For page-only tours, start immediately on current page
+		console.log('TourLauncher: Starting page-only tour on current page');
 		window.dispatchEvent(new CustomEvent('tour:launch'));
 	};
 

@@ -4,6 +4,7 @@ import { calendarEvents as initialEvents } from '../../data/calendar';
 import { Plus, Trash2, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useLanguage } from '../../context/LanguageContext';
+import { useTour } from '../../context/TourContext.jsx';
 
 // Minimal Hijri conversion (demo) - Fixed to year 1447
 function gregorianToHijri(date) {
@@ -34,8 +35,64 @@ const eventTypes = [
 ];
 
 export default function AcademicCalendar() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { currentLanguage } = useLanguage();
+  const { startTour } = useTour();
+
+  useEffect(() => {
+    const onLaunch = () => {
+      const launch = localStorage.getItem('tour:launch');
+      if (launch === 'admin-full' || launch === 'admin-resume') {
+        localStorage.removeItem('tour:launch');
+        setTimeout(() => startAdminCalendarTour(), 200);
+      }
+    };
+    window.addEventListener('tour:launch', onLaunch);
+    return () => window.removeEventListener('tour:launch', onLaunch);
+  }, []);
+
+  const startAdminCalendarTour = () => {
+    const isRTL = i18n.dir() === 'rtl';
+    const pr = (ltr, rtl) => (isRTL ? rtl : ltr);
+    const steps = [
+      {
+        target: '[data-tour="admin-calendar-header"]',
+        title: t('admin.tour.calendar.header.title', 'Academic Calendar Overview'),
+        content: t('admin.tour.calendar.header.desc', 'Manage the complete academic calendar with events, exams, and holidays. Set important dates that affect the entire university community.'),
+        placement: pr('bottom', 'top'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-calendar-date-system"]',
+        title: t('admin.tour.calendar.dateSystem.title', 'Date System Toggle'),
+        content: t('admin.tour.calendar.dateSystem.desc', 'Switch between Gregorian and Hijri calendar systems. All dates are automatically converted and displayed in both formats for accessibility.'),
+        placement: pr('bottom', 'top'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-calendar-add-event"]',
+        title: t('admin.tour.calendar.addEvent.title', 'Add Calendar Events'),
+        content: t('admin.tour.calendar.addEvent.desc', 'Create new academic events, exams, or holidays. Set dates, types, and descriptions. Events are immediately visible to all students and staff.'),
+        placement: pr('bottom', 'top'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-calendar-table"]',
+        title: t('admin.tour.calendar.table.title', 'Event Directory'),
+        content: t('admin.tour.calendar.table.desc', 'View all scheduled events with their details. See dates in both calendar systems, event types, and descriptions. Manage the academic timeline efficiently.'),
+        placement: pr('top', 'bottom'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-calendar-actions"]',
+        title: t('admin.tour.calendar.actions.title', 'Event Management'),
+        content: t('admin.tour.calendar.actions.desc', 'Delete outdated or incorrect events. Each change is immediately reflected across the system, keeping everyone informed of schedule updates.'),
+        placement: pr('top', 'bottom'),
+        disableBeacon: true
+      }
+    ].filter(s => document.querySelector(s.target));
+    if (steps.length) startTour('admin:calendar:v1', steps);
+  };
   const [events, setEvents] = useState(() => {
     const stored = localStorage.getItem('calendarEvents');
     return stored ? JSON.parse(stored) : initialEvents;
@@ -68,15 +125,16 @@ export default function AcademicCalendar() {
       <Sidebar role="admin" />
       <div className="flex-1 overflow-auto">
         <div className="p-6">
-          <div className="flex justify-between items-center mb-6">
+          <div data-tour="admin-calendar-header" className="flex justify-between items-center mb-6">
             <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">{t('admin.academicCalendar.title', 'Academic Calendar')}</h1>
             <div className="flex items-center gap-3">
-              <div className="hidden md:flex items-center gap-1 text-xs text-gray-500">
+              <div data-tour="admin-calendar-date-system" className="hidden md:flex items-center gap-1 text-xs text-gray-500">
                 <span>{t('student.schedule.dateSystem.label')}</span>
                 <button onClick={() => setUseHijri(false)} className={`px-2 py-0.5 rounded ${!useHijri ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'}`}>{t('student.schedule.dateSystem.gregorian')}</button>
                 <button onClick={() => setUseHijri(true)} className={`px-2 py-0.5 rounded ${useHijri ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'}`}>{t('student.schedule.dateSystem.hijri')}</button>
               </div>
               <button
+                data-tour="admin-calendar-add-event"
                 onClick={() => setShowAddModal(true)}
                 className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors"
               >
@@ -87,7 +145,7 @@ export default function AcademicCalendar() {
           </div>
 
           {/* Event List */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+          <div data-tour="admin-calendar-table" className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
             <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
               <thead className="bg-gray-50 dark:bg-gray-900">
                 <tr>
@@ -95,7 +153,7 @@ export default function AcademicCalendar() {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.academicCalendar.table.date', 'Date')}</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.academicCalendar.table.type', 'Type')}</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.academicCalendar.table.description', 'Description')}</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.academicCalendar.table.actions', 'Actions')}</th>
+                  <th data-tour="admin-calendar-actions" className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{t('admin.academicCalendar.table.actions', 'Actions')}</th>
                 </tr>
               </thead>
               <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">

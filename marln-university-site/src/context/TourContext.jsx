@@ -36,6 +36,8 @@ export function TourProvider({ children }) {
 		localStorage.removeItem('tour:launch');
 	}, []);
 
+
+
 	const restartTour = useCallback((id) => {
 		setTourId(id);
 		setRun(true);
@@ -49,8 +51,15 @@ export function TourProvider({ children }) {
 			window.history.pushState({}, '', path);
 			window.dispatchEvent(new Event('popstate'));
 			// Preserve role when resuming
-			const isInstructor = path.startsWith('/instructor');
-			localStorage.setItem('tour:launch', isInstructor ? 'instructor-resume' : 'student-resume');
+			let launchEvent;
+			if (path.startsWith('/admin')) {
+				launchEvent = 'admin-resume';
+			} else if (path.startsWith('/instructor')) {
+				launchEvent = 'instructor-resume';
+			} else {
+				launchEvent = 'student-resume';
+			}
+			localStorage.setItem('tour:launch', launchEvent);
 			// Increased delay for better page loading and element availability
 			setTimeout(() => window.dispatchEvent(new CustomEvent('tour:launch')), 400);
 		} catch (error) {
@@ -74,6 +83,9 @@ export function TourProvider({ children }) {
 			try {
 				const mode = localStorage.getItem('tour:mode');
 				const rawQueue = JSON.parse(localStorage.getItem('tour:queue') || '[]');
+				const currentPath = window.location.pathname;
+				console.log('Tour completion - Mode:', mode, 'Raw Queue:', rawQueue, 'Current Path:', currentPath);
+				
 				const allowedStudent = [
 					'/student/courses',
 					'/student/assignments',
@@ -96,16 +108,37 @@ export function TourProvider({ children }) {
 					'/instructor/notifications',
 					'/instructor/profile'
 				];
-				const allowed = [...allowedStudent, ...allowedInstructor];
+				const allowedAdmin = [
+					'/admin/dashboard',
+					'/admin/students',
+					'/admin/instructors',
+					'/admin/programs',
+					'/admin/courses',
+					'/admin/documents',
+					'/admin/calendar',
+					'/admin/notifications',
+					'/admin/reports',
+					'/admin/users',
+					'/admin/settings',
+					'/admin/profile'
+				];
+				const allowed = [...allowedStudent, ...allowedInstructor, ...allowedAdmin];
 				const queue = Array.isArray(rawQueue) ? rawQueue.filter(p => allowed.includes(p)) : [];
 				
 				// Handle full tour with more pages
 				if (mode === 'full' && Array.isArray(queue) && queue.length > 0) {
-					const [next, ...rest] = queue;
-					setPendingQueue(rest);
-					setNextPath(next);
-					setContinuePrompt(true);
-					return;
+					// Filter out the current page to avoid restarting the same page
+					const currentPath = window.location.pathname;
+					const filteredQueue = queue.filter(page => page !== currentPath);
+					
+					if (filteredQueue.length > 0) {
+						const [next, ...rest] = filteredQueue;
+						console.log('Tour: Continuing to next page:', next, 'Remaining:', rest, 'Current:', currentPath);
+						setPendingQueue(rest);
+						setNextPath(next);
+						setContinuePrompt(true);
+						return;
+					}
 				}
 				
 				// Handle single page tour - just end cleanly, no prompts
@@ -150,6 +183,13 @@ export function TourProvider({ children }) {
 		} catch { return false; }
 	})();
 
+	const isAdminTour = (() => {
+		try {
+			const full = JSON.parse(localStorage.getItem('tour:full:sequence') || '[]');
+			return Array.isArray(full) && full.some(p => typeof p === 'string' && p.startsWith('/admin/'));
+		} catch { return false; }
+	})();
+
 	return (
 		<TourContext.Provider value={value}>
 			{children}
@@ -157,7 +197,7 @@ export function TourProvider({ children }) {
 				run={run}
 				steps={steps}
 				continuous
-				showProgress={false}
+				showProgress={isAdminTour}
 				showSkipButton
 				disableBeacon={true}
 				scrollToFirstStep={true}
@@ -239,7 +279,7 @@ export function TourProvider({ children }) {
 			/>
 			{showClose && (
 				<button
-					onClick={() => { stopTour(); localStorage.removeItem('tour:queue'); localStorage.removeItem('tour:mode'); }}
+					onClick={() => { stopTour(); localStorage.removeItem('tour:queue'); localStorage.removeItem('tour:mode'); localStorage.removeItem('tour:launch'); }}
 					className="fixed top-4 right-4 z-[21060] bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-100 rounded-full w-9 h-9 flex items-center justify-center shadow hover:bg-gray-50"
 					aria-label={t('common.cancel', 'Cancel')}
 				>
@@ -252,13 +292,32 @@ export function TourProvider({ children }) {
 				<div className="fixed inset-0 z-[21050] flex items-center justify-center p-4 animate-fadeIn">
 					<div className="absolute inset-0 bg-black/40 transition-opacity duration-300" onClick={() => setContinuePrompt(false)} />
 					<div className="relative w-full max-w-sm rounded-xl bg-white dark:bg-gray-800 shadow-xl border border-gray-100 dark:border-gray-700 p-4 transform transition-all duration-300 ease-out animate-slideInUp">
-						<h3 className="text-gray-900 dark:text-gray-100 font-semibold mb-2">{t('student.tour.nextPrompt.title', 'Continue to next page?')}</h3>
-						<p className="text-sm text-gray-600 dark:text-gray-300 mb-4">{t('student.tour.nextPrompt.desc', 'You finished this page tour. You can continue with the next page or close now.')}</p>
+						<h3 className="text-gray-900 dark:text-gray-100 font-semibold mb-2">
+							{isAdminTour ? t('admin.tour.nextPrompt.title', 'Continue to next admin page?') : 
+							 isInstructorTour ? t('instructor.tour.nextPrompt.title', 'Continue to next instructor page?') : 
+							 t('student.tour.nextPrompt.title', 'Continue to next page?')}
+						</h3>
+						<p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
+							{isAdminTour ? t('admin.tour.nextPrompt.desc', 'You finished this admin page tour. Continue to explore the next management feature.') :
+							 isInstructorTour ? t('instructor.tour.nextPrompt.desc', 'You finished this instructor page tour. Continue to explore the next teaching feature.') : 
+							 t('student.tour.nextPrompt.desc', 'You finished this page tour. You can continue with the next page or close now.')}
+						</p>
 						<div className="flex gap-2 justify-end">
 							<button onClick={() => { setContinuePrompt(false); setPendingQueue(null); setNextPath(null); }} className="px-3 py-1.5 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200">
 								{t('common.cancel', 'Cancel')}
 							</button>
-							<button onClick={() => { if (pendingQueue) localStorage.setItem('tour:queue', JSON.stringify(pendingQueue)); const dest = nextPath; setContinuePrompt(false); setPendingQueue(null); setNextPath(null); if (dest) navigateTo(dest); }} className="px-3 py-1.5 rounded-md bg-purple-600 text-white hover:bg-purple-700 transition-colors duration-200">
+							<button onClick={() => { 
+								console.log('Continue prompt - Next clicked. Pending Queue:', pendingQueue, 'Next Path:', nextPath);
+								if (pendingQueue) localStorage.setItem('tour:queue', JSON.stringify(pendingQueue)); 
+								const dest = nextPath; 
+								setContinuePrompt(false); 
+								setPendingQueue(null); 
+								setNextPath(null); 
+								if (dest) {
+									console.log('Navigating to:', dest);
+									navigateTo(dest);
+								}
+							}} className="px-3 py-1.5 rounded-md bg-purple-600 text-white hover:bg-purple-700 transition-colors duration-200">
 								{t('common.next', 'Next')}
 							</button>
 						</div>
@@ -269,14 +328,42 @@ export function TourProvider({ children }) {
 				<div className="fixed inset-0 z-[21050] flex items-center justify-center p-4 animate-fadeIn">
 					<div className="absolute inset-0 bg-black/40 transition-opacity duration-300" onClick={() => setCompletePrompt(false)} />
 					<div className="relative w-full max-w-sm rounded-xl bg-white dark:bg-gray-800 shadow-xl border border-gray-100 dark:border-gray-700 p-4 transform transition-all duration-300 ease-out animate-slideInUp">
-						<h3 className="text-gray-900 dark:text-gray-100 font-semibold mb-2">{t(isInstructorTour ? 'instructor.tour.complete.title' : 'student.tour.complete.title', isInstructorTour ? 'Instructor Onboarding Tour Complete!' : 'Onboarding Tour Complete!')}</h3>
-						<p className="text-sm text-gray-600 dark:text-gray-300 mb-4">{t(isInstructorTour ? 'instructor.tour.complete.desc' : 'student.tour.complete.desc', isInstructorTour ? 'You have completed the instructor tour and explored the key teaching features. You\'re ready to go!' : 'You have completed the onboarding tour and explored all the key features of your LMS. You\'re ready to start your learning journey!')}</p>
+						<h3 className="text-gray-900 dark:text-gray-100 font-semibold mb-2">
+							{isAdminTour ? 'Admin Onboarding Tour Complete!' : 
+							 isInstructorTour ? 'Instructor Onboarding Tour Complete!' : 
+							 'Onboarding Tour Complete!'}
+						</h3>
+						<p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
+							{isAdminTour ? 'You have completed the admin tour and explored all the key management features. You\'re ready to manage the LMS system!' :
+							 isInstructorTour ? 'You have completed the instructor tour and explored the key teaching features. You\'re ready to go!' : 
+							 'You have completed the onboarding tour and explored all the key features of your LMS. You\'re ready to start your learning journey!'}
+						</p>
 						<div className="flex gap-2 justify-end">
 							<button onClick={() => setCompletePrompt(false)} className="px-3 py-1.5 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200">
 								{t('common.close', 'Close')}
 							</button>
-							<button onClick={() => { const full = JSON.parse(localStorage.getItem('tour:full:sequence') || '[]'); localStorage.setItem('tour:mode', 'full'); localStorage.setItem('tour:queue', JSON.stringify(Array.isArray(full) && full.length ? full : [])); const hasInstructor = (Array.isArray(full) ? full : []).some(p => p.startsWith('/instructor/')); const launch = hasInstructor ? 'instructor-full' : 'student-full'; localStorage.setItem('tour:launch', launch); setCompletePrompt(false); const dash = hasInstructor ? '/instructor/dashboard' : '/student/dashboard'; navigateTo(dash); }} className="px-3 py-1.5 rounded-md bg-purple-600 text-white hover:bg-purple-700 transition-colors duration-200">
-								{t(isInstructorTour ? 'instructor.tour.complete.restart' : 'student.tour.complete.restart', 'Restart tour')}
+							<button onClick={() => { 
+								const full = JSON.parse(localStorage.getItem('tour:full:sequence') || '[]'); 
+								localStorage.setItem('tour:mode', 'full'); 
+								localStorage.setItem('tour:queue', JSON.stringify(Array.isArray(full) && full.length ? full : [])); 
+								
+								let launch, dash;
+								if (isAdminTour) {
+									launch = 'admin-full';
+									dash = '/admin/dashboard';
+								} else if (isInstructorTour) {
+									launch = 'instructor-full';
+									dash = '/instructor/dashboard';
+								} else {
+									launch = 'student-full';
+									dash = '/student/dashboard';
+								}
+								
+								localStorage.setItem('tour:launch', launch); 
+								setCompletePrompt(false); 
+								navigateTo(dash); 
+							}} className="px-3 py-1.5 rounded-md bg-purple-600 text-white hover:bg-purple-700 transition-colors duration-200">
+								{t('common.restart', 'Restart tour')}
 							</button>
 						</div>
 					</div>

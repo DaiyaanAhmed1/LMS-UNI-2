@@ -17,6 +17,7 @@
     "finish": "Finish",
     "skip": "Skip",
     "close": "Close",
+    "restart": "Restart Tour",
     "copyright": "© {{year}} MARLN. All rights reserved."
   },
   "navigation": {
@@ -2303,6 +2304,320 @@
       "systemAnnouncements": "System Announcements",
       "recentLogins": "Recent Logins",
       "completions": "{{count}} completions"
+    },
+    "tour": {
+      "nextPrompt": {
+        "title": "Continue to next admin page?",
+        "desc": "You finished this admin page tour. Continue to explore the next management feature."
+      },
+      "dashboard": {
+        "welcome": {
+          "title": "Welcome to Admin Dashboard",
+          "desc": "This is your central command center for managing the entire LMS system."
+        },
+        "stats": {
+          "title": "Key Metrics Overview",
+          "desc": "Monitor students, instructors, courses, and revenue at a glance."
+        },
+        "quickActions": {
+          "title": "Quick Actions",
+          "desc": "Access frequently used functions like adding courses, managing users, and system settings."
+        },
+        "charts": {
+          "title": "Analytics & Trends",
+          "desc": "Track enrollment trends and course completion rates with visual charts."
+        },
+        "activity": {
+          "title": "Recent Activity",
+          "desc": "Stay updated with real-time system activities and user actions."
+        },
+        "announcements": {
+          "title": "System Announcements",
+          "desc": "View and manage important announcements for students and staff."
+        },
+        "approvals": {
+          "title": "Pending Approvals",
+          "desc": "Review and approve course submissions, instructor applications, and other requests."
+        },
+        "systemHealth": {
+          "title": "System Health",
+          "desc": "Monitor server status, uptime, API health, and active users."
+        },
+        "topCourses": {
+          "title": "Top Performing Courses",
+          "desc": "Identify your most popular courses and track enrollment numbers."
+        },
+        "feedback": {
+          "title": "User Feedback & Support",
+          "desc": "Monitor user feedback, support tickets, and system issues."
+        },
+        "events": {
+          "title": "Upcoming Events",
+          "desc": "Track important dates, meetings, and deadlines."
+        },
+        "leaderboard": {
+          "title": "Instructor Performance",
+          "desc": "View instructor ratings and course completion statistics."
+        },
+        "progress": {
+          "title": "Student Progress Overview",
+          "desc": "Monitor overall student performance and identify at-risk students."
+        },
+        "quickLinks": {
+          "title": "Quick Links & Resources",
+          "desc": "Access help center, admin documentation, and LMS roadmap."
+        },
+        "systemAnnouncements": {
+          "title": "System Updates",
+          "desc": "Stay informed about maintenance schedules and new features."
+        },
+        "recentLogins": {
+          "title": "Recent User Activity",
+          "desc": "Monitor who is currently active in the system and their login times."
+        }
+      },
+      "students": {
+        "header": {
+          "title": "Student Management Overview",
+          "desc": "This is your central hub for managing all student records, enrollments, and academic information."
+        },
+        "actions": {
+          "title": "Quick Actions",
+          "desc": "Add new students individually or upload multiple students via Excel file. Export data for reporting and analysis."
+        },
+        "search": {
+          "title": "Search & Filter",
+          "desc": "Quickly find students by name or email. Filter by status (Active, Inactive, Graduated) to focus on specific groups."
+        },
+        "table": {
+          "title": "Student Records Table",
+          "desc": "View all student information including program, year, status, and enrollment date. Click the action menu for each student to edit, delete, or view results."
+        },
+        "pagination": {
+          "title": "Navigation & Export",
+          "desc": "Navigate through student records and export filtered data to Excel for external analysis and reporting."
+        }
+      },
+      "instructors": {
+        "header": {
+          "title": "Instructor Management Overview",
+          "desc": "Manage all instructor accounts, departments, and teaching assignments. Monitor their engagement and course load."
+        },
+        "add": {
+          "title": "Add New Instructors",
+          "desc": "Create new instructor accounts with department assignments. Each instructor gets access to course management tools."
+        },
+        "table": {
+          "title": "Instructor Records",
+          "desc": "View instructor details including courses taught, assigned batches, and engagement metrics. Use action buttons to edit or delete accounts."
+        },
+        "metrics": {
+          "title": "Performance Metrics",
+          "desc": "Track instructor performance through course counts, batch assignments, and engagement percentages. Monitor workload distribution across departments."
+        },
+        "actions": {
+          "title": "Account Management",
+          "desc": "Edit instructor information, update department assignments, or remove accounts. Changes affect course access and teaching schedules."
+        }
+      },
+      "programs": {
+        "header": {
+          "title": "Program Management Overview",
+          "desc": "Create and manage academic programs, define their structure, duration, and course requirements. This is the foundation for student enrollment and course planning."
+        },
+        "add": {
+          "title": "Create New Programs",
+          "desc": "Add new academic programs with customizable duration, specialization areas, and term-based structure. Each program can have multiple terms with assigned courses."
+        },
+        "table": {
+          "title": "Program Directory",
+          "desc": "View all academic programs with their key details. Use the action buttons to view detailed structure, edit program information, or manage course assignments."
+        },
+        "structure": {
+          "title": "Program Structure",
+          "desc": "Each program is organized into terms or semesters. View the complete structure, manage course assignments per term, and ensure proper academic progression."
+        },
+        "courses": {
+          "title": "Course Management",
+          "desc": "Assign courses to specific terms within programs. Manage the curriculum flow, ensure prerequisites are met, and maintain academic standards across all programs."
+        }
+      },
+      "courses": {
+        "header": {
+          "title": "Course Management Overview",
+          "desc": "Manage the complete course catalog, create new courses, and organize the curriculum. This is where you define what students will learn."
+        },
+        "filters": {
+          "title": "Search & Filter Tools",
+          "desc": "Filter courses by academic level (Undergraduate, Masters) and search by name, code, or level. Reset to default courses or add new ones."
+        },
+        "table": {
+          "title": "Course Directory",
+          "desc": "View all courses with their codes, credits, hours, and source information. Use action buttons to view details, edit, or manage course content."
+        },
+        "predefined": {
+          "title": "Predefined Course Library",
+          "desc": "Access a library of pre-built courses from MarLn. Add these to your university catalog with one click. Perfect for quickly expanding your course offerings."
+        },
+        "actions": {
+          "title": "Course Operations",
+          "desc": "Create new courses from scratch, edit existing ones, or view detailed information. Each course can be customized with credits, hours, and descriptions."
+        }
+      },
+      "documents": {
+        "header": {
+          "title": "Document Management Overview",
+          "desc": "Manage all university documents, policies, and resources. Upload new documents, organize them by category, and maintain a centralized document repository."
+        },
+        "upload": {
+          "title": "Document Upload",
+          "desc": "Add new documents to the system. Upload files with titles, categories, and descriptions. All documents are automatically organized and searchable."
+        },
+        "table": {
+          "title": "Document Directory",
+          "desc": "View all uploaded documents with their metadata. See who uploaded each document, when it was added, and access download or delete options."
+        },
+        "actions": {
+          "title": "Document Operations",
+          "desc": "Download documents for review or distribution. Delete outdated or incorrect documents. Each action is logged for audit purposes."
+        },
+        "categories": {
+          "title": "Document Organization",
+          "desc": "Documents are automatically categorized for easy navigation. Students and instructors can quickly find relevant materials by category."
+        }
+      },
+      "calendar": {
+        "header": {
+          "title": "Academic Calendar Overview",
+          "desc": "Manage the complete academic calendar with events, exams, and holidays. Set important dates that affect the entire university community."
+        },
+        "dateSystem": {
+          "title": "Date System Toggle",
+          "desc": "Switch between Gregorian and Hijri calendar systems. All dates are automatically converted and displayed in both formats for accessibility."
+        },
+        "addEvent": {
+          "title": "Add Calendar Events",
+          "desc": "Create new academic events, exams, or holidays. Set dates, types, and descriptions. Events are immediately visible to all students and staff."
+        },
+        "table": {
+          "title": "Event Directory",
+          "desc": "View all scheduled events with their details. See dates in both calendar systems, event types, and descriptions. Manage the academic timeline efficiently."
+        },
+        "actions": {
+          "title": "Event Management",
+          "desc": "Delete outdated or incorrect events. Each change is immediately reflected across the system, keeping everyone informed of schedule updates."
+        }
+      },
+      "notifications": {
+        "header": {
+          "title": "Notifications & Queries Overview",
+          "desc": "Manage all university communications, respond to student and instructor queries, and send announcements to the entire community."
+        },
+        "send": {
+          "title": "Send Notifications",
+          "desc": "Create and send notifications to all users, specific groups, or individual recipients. Keep everyone informed about important updates and announcements."
+        },
+        "queries": {
+          "title": "Query Management",
+          "desc": "View and respond to questions from students and instructors. Track query status and maintain open communication channels with the university community."
+        },
+        "sent": {
+          "title": "Notification History",
+          "desc": "Review all sent notifications with recipient information and dates. Track communication history and ensure important messages were delivered."
+        },
+        "actions": {
+          "title": "Communication Actions",
+          "desc": "Reply to queries, send notifications, and manage all university communications from one centralized location."
+        }
+      },
+      "reports": {
+        "header": {
+          "title": "Reports & Analytics Overview",
+          "desc": "Access comprehensive analytics and performance reports for the entire university. Monitor student progress, course performance, and institutional metrics."
+        },
+        "dateFilter": {
+          "title": "Date Range Filter",
+          "desc": "Filter reports by specific date ranges to analyze performance over time periods. Compare data across different academic terms and years."
+        },
+        "summaryCards": {
+          "title": "Key Performance Indicators",
+          "desc": "View critical metrics at a glance: total enrollments, course completions, and MarLn platform performance. Track institutional success indicators."
+        },
+        "analyticsTable": {
+          "title": "Detailed Course Analytics",
+          "desc": "Examine individual course performance with enrollment and completion data. Compare university courses with MarLn offerings to identify trends."
+        },
+        "marlnPerformance": {
+          "title": "MarLn Platform Insights",
+          "desc": "Monitor the performance of MarLn courses separately from university offerings. Track completion rates and student engagement with external content."
+        }
+      },
+      "users": {
+        "header": {
+          "title": "User Management Overview",
+          "desc": "Manage all university users including students, instructors, and administrators. Control access, manage credentials, and monitor user status across the system."
+        },
+        "tabs": {
+          "title": "User Categories",
+          "desc": "Switch between active users and deleted users. View user counts and manage different user states. Restore deleted users when needed."
+        },
+        "table": {
+          "title": "User Directory",
+          "desc": "View comprehensive user information including names, emails, roles, status, programs, and credential status. Monitor user activity and program assignments."
+        },
+        "actions": {
+          "title": "User Management Actions",
+          "desc": "Perform various user operations: reset passwords, suspend/unsuspend accounts, upgrade student programs, create credentials, and delete users."
+        },
+        "credentials": {
+          "title": "Credential Management",
+          "desc": "Create login credentials for new users, send them via email, and set password change requirements. Manage user authentication and access control."
+        }
+      },
+      "systemSettings": {
+        "header": {
+          "title": "System Settings Overview",
+          "desc": "Manage MarLn platform integration, course subscriptions, and system-wide configurations. Control external service access and billing management."
+        },
+        "availableCourses": {
+          "title": "Course Marketplace",
+          "desc": "Browse and purchase access to MarLn courses. Select individual courses or packages, set subscription duration, and manage institutional learning resources."
+        },
+        "purchaseButton": {
+          "title": "Purchase Management",
+          "desc": "Buy access to selected courses with flexible subscription options. Choose duration, review pricing, and complete transactions for the university."
+        },
+        "activeCourses": {
+          "title": "Active Subscriptions",
+          "desc": "Monitor currently active MarLn course subscriptions. Track expiration dates and ensure continuous access to purchased learning content."
+        },
+        "billing": {
+          "title": "Billing & Payments",
+          "desc": "Manage upcoming bills, subscription renewals, and payment processing. Keep track of MarLn platform costs and ensure timely payments."
+        }
+      },
+      "profile": {
+        "header": {
+          "title": "Profile Overview",
+          "desc": "Manage your personal information, contact details, and professional profile. Update your photo, personal data, and view your activity statistics."
+        },
+        "photo": {
+          "title": "Profile Photo Management",
+          "desc": "Upload and manage your profile picture. Click the camera icon to change your photo. Your initials will be displayed if no photo is uploaded."
+        },
+        "info": {
+          "title": "Personal Information",
+          "desc": "View and edit your contact details, department, role, and personal information. All changes are saved automatically to maintain your profile accuracy."
+        },
+        "password": {
+          "title": "Password Management",
+          "desc": "Change your login password securely. Enter your new password twice to confirm. Ensure your account remains secure with regular password updates."
+        },
+        "activity": {
+          "title": "Activity & Statistics",
+          "desc": "Monitor your system activity, last login time, courses enrolled, bills paid, and monthly performance metrics. Track your engagement and contribution to the university."
+        }
+      }
     },
     "profile": {
       "completion": "Profile Completion",

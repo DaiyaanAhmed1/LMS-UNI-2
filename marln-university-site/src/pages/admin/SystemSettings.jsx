@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Sidebar from '../../components/Sidebar';
 import { CheckCircle, ShoppingCart, CreditCard, BookOpen, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useTour } from '../../context/TourContext.jsx';
 
 const availableCourses = [
   { id: 1, name: 'MarLn: Data Science', price: 200 },
@@ -20,8 +21,64 @@ const mockBills = [
 ];
 
 export default function SystemSettings() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const { startTour } = useTour();
   const [selected, setSelected] = useState([]);
+
+  useEffect(() => {
+    const onLaunch = () => {
+      const launch = localStorage.getItem('tour:launch');
+      if (launch === 'admin-full' || launch === 'admin-resume') {
+        localStorage.removeItem('tour:launch');
+        setTimeout(() => startAdminSystemSettingsTour(), 200);
+      }
+    };
+    window.addEventListener('tour:launch', onLaunch);
+    return () => window.removeEventListener('tour:launch', onLaunch);
+  }, []);
+
+  const startAdminSystemSettingsTour = () => {
+    const isRTL = i18n.dir() === 'rtl';
+    const pr = (ltr, rtl) => (isRTL ? rtl : ltr);
+    const steps = [
+      {
+        target: '[data-tour="admin-settings-header"]',
+        title: t('admin.tour.systemSettings.header.title', 'System Settings Overview'),
+        content: t('admin.tour.systemSettings.header.desc', 'Manage MarLn platform integration, course subscriptions, and system-wide configurations. Control external service access and billing management.'),
+        placement: pr('bottom', 'top'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-settings-available-courses"]',
+        title: t('admin.tour.systemSettings.availableCourses.title', 'Course Marketplace'),
+        content: t('admin.tour.systemSettings.availableCourses.desc', 'Browse and purchase access to MarLn courses. Select individual courses or packages, set subscription duration, and manage institutional learning resources.'),
+        placement: pr('top', 'bottom'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-settings-purchase-button"]',
+        title: t('admin.tour.systemSettings.purchaseButton.title', 'Purchase Management'),
+        content: t('admin.tour.systemSettings.purchaseButton.desc', 'Buy access to selected courses with flexible subscription options. Choose duration, review pricing, and complete transactions for the university.'),
+        placement: pr('top', 'bottom'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-settings-active-courses"]',
+        title: t('admin.tour.systemSettings.activeCourses.title', 'Active Subscriptions'),
+        content: t('admin.tour.systemSettings.activeCourses.desc', 'Monitor currently active MarLn course subscriptions. Track expiration dates and ensure continuous access to purchased learning content.'),
+        placement: pr('top', 'bottom'),
+        disableBeacon: true
+      },
+      {
+        target: '[data-tour="admin-settings-billing"]',
+        title: t('admin.tour.systemSettings.billing.title', 'Billing & Payments'),
+        content: t('admin.tour.systemSettings.billing.desc', 'Manage upcoming bills, subscription renewals, and payment processing. Keep track of MarLn platform costs and ensure timely payments.'),
+        placement: pr('top', 'bottom'),
+        disableBeacon: true
+      }
+    ].filter(s => document.querySelector(s.target));
+    if (steps.length) startTour('admin:systemSettings:v1', steps);
+  };
   const [duration, setDuration] = useState(3);
   const [activeCourses, setActiveCourses] = useState(mockActive);
   const [bills, setBills] = useState(mockBills);
@@ -63,13 +120,14 @@ export default function SystemSettings() {
       <Sidebar role="admin" />
       <div className="flex-1 overflow-auto">
         <div className="p-6">
-          <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6">{t('admin.systemSettings.title', 'System Settings & MarLn Integration')}</h1>
+          <h1 data-tour="admin-settings-header" className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6">{t('admin.systemSettings.title', 'System Settings & MarLn Integration')}</h1>
 
           {/* Available Courses */}
-          <div className="mb-8">
+          <div data-tour="admin-settings-available-courses" className="mb-8">
             <div className="flex justify-between items-center mb-2">
               <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-200 flex items-center gap-2"><BookOpen size={20}/> {t('admin.systemSettings.availableCourses.title', 'Available Courses')}</h2>
               <button
+                data-tour="admin-settings-purchase-button"
                 onClick={() => setShowPurchaseModal(true)}
                 className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors disabled:opacity-50"
                 disabled={selected.length === 0}
@@ -97,7 +155,7 @@ export default function SystemSettings() {
           </div>
 
           {/* Active Courses */}
-          <div className="mb-8">
+          <div data-tour="admin-settings-active-courses" className="mb-8">
             <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-2 flex items-center gap-2"><CheckCircle size={20}/> {t('admin.systemSettings.activeCourses.title', 'Active Courses')}</h2>
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
               {activeCourses.length === 0 ? (
@@ -124,7 +182,7 @@ export default function SystemSettings() {
           </div>
 
           {/* Upcoming Bills */}
-          <div className="mb-8">
+          <div data-tour="admin-settings-billing" className="mb-8">
             <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-2 flex items-center gap-2"><CreditCard size={20}/> {t('admin.systemSettings.bills.title', 'Upcoming Bills')}</h2>
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
               {bills.length === 0 ? (

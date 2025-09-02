@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import userData from '../../data/user';
-import logo from '../../assets/marln-logo.png';
+const logo = 'https://lms-frontend-resources.s3.ap-south-1.amazonaws.com/marlnlogopng.png';
 import banner from '../../assets/banner.png';
 import LanguageSwitcher from '../../components/LanguageSwitcher';
 import { useLanguage } from '../../context/LanguageContext';

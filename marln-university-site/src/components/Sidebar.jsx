@@ -33,7 +33,7 @@ import LanguageSwitcher from './LanguageSwitcher';
 import { useTranslation } from 'react-i18next';
 import { useLanguage } from '../context/LanguageContext';
 import { useAccessibility } from '../context/AccessibilityContext';
-import logo from '../assets/marln-logo.png';
+const logo = 'https://lms-frontend-resources.s3.ap-south-1.amazonaws.com/marlnlogopng.png';
 
 // CSS for light flaring animation
 const lightFlareStyle = {
@@ -385,31 +385,26 @@ export default function Sidebar({ role: propRole }) {
       {/* Sage AI Button */}
       <button
         onClick={() => {
-          if (role === 'admin') {
-            // Admin role - button is locked/disabled
-            return;
-          }
-          const sageAIPath = role === 'instructor' ? '/instructor/sage-ai' : '/student/sage-ai';
+          const sageAIPath = role === 'admin' ? '/admin/sage-ai' : 
+                             role === 'instructor' ? '/instructor/sage-ai' : 
+                             '/student/sage-ai';
           if (location.pathname !== sageAIPath) {
             navigate(sageAIPath);
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }
         }}
-        className={`w-full px-4 py-3 flex items-center space-x-3 transition-colors border-t border-[#0a1f4d] dark:border-gray-800 ${
-          role === 'admin' 
-            ? 'opacity-50 cursor-not-allowed' 
-            : 'hover:bg-[#0a1f4d] dark:hover:bg-gray-800'
-        } ${
+        className={`w-full px-4 py-3 flex items-center space-x-3 transition-colors border-t border-[#0a1f4d] dark:border-gray-800 hover:bg-[#0a1f4d] dark:hover:bg-gray-800 ${
+          (role === 'admin' && location.pathname === '/admin/sage-ai') ||
           (role === 'instructor' && location.pathname === '/instructor/sage-ai') || 
           (role === 'student' && location.pathname === '/student/sage-ai') 
             ? 'bg-[#0a1f4d] dark:bg-gray-800' 
             : ''
         }`}
-        aria-current={(role === 'instructor' && location.pathname === '/instructor/sage-ai') || (role === 'student' && location.pathname === '/student/sage-ai') ? 'page' : undefined}
-        disabled={role === 'admin'}
-        title={role === 'admin' ? t('sidebar.sageAI.proFeature', 'Pro Feature - Coming Soon') : undefined}
+        aria-current={(role === 'admin' && location.pathname === '/admin/sage-ai') ||
+                      (role === 'instructor' && location.pathname === '/instructor/sage-ai') || 
+                      (role === 'student' && location.pathname === '/student/sage-ai') ? 'page' : undefined}
       >
-        {role === 'admin' ? <Lock size={20} /> : <Bot size={20} />}
+        <Bot size={20} />
         <span>{t(`sidebar.menu.${role}.sage-ai`)}</span>
       </button>
 
@@ -452,6 +447,34 @@ export default function Sidebar({ role: propRole }) {
           <HelpCircle size={20} />
           <span>{t('student.tour.cta.try', 'Start Tour')}</span>
           {!isSageAIInstructor && !localStorage.getItem('tour:hint:sidebar:shown') && (
+            <span className="ml-auto flex items-center gap-2 text-xs text-yellow-200">
+              <span className="inline-block w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+              {t('student.tour.cta.hint', 'Click here')}
+            </span>
+          )}
+        </button>
+      )}
+
+      {/* Start Tour - Admin */}
+      {role === 'admin' && (
+        <button
+          onClick={location.pathname === '/admin/sage-ai' ? undefined : () => {
+            localStorage.setItem('tour:hint:sidebar:shown', '1');
+            window.dispatchEvent(new CustomEvent('tour:open-launcher'));
+          }}
+          disabled={location.pathname === '/admin/sage-ai'}
+          className={`p-4 border-t border-[#0a1f4d] dark:border-gray-800 flex items-center space-x-3 transition-colors ${
+            location.pathname === '/admin/sage-ai' 
+              ? 'opacity-50 cursor-not-allowed' 
+              : 'hover:bg-[#0a1f4d] dark:hover:bg-gray-800'
+          }`}
+          title={location.pathname === '/admin/sage-ai' ? 'Tour not available on Sage AI page' : t('student.tour.cta.try', 'Start Tour')}
+          aria-label={location.pathname === '/admin/sage-ai' ? 'Tour not available on Sage AI page' : t('student.tour.cta.try', 'Start Tour')}
+          aria-disabled={location.pathname === '/admin/sage-ai'}
+        >
+          {location.pathname === '/admin/sage-ai' ? <Lock size={20} /> : <HelpCircle size={20} />}
+          <span>{t('student.tour.cta.try', 'Start Tour')}</span>
+          {!localStorage.getItem('tour:hint:sidebar:shown') && location.pathname !== '/admin/sage-ai' && (
             <span className="ml-auto flex items-center gap-2 text-xs text-yellow-200">
               <span className="inline-block w-2 h-2 bg-red-500 rounded-full animate-pulse" />
               {t('student.tour.cta.hint', 'Click here')}
